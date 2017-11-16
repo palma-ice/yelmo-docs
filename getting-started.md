@@ -16,10 +16,10 @@ is also necessary due to the dependence on MKL.
 - NetCDF library (preferably version 4.0 or higher)
 - [Coordinates library](https://github.com/alex-robinson/coordinates "alex-robinson/coordinates")
 - Python 2.7.x (only needed for automation of configuration
-and job submission steps)
+and job submission steps, which can also be done by hand)
 - Access to the `ice_data` repository of pre-processed
 input data for the model on different domains (North, Antarctica,
-Greenland)
+Greenland, etc.)
 
 # Directory structure
 
@@ -32,7 +32,7 @@ input_1D/
     Location of any input time series data needed by the model.
 libyelmo/
     All compiled object files and binaries will be located here
-    after compilation.
+    after compilation (in bin/ and include/ subfolders).
 libs/
     Auxiliary included libraries necessary for running the model.
 output/
@@ -50,7 +50,9 @@ obtain the code, compile it and run a test simulation.
 
 ## 1. Get the code.
 
-Clone the repository, check out a new branch and make sure it is linked 'upstream' to the same branch in the central repository:
+Clone the repository, check out a new branch and, if you plan on 
+making tracked changes in the code, make sure it is linked 'upstream' 
+to the same branch in the central repository:
 
 ```
 git clone user@airara.fis.ucm.es:/palma/repos/yelmo.git yelmo
@@ -61,14 +63,7 @@ You should now be working on the branch `user-dev`.
 
 ## 2. Housekeeping.
 
-- You need to generate a symbolic link to the input (2D/3D/+) data folder that the model uses (typically the location of the `ice_data` repository), e.g.,
-
-```
-ln -s PATH/TO/ice_data ice_data
-```
-- You will also need to copy the default parameter values into the main folder. Only the parameter files in the main folder will be found.
-
-- You need to generate the Makefile that is appropriate for your system. In the folder config, you need to specify a configuration file with the name of your system that contains the paths to the NetCDF and MKL libraries. See others in the config folder for a template, e.g.,
+- You need to generate the Makefile that is appropriate for your system. In the folder config, you need to specify a configuration file with the name of your system that contains the paths to the NetCDF, coordinates and MKL libraries. See others in the config folder for a template, e.g.,
 
 ```
 cd config
@@ -81,10 +76,19 @@ cd ..
 python config.py
 ```
 
-- You need to copy the parameter files for your domain from the `pars_default` folder to the main folder, eg for `North-40`:
+- You need to generate a symbolic link to the input (2D/3D/+) data folder that the model uses (typically the location of the `ice_data` repository), e.g.,
 
 ```
-cp pars_default/North.nml ./
+ln -s PATH/TO/ice_data ice_data
+```
+- You will also need to copy the default parameter values into the main folder. Only the parameter files found in the main folder will be used by the program.
+
+
+
+- You need to copy the parameter files for your domain from the `pars_default` folder to the main folder, eg for `Greenland`:
+
+```
+cp pars_default/Greenland.nml ./
 cp pars_default/yelmo_control.nml ./
 ```
 The parameter files copied into the main directory will be used by
@@ -92,13 +96,17 @@ the model, and will not be tracked by the repository.
 
 ## 3. Compile the code.
 
-Now you are ready to compile **Yelmo** for your domain and grid of interest (eg, `North-40`) :
+Now you are ready to compile **Yelmo**. To compile a test program for the 
+EISMINT protocol, for example, run the following commands:
 
 ```
-make clean    *This step is very important to avoid errors!!
-make North-40 [debug=1]
+make clean
+make yelmo-eismint [debug=1]
 ```
-(or other domains `Ant-40`, `Grl-20`, or `GRL-10`). The `debug=1` option allows you to compile with debugging compiler options enabled, in case you need to debug the code. Using this option, the code will run much slower, so this option is not recommended for real simulations.
+(or other executable programs in the main directory like `test_yelmo-grl`). 
+The `debug=1` option allows you to compile with debugging compiler options enabled, 
+in case you need to debug the code. Using this option, the code will run 
+much slower, so this option is not recommended for real simulations.
 
 ## 4. Run the model.
 
