@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Getting started - Yelmo-docs</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="..">Yelmo-docs</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                    <li class="active">
+                        <a href="./">Getting started</a>
+                    </li>
+                    <li >
+                        <a href="../parameters/">Parameters</a>
+                    </li>
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                    <li >
+                        <a rel="next" href="..">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../parameters/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#dependencies">Dependencies</a></li>
+        <li class="main "><a href="#directory-structure">Directory structure</a></li>
+        <li class="main "><a href="#usage">Usage</a></li>
+            <li><a href="#1-get-the-code">1. Get the code.</a></li>
+            <li><a href="#2-housekeeping">2. Housekeeping.</a></li>
+            <li><a href="#3-compile-the-code">3. Compile the code.</a></li>
+            <li><a href="#4-run-the-model">4. Run the model.</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<p>This file describes the basic steps needed to get <strong>Yelmo</strong>
+running.</p>
+<h2 id="dependencies">Dependencies</h2>
+<ul>
+<li>Intel FORTRAN compiler with Math Kernel Library (MKL).
+Note: <strong>Yelmo</strong> can also be compiled using <code>gfortran</code>, however <code>ifort</code>
+is also necessary due to the dependence on MKL.</li>
+<li>NetCDF library (preferably version 4.0 or higher)</li>
+<li><a href="https://github.com/alex-robinson/coordinates" title="alex-robinson/coordinates">Coordinates library</a></li>
+<li>Python 2.7.x (only needed for automation of configuration
+and job submission steps)</li>
+<li>Access to the <code>ice_data</code> repository of pre-processed
+input data for the model on different domains (North, Antarctica,
+Greenland)</li>
+</ul>
+<h1 id="directory-structure">Directory structure</h1>
+<pre><code>config/
+    Location of the Makefile template and configuration files.
+extra_data/
+    An empty folder where user-specific input data can be stored.
+input_1D/
+    Location of any input time series data needed by the model.
+libyelmo/
+    All compiled object files and binaries will be located here
+    after compilation.
+libs/
+    Auxiliary included libraries necessary for running the model.
+output/
+    Default location for model output.
+pars_default/
+    Folder containing the default parameter files for running Yelmo.
+src/
+    Source code for Yelmo.
+</code></pre>
+
+<h1 id="usage">Usage</h1>
+<p><strong>Yelmo</strong> is hosted in a git repository. Follow the steps below to
+obtain the code, compile it and run a test simulation.</p>
+<h2 id="1-get-the-code">1. Get the code.</h2>
+<p>Clone the repository, check out a new branch and make sure it is linked 'upstream' to the same branch in the central repository:</p>
+<pre><code>git clone user@airara.fis.ucm.es:/palma/repos/yelmo.git yelmo
+git checkout -b user-dev
+git push -u origin user-dev
+</code></pre>
+
+<p>You should now be working on the branch <code>user-dev</code>.</p>
+<h2 id="2-housekeeping">2. Housekeeping.</h2>
+<ul>
+<li>You need to generate a symbolic link to the input (2D/3D/+) data folder that the model uses (typically the location of the <code>ice_data</code> repository), e.g.,</li>
+</ul>
+<pre><code>ln -s PATH/TO/ice_data ice_data
+</code></pre>
+
+<ul>
+<li>
+<p>You will also need to copy the default parameter values into the main folder. Only the parameter files in the main folder will be found.</p>
+</li>
+<li>
+<p>You need to generate the Makefile that is appropriate for your system. In the folder config, you need to specify a configuration file with the name of your system that contains the paths to the NetCDF and MKL libraries. See others in the config folder for a template, e.g.,</p>
+</li>
+</ul>
+<pre><code>cd config
+cp eolo your_system
+</code></pre>
+
+<p>then modify the file <code>your_system</code> to match your paths. This file should have the name that is output from your system when you run the bash command <code>hostname</code>. Back in the main <code>yelmo</code> directory, you can then generate your Makefile with the provided python configuration script:</p>
+<pre><code>cd ..
+python config.py
+</code></pre>
+
+<ul>
+<li>You need to copy the parameter files for your domain from the <code>pars_default</code> folder to the main folder, eg for <code>North-40</code>:</li>
+</ul>
+<pre><code>cp pars_default/North.nml ./
+cp pars_default/yelmo_control.nml ./
+</code></pre>
+
+<p>The parameter files copied into the main directory will be used by
+the model, and will not be tracked by the repository.</p>
+<h2 id="3-compile-the-code">3. Compile the code.</h2>
+<p>Now you are ready to compile <strong>Yelmo</strong> for your domain and grid of interest (eg, <code>North-40</code>) :</p>
+<pre><code>make clean    *This step is very important to avoid errors!!
+make North-40 [debug=1]
+</code></pre>
+
+<p>(or other domains <code>Ant-40</code>, <code>Grl-20</code>, or <code>GRL-10</code>). The <code>debug=1</code> option allows you to compile with debugging compiler options enabled, in case you need to debug the code. Using this option, the code will run much slower, so this option is not recommended for real simulations.</p>
+<h2 id="4-run-the-model">4. Run the model.</h2>
+<p>Once the executable has been created, you can run the model. This can be
+achieved via a Python job submission script <code>gjob</code>. The following steps
+are carried out via the script:</p>
+<ol>
+<li>The output directory is created.</li>
+<li>The parameter files are modified according to command-line options,
+then saved in the output directory.</li>
+<li>The executable is copied to the output directory, along with
+links to the input data paths (<code>input_1D</code>, <code>ice_data</code> and <code>extra_data</code>).</li>
+<li>The executable is run from the output directory, either as a background process or it is submitted to the queue (currently supports <code>qsubmit</code> command).</li>
+</ol>
+<p>The model output of each simulation will appear in the specified output directory. The above steps can also be run for a batch ensemble of simulations, which can also be automatically generated via <code>gjob</code>.</p>
+<p>To run a test simulation of the domain <code>North-40</code>, submitted to the queue (option <code>-l</code>), use the following command:</p>
+<pre><code>python gjob -p North-40 -l -f -o output/test
+</code></pre>
+
+<p>Or, you can change parameters at the command line:</p>
+<pre><code>python gjob -p North-40 -l -f -o output/test \&amp;group=&quot;par1=0.0&quot;
+</code></pre>
+
+<p>where <code>\&amp;group</code> is the Namelist group that contains the parameter par1.
+Or, you can run an ensemble of simulations:</p>
+<pre><code>python gjob -p North-40 -l -f -a output/ens1 \&amp;group=&quot;par1=0.0,0.5 par2=0,1,2&quot;
+</code></pre>
+
+<p>*Note the change of <code>-o</code> to <code>-a</code> which means that sub-directories will be automatically generated for each simulation inside the chosen directory.</p>
+<p>More information about running jobs can be found in the help:</p>
+<pre><code>python gjob -h
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '..';</script>
+        <script src="../js/base.js"></script>
+        <script src="../search/require.js"></script>
+        <script src="../search/search.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    </body>
+</html>
