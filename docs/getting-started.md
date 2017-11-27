@@ -1,9 +1,3 @@
----
-layout: default
-title: Getting started
-permalink: /getting-started
----
-
 This file describes the basic steps needed to get **Yelmo**
 running.
 
@@ -14,8 +8,11 @@ Note: **Yelmo** can also be compiled using `gfortran`, however `ifort`
 is also necessary due to the dependence on MKL.
 - NetCDF library (preferably version 4.0 or higher)
 - [Coordinates library](https://github.com/alex-robinson/coordinates "alex-robinson/coordinates")
-- Python 2.7.x (only needed for automation of configuration
+- Python 2.7.x (only needed for automation of configuration of Makefile
 and job submission steps)
+
+OPTIONAL:
+
 - Access to the `ice_data` repository of pre-processed
 input data for the model on different domains (North, Antarctica,
 Greenland)
@@ -31,7 +28,7 @@ input_1D/
     Location of any input time series data needed by the model.
 libyelmo/
     All compiled object files and binaries will be located here
-    after compilation.
+    after compilation (in bin/ and include/ directories).
 libs/
     Auxiliary included libraries necessary for running the model.
 output/
