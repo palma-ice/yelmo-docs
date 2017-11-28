@@ -172,7 +172,7 @@ Next, in the main directory, there should be one namelist file per modeled domai
 
 This two step procedure is convenient in that usually the default values do not change and can be stored for reference in the model component namelist file. Meanwhile in the domain-specific namelist file, only the parameters of interest that need to be modified for a given run need to be specified.
 
-# Libraries
+## Libraries
 
 Yelmo relies on some external libraries (some of which have been built specifically for use with it), however the Yelmo repository is mostly self-contained. If the libraries are portable, like fortran modules, then they are stored in the `libs/` subdirectory. The only external dependency is on the NetCDF libraries, which must be preinstalled on the system.
 

@@ -17,7 +17,7 @@ OPTIONAL:
 input data for the model on different domains (North, Antarctica,
 Greenland)
 
-# Directory structure
+## Directory structure
 
 ```
 config/
@@ -39,12 +39,12 @@ src/
     Source code for Yelmo.
 ```
 
-# Usage
+## Usage
 
 **Yelmo** is hosted in a git repository. Follow the steps below to
 obtain the code, compile it and run a test simulation.
 
-## 1. Get the code.
+### 1. Get the code.
 
 Clone the repository, check out a new branch and make sure it is linked 'upstream' to the same branch in the central repository:
 
@@ -55,7 +55,7 @@ git push -u origin user-dev
 ```
 You should now be working on the branch `user-dev`.
 
-## 2. Housekeeping.
+### 2. Housekeeping.
 
 - You need to generate a symbolic link to the input (2D/3D/+) data folder that the model uses (typically the location of the `ice_data` repository), e.g.,
 
@@ -86,7 +86,7 @@ cp pars_default/yelmo_control.nml ./
 The parameter files copied into the main directory will be used by
 the model, and will not be tracked by the repository.
 
-## 3. Compile the code.
+### 3. Compile the code.
 
 Now you are ready to compile **Yelmo** for your domain and grid of interest (eg, `North-40`) :
 
@@ -96,7 +96,7 @@ make North-40 [debug=1]
 ```
 (or other domains `Ant-40`, `Grl-20`, or `GRL-10`). The `debug=1` option allows you to compile with debugging compiler options enabled, in case you need to debug the code. Using this option, the code will run much slower, so this option is not recommended for real simulations.
 
-## 4. Run the model.
+### 4. Run the model.
 
 Once the executable has been created, you can run the model. This can be
 achieved via a Python job submission script `gjob`. The following steps
