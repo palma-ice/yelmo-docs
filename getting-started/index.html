@@ -109,7 +109,7 @@ and job submission steps)</li>
 input data for the model on different domains (North, Antarctica,
 Greenland)</li>
 </ul>
-<h1 id="directory-structure">Directory structure</h1>
+<h2 id="directory-structure">Directory structure</h2>
 <pre><code>config/
     Location of the Makefile template and configuration files.
 extra_data/
@@ -129,10 +129,10 @@ src/
     Source code for Yelmo.
 </code></pre>
 
-<h1 id="usage">Usage</h1>
+<h2 id="usage">Usage</h2>
 <p><strong>Yelmo</strong> is hosted in a git repository. Follow the steps below to
 obtain the code, compile it and run a test simulation.</p>
-<h2 id="1-get-the-code">1. Get the code.</h2>
+<h3 id="1-get-the-code">1. Get the code.</h3>
 <p>Clone the repository, check out a new branch and make sure it is linked 'upstream' to the same branch in the central repository:</p>
 <pre><code>git clone user@airara.fis.ucm.es:/palma/repos/yelmo.git yelmo
 git checkout -b user-dev
@@ -140,7 +140,7 @@ git push -u origin user-dev
 </code></pre>
 
 <p>You should now be working on the branch <code>user-dev</code>.</p>
-<h2 id="2-housekeeping">2. Housekeeping.</h2>
+<h3 id="2-housekeeping">2. Housekeeping.</h3>
 <ul>
 <li>You need to generate a symbolic link to the input (2D/3D/+) data folder that the model uses (typically the location of the <code>ice_data</code> repository), e.g.,</li>
 </ul>
@@ -173,14 +173,14 @@ cp pars_default/yelmo_control.nml ./
 
 <p>The parameter files copied into the main directory will be used by
 the model, and will not be tracked by the repository.</p>
-<h2 id="3-compile-the-code">3. Compile the code.</h2>
+<h3 id="3-compile-the-code">3. Compile the code.</h3>
 <p>Now you are ready to compile <strong>Yelmo</strong> for your domain and grid of interest (eg, <code>North-40</code>) :</p>
 <pre><code>make clean    *This step is very important to avoid errors!!
 make North-40 [debug=1]
 </code></pre>
 
 <p>(or other domains <code>Ant-40</code>, <code>Grl-20</code>, or <code>GRL-10</code>). The <code>debug=1</code> option allows you to compile with debugging compiler options enabled, in case you need to debug the code. Using this option, the code will run much slower, so this option is not recommended for real simulations.</p>
-<h2 id="4-run-the-model">4. Run the model.</h2>
+<h3 id="4-run-the-model">4. Run the model.</h3>
 <p>Once the executable has been created, you can run the model. This can be
 achieved via a Python job submission script <code>gjob</code>. The following steps
 are carried out via the script:</p>

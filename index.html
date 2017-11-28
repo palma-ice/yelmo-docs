@@ -88,7 +88,7 @@
             <li><a href="#compiling-yelmo-programs">Compiling Yelmo programs</a></li>
             <li><a href="#running-the-programs">Running the programs</a></li>
             <li><a href="#parameter-modification">Parameter modification</a></li>
-        <li class="main "><a href="#libraries">Libraries</a></li>
+            <li><a href="#libraries">Libraries</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -226,7 +226,7 @@ cp Greenland.nml output/simulation1/
 <p>Yelmo depends on a namelist file with default parameter values located in the <code>src</code> directory (<code>src/yelmo.nml</code>). This file should remain unchanged during production runs, it is only used to initially load all parameter values.</p>
 <p>Next, in the main directory, there should be one namelist file per modeled domain (e.g., <code>Greenland.nml</code>), with each group of parameters corresponding to each model component. The name of this namelist file corresponds to the name of the domain given in the code when the domain was initialized. As the program runs, it first loads parameters from the default namelist file, then it checks if any parameters should be overwritten from the domain-specific namelist file.</p>
 <p>This two step procedure is convenient in that usually the default values do not change and can be stored for reference in the model component namelist file. Meanwhile in the domain-specific namelist file, only the parameters of interest that need to be modified for a given run need to be specified.</p>
-<h1 id="libraries">Libraries</h1>
+<h2 id="libraries">Libraries</h2>
 <p>Yelmo relies on some external libraries (some of which have been built specifically for use with it), however the Yelmo repository is mostly self-contained. If the libraries are portable, like fortran modules, then they are stored in the <code>libs/</code> subdirectory. The only external dependency is on the NetCDF libraries, which must be preinstalled on the system.</p>
 <p>Below is a list of the libraries used in Yelmo:</p>
 <p><strong>nml</strong> is a custom library for reading namelist parameters into a Fortran program. It has the same functionality as native nml reading, however it does not require the definition of a common block.</p>
@@ -315,5 +315,5 @@ cp Greenland.nml output/simulation1/
 
 <!--
 MkDocs version : 0.17.2
-Build Date UTC : 2017-11-28 03:12:04
+Build Date UTC : 2017-11-28 03:15:15
 -->
