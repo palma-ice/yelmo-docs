@@ -100,8 +100,11 @@ Note: <strong>Yelmo</strong> can also be compiled using <code>gfortran</code>, h
 is also necessary due to the dependence on MKL.</li>
 <li>NetCDF library (preferably version 4.0 or higher)</li>
 <li><a href="https://github.com/alex-robinson/coordinates" title="alex-robinson/coordinates">Coordinates library</a></li>
-<li>Python 2.7.x (only needed for automation of configuration
+<li>Python 2.7.x (only needed for automation of configuration of Makefile
 and job submission steps)</li>
+</ul>
+<p>OPTIONAL:</p>
+<ul>
 <li>Access to the <code>ice_data</code> repository of pre-processed
 input data for the model on different domains (North, Antarctica,
 Greenland)</li>
@@ -115,7 +118,7 @@ input_1D/
     Location of any input time series data needed by the model.
 libyelmo/
     All compiled object files and binaries will be located here
-    after compilation.
+    after compilation (in bin/ and include/ directories).
 libs/
     Auxiliary included libraries necessary for running the model.
 output/
