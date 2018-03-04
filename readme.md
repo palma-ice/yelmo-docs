@@ -1,4 +1,4 @@
-This site is built by the Python package `mkdirs`.
+This site is built by the Python package `mkdocs`.
 
 To publish the site from the master branch, simply
 run `mkdocs gh-deploy`. This will build the site and
