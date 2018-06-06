@@ -95,13 +95,11 @@
 running.</p>
 <h2 id="dependencies">Dependencies</h2>
 <ul>
-<li>Intel FORTRAN compiler with Math Kernel Library (MKL).
-Note: <strong>Yelmo</strong> can also be compiled using <code>gfortran</code>, however <code>ifort</code>
-is also necessary due to the dependence on MKL.</li>
 <li>NetCDF library (preferably version 4.0 or higher)</li>
+<li>LIS: <a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
 <li><a href="https://github.com/alex-robinson/coordinates" title="alex-robinson/coordinates">Coordinates library</a></li>
 <li>Python 2.7.x (only needed for automation of configuration of Makefile
-and job submission steps)</li>
+and the use of the <code>run_yelmo.py</code> script for job preparation and submission)</li>
 </ul>
 <p>OPTIONAL:</p>
 <ul>
@@ -114,16 +112,16 @@ Greenland)</li>
     Location of the Makefile template and configuration files.
 extra_data/
     An empty folder where user-specific input data can be stored.
-input_1D/
-    Location of any input time series data needed by the model.
+input/
+    Location of any input time series and other data needed by the model.
 libyelmo/
     All compiled object files and binaries will be located here
     after compilation (in bin/ and include/ directories).
 libs/
-    Auxiliary included libraries necessary for running the model.
+    Auxiliary included libraries necessary/useful for running the model.
 output/
     Default location for model output.
-pars_default/
+par/
     Folder containing the default parameter files for running Yelmo.
 src/
     Source code for Yelmo.
@@ -148,12 +146,7 @@ git push -u origin user-dev
 </code></pre>
 
 <ul>
-<li>
-<p>You will also need to copy the default parameter values into the main folder. Only the parameter files in the main folder will be found.</p>
-</li>
-<li>
-<p>You need to generate the Makefile that is appropriate for your system. In the folder config, you need to specify a configuration file with the name of your system that contains the paths to the NetCDF and MKL libraries. See others in the config folder for a template, e.g.,</p>
-</li>
+<li>You need to generate the Makefile that is appropriate for your system. In the folder config, you need to specify a configuration file with the name of your system that contains the paths to the <code>NetCDF</code>, <code>LIS</code> and <code>coordinates</code> libraries. See others in the config folder for a template, e.g.,</li>
 </ul>
 <pre><code>cd config
 cp eolo your_system
@@ -164,51 +157,42 @@ cp eolo your_system
 python config.py
 </code></pre>
 
-<ul>
-<li>You need to copy the parameter files for your domain from the <code>pars_default</code> folder to the main folder, eg for <code>North-40</code>:</li>
-</ul>
-<pre><code>cp pars_default/North.nml ./
-cp pars_default/yelmo_control.nml ./
-</code></pre>
-
-<p>The parameter files copied into the main directory will be used by
-the model, and will not be tracked by the repository.</p>
 <h3 id="3-compile-the-code">3. Compile the code.</h3>
-<p>Now you are ready to compile <strong>Yelmo</strong> for your domain and grid of interest (eg, <code>North-40</code>) :</p>
+<p>Now you are ready to compile the <strong>Yelmo</strong> program you desire (eg, <code>yelmo_eismint</code>) :</p>
 <pre><code>make clean    *This step is very important to avoid errors!!
-make North-40 [debug=1]
+make yelmo_eismint [debug=1]
 </code></pre>
 
-<p>(or other domains <code>Ant-40</code>, <code>Grl-20</code>, or <code>GRL-10</code>). The <code>debug=1</code> option allows you to compile with debugging compiler options enabled, in case you need to debug the code. Using this option, the code will run much slower, so this option is not recommended for real simulations.</p>
+<p>(or other program <code>yelmo_test</code>, <code>yelmo_mismip</code>, <code>yelmo_stommel</code> or <code>yelmo_optbeta</code>). The <code>debug=1</code> option allows you to compile with debugging compiler options enabled, in case you need to debug the code. Using this option, the code will run much slower, so this option is not recommended for real simulations.</p>
 <h3 id="4-run-the-model">4. Run the model.</h3>
 <p>Once the executable has been created, you can run the model. This can be
-achieved via a Python job submission script <code>gjob</code>. The following steps
+achieved via a Python job submission script <code>run_yelmo.py</code>. The following steps
 are carried out via the script:</p>
 <ol>
 <li>The output directory is created.</li>
 <li>The parameter files are modified according to command-line options,
 then saved in the output directory.</li>
 <li>The executable is copied to the output directory, along with
-links to the input data paths (<code>input_1D</code>, <code>ice_data</code> and <code>extra_data</code>).</li>
-<li>The executable is run from the output directory, either as a background process or it is submitted to the queue (currently supports <code>qsubmit</code> command).</li>
+links to the input data paths (<code>input</code> and <code>ice_data</code>).</li>
+<li>The executable is run from the output directory, either as a background process or it is submitted to the queue (currently supports <code>qsubmit</code> and <code>sbatch</code> commands).</li>
 </ol>
-<p>The model output of each simulation will appear in the specified output directory. The above steps can also be run for a batch ensemble of simulations, which can also be automatically generated via <code>gjob</code>.</p>
-<p>To run a test simulation of the domain <code>North-40</code>, submitted to the queue (option <code>-l</code>), use the following command:</p>
-<pre><code>python gjob -p North-40 -l -f -o output/test
+<p><strong>TO DO</strong> <strong>The model output of each simulation will appear in the specified output directory. The above steps can also be run for a batch ensemble of simulations, which can also be automatically generated via <code>runner</code>.</strong></p>
+<p>To run a test simulation <code>yelmo_eismint.x</code>, submitted to the queue (option <code>-s</code>), use the following command:</p>
+<pre><code>./run_yelmo.py  -e yelmo_eismint.x -s -f -o output/test
 </code></pre>
 
-<p>Or, you can change parameters at the command line:</p>
-<pre><code>python gjob -p North-40 -l -f -o output/test \&amp;group=&quot;par1=0.0&quot;
+<p><strong>TO DO</strong> Or, you can change parameters at the command line:</p>
+<pre><code>./run_yelmo.py -p yelmo_eismint.x -s -f -o output/test \&amp;group=&quot;par1=0.0&quot;
 </code></pre>
 
 <p>where <code>\&amp;group</code> is the Namelist group that contains the parameter par1.
-Or, you can run an ensemble of simulations:</p>
-<pre><code>python gjob -p North-40 -l -f -a output/ens1 \&amp;group=&quot;par1=0.0,0.5 par2=0,1,2&quot;
+<strong>TO DO</strong> Or, you can run an ensemble of simulations:</p>
+<pre><code>./run_yelmo.py -p yelmo_eismint.x -s -f -a output/ens1 \&amp;group=&quot;par1=0.0,0.5 par2=0,1,2&quot;
 </code></pre>
 
 <p>*Note the change of <code>-o</code> to <code>-a</code> which means that sub-directories will be automatically generated for each simulation inside the chosen directory.</p>
 <p>More information about running jobs can be found in the help:</p>
-<pre><code>python gjob -h
+<pre><code>./run_yelmo.py -h
 </code></pre></div>
         </div>
 
