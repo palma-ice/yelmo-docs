@@ -87,6 +87,7 @@
             <li><a href="#2-housekeeping">2. Housekeeping.</a></li>
             <li><a href="#3-compile-the-code">3. Compile the code.</a></li>
             <li><a href="#4-run-the-model">4. Run the model.</a></li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -193,6 +194,14 @@ links to the input data paths (<code>input</code> and <code>ice_data</code>).</l
 <p>*Note the change of <code>-o</code> to <code>-a</code> which means that sub-directories will be automatically generated for each simulation inside the chosen directory.</p>
 <p>More information about running jobs can be found in the help:</p>
 <pre><code>./run_yelmo.py -h
+</code></pre>
+
+<h3 id="troubleshooting">Troubleshooting</h3>
+<p><code>Runtime error: liblis.so.0 not found</code>
+It may be necessary to export the LIS lib path to the linker, in order to avoid a runtime error. This can be achieved by including the following lines in the <code>.bash_profile</code> file:</p>
+<pre><code># lis library paths 
+LD_LIBRARY_PATH=/home/fispalma25/apps/lis/lis/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH
 </code></pre></div>
         </div>
 
