@@ -99,15 +99,13 @@ running.</p>
 <li>NetCDF library (preferably version 4.0 or higher)</li>
 <li>LIS: <a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
 <li><a href="https://github.com/alex-robinson/coordinates" title="alex-robinson/coordinates">Coordinates library</a></li>
-<li>Python 2.7.x (only needed for automation of configuration of Makefile
-and the use of the <code>run_yelmo.py</code> script for job preparation and submission)</li>
 </ul>
-<p>OPTIONAL:</p>
-<ul>
-<li>Access to the <code>ice_data</code> repository of pre-processed
-input data for the model on different domains (North, Antarctica,
-Greenland)</li>
-</ul>
+<p>OPTIONAL:
+- Python 2.7.x or 3.x, which is only needed for automation of configuration of Makefile
+and the use of the <code>run_yelmo.py</code> script for job preparation and submission.
+- <a href="https://gitlab.pik-potsdam.de/greenrise/runner" title="runner library">Python library <code>runner</code></a>, which extends the <code>run_yelmo.py</code> functionality to facilitate running ensembles of simulations.
+- Access to the <code>ice_data</code> repository of pre-processed
+input data for the model on different domains (North, Eurasia, Greenland, Antarctica)</p>
 <h2 id="directory-structure">Directory structure</h2>
 <pre><code>config/
     Location of the Makefile template and configuration files.
@@ -159,9 +157,9 @@ python config.py
 </code></pre>
 
 <h3 id="3-compile-the-code">3. Compile the code.</h3>
-<p>Now you are ready to compile the <strong>Yelmo</strong> program you desire (eg, <code>yelmo_eismint</code>) :</p>
+<p>Now you are ready to compile the <strong>Yelmo</strong> program you desire (eg, <code>yelmo_benchmarks</code>) :</p>
 <pre><code>make clean    *This step is very important to avoid errors!!
-make yelmo_eismint [debug=1]
+make yelmo_benchmarks [debug=1]
 </code></pre>
 
 <p>(or other program <code>yelmo_test</code>, <code>yelmo_mismip</code>, <code>yelmo_stommel</code> or <code>yelmo_optbeta</code>). The <code>debug=1</code> option allows you to compile with debugging compiler options enabled, in case you need to debug the code. Using this option, the code will run much slower, so this option is not recommended for real simulations.</p>
@@ -171,29 +169,35 @@ achieved via a Python job submission script <code>run_yelmo.py</code>. The follo
 are carried out via the script:</p>
 <ol>
 <li>The output directory is created.</li>
-<li>The parameter files are modified according to command-line options,
-then saved in the output directory.</li>
-<li>The executable is copied to the output directory, along with
-links to the input data paths (<code>input</code> and <code>ice_data</code>).</li>
+<li>The executable is copied to the output directory</li>
+<li>The parameter files are copied to the output directory.</li>
+<li>Links to the input data paths (<code>input</code> and <code>ice_data</code>) are created in the output directory.</li>
 <li>The executable is run from the output directory, either as a background process or it is submitted to the queue (currently supports <code>qsubmit</code> and <code>sbatch</code> commands).</li>
 </ol>
-<p><strong>TO DO</strong> <strong>The model output of each simulation will appear in the specified output directory. The above steps can also be run for a batch ensemble of simulations, which can also be automatically generated via <code>runner</code>.</strong></p>
-<p>To run a test simulation <code>yelmo_eismint.x</code>, submitted to the queue (option <code>-s</code>), use the following command:</p>
-<pre><code>./run_yelmo.py  -e yelmo_eismint.x -s -f -o output/test
+<p>To run a test simulation on a cluster using the executable <code>yelmo_benchmarks.x</code>, use the following command:</p>
+<pre><code>./run_yelmo.py -s -e benchmarks output/test par/yelmo_EISMINT.nml 
 </code></pre>
 
-<p><strong>TO DO</strong> Or, you can change parameters at the command line:</p>
-<pre><code>./run_yelmo.py -p yelmo_eismint.x -s -f -o output/test \&amp;group=&quot;par1=0.0&quot;
+<p>where <code>-s</code> implies submission to the cluster queue, and <code>-e</code> lets you specify the executable. For some standard cases, shortcuts have been created:</p>
+<pre><code>benchmarks = libyelmo/bin/yelmo_benchmarks.x 
+test       = libyelmo/bin/yelmo_test.x 
+mismip     = libyelmo/bin/yemo_mismip.x 
 </code></pre>
 
-<p>where <code>\&amp;group</code> is the Namelist group that contains the parameter par1.
-<strong>TO DO</strong> Or, you can run an ensemble of simulations:</p>
-<pre><code>./run_yelmo.py -p yelmo_eismint.x -s -f -a output/ens1 \&amp;group=&quot;par1=0.0,0.5 par2=0,1,2&quot;
+<p>The last two mandatory arguments are always the output/run directory and the parameter file to be used for this simulation. </p>
+<p>Additional powerful job submission functionality is available by using the Python <code>runner</code> tool. The <code>job run</code> command of the <code>runner</code> package allows you to change parameter values at the command line and perform large ensembles. For example, you can run an ensemble of two simulations as above but with different grid resolutions using:</p>
+<pre><code>job run -f -o output/test -p eismint.dx=25.0,50.0 -- python run_yelmo.py -s -x -e benchmarks {} par/yelmo_EISMINT.nml
 </code></pre>
 
-<p>*Note the change of <code>-o</code> to <code>-a</code> which means that sub-directories will be automatically generated for each simulation inside the chosen directory.</p>
-<p>More information about running jobs can be found in the help:</p>
+<p>where <code>-f</code> means execute the command without confirmation, <code>-o</code> is the parent ensemble directory, <code>-p</code> is the argument to allow you to list parameters to modify and <code>eismint.dx=25.0,50.0</code> specifies that the parameter <code>dx</code> in the namelist group <code>eismint</code> should be given a value of <code>25.0</code> in one simulation and <code>50.0</code> in the second simulation. This command will modify the specified parameters found in the parameter file <code>par_yelmo_EISMINT.nml</code> and then run the simulation from the run directory <code>output/test/{}</code> where <code>{}</code> is the name of the directory corresponding to that parameter combination. Using the option <code>-o</code> means that the specific run directory name is simply the number of the simulation, so the run directory for the above command would be <code>output/test/0</code>. Using the option <code>-a</code> means that the run directory will have a name corresponding to the parameter combination specified. Also note that for <code>run_yelmo.py</code> to work properly when called by <code>job run</code>, the additional option <code>-x</code> must be specified.</p>
+<p>The list of parameter choices corresponding to each directory can be found in the file:</p>
+<pre><code>output/test/params.txt
+</code></pre>
+
+<p>More information about running jobs can be found in the help of <code>run_yelmo.py</code> and <code>runner</code>:</p>
 <pre><code>./run_yelmo.py -h
+job -h 
+job run -h 
 </code></pre>
 
 <h3 id="troubleshooting">Troubleshooting</h3>
