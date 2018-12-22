@@ -107,23 +107,25 @@ and the use of the <code>run_yelmo.py</code> script for job preparation and subm
 - Access to the <code>ice_data</code> repository of pre-processed
 input data for the model on different domains (North, Eurasia, Greenland, Antarctica)</p>
 <h2 id="directory-structure">Directory structure</h2>
-<pre><code>config/
-    Location of the Makefile template and configuration files.
-extra_data/
-    An empty folder where user-specific input data can be stored.
-input/
-    Location of any input time series and other data needed by the model.
-libyelmo/
-    All compiled object files and binaries will be located here
-    after compilation (in bin/ and include/ directories).
-libs/
-    Auxiliary included libraries necessary/useful for running the model.
-output/
-    Default location for model output.
-par/
-    Folder containing the default parameter files for running Yelmo.
-src/
-    Source code for Yelmo.
+<pre><code class="fortran">    config/
+        Configuration files for compilation on different systems.
+    docs/
+        Model documentation.
+    input/
+        Location of any input data needed by the model.
+    libs/
+        Auxiliary libraries nesecessary for running the model.
+    libyelmo/
+        Folder containing all compiled files in a standard way with
+        lib/, include/ and bin/ folders.
+    output/
+        Default location for model output.
+    par/ 
+        Default parameter files that manage the model configuration.
+    src/
+        Source code for Yelmo.
+    tests/ 
+        Source code and analysis scripts for specific model benchmarks and tests.
 </code></pre>
 
 <h2 id="usage">Usage</h2>

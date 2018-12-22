@@ -81,8 +81,7 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#yelmo">Yelmo</a></li>
-            <li><a href="#directory-structure">Directory structure</a></li>
-            <li><a href="#classes-and-usage">Classes and usage</a></li>
+            <li><a href="#general-model-structure-classes-and-usage">General model structure - classes and usage</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -97,31 +96,10 @@ Approximation (SSA) for faster moving ice streams and ice shelves and a hybrid c
 <p><strong>Yelmo</strong> has been designed to operate as a stand-alone model or to be easily plugged in as a module in another program. The key to its flexibility is that no variables are defined globally and parameters are defined according to the domain being modeled. In this way, all variables and calculations are store in an object that entirely represents the model domain.</p>
 <p>A description of <strong>Yelmo</strong> along with validation tests has been published here:
 Robinson et al., 2019...</p>
-<h2 id="directory-structure">Directory structure</h2>
-<pre><code>config/
-    Configuration files for compilation on different systems.
-docs/
-    Model documentation.
-input/
-    Location of any input data needed by the model.
-libs/
-    Auxiliary libraries nesecessary for running the model.
-libyelmo/
-    Folder containing all compiled files in a standard way with
-    lib/, include/ and bin/ folders.
-output/
-    Default location for model output.
-par/ 
-    Default parameter files that manage the model configuration.
-src/
-    Source code for Yelmo.
-tests/ 
-    Source code and analysis scripts for specific model benchmarks and tests.
-</code></pre>
-<h2 id="classes-and-usage">Classes and usage</h2>
+<h2 id="general-model-structure-classes-and-usage">General model structure - classes and usage</h2>
 <h3 id="yelmo_class">yelmo_class</h3>
 <p>The Yelmo class defines all data related to a model domain, such as Greenland or Antarctica. As seen below in the yelmo_class defintion, the 'class' is simply a user-defined Fortran type that contains additional types representing various parameters, variables or sets of module variables.</p>
-<pre><code>    type yelmo_class
+<pre><code class="fortran">    type yelmo_class
         type(yelmo_param_class) :: par      ! General domain parameters
         type(grid_class)        :: grid     ! Grid definition
         type(ytopo_class)       :: tpo      ! Topography variables
@@ -135,7 +113,7 @@ tests/
 </code></pre>
 
 <p>Likewise the module variables are defined in a similar way, e.g. ytopo_class that defines variables and parameters associated with the topography:</p>
-<pre><code>    type ytopo_class
+<pre><code class="fortran">    type ytopo_class
 
         type(ytopo_param_class) :: par        ! Parameters
         type(ytopo_state_class) :: now        ! Variables
@@ -304,5 +282,5 @@ compile a test program and run simulations.</p></div>
 
 <!--
 MkDocs version : 0.17.2
-Build Date UTC : 2018-12-22 14:57:14
+Build Date UTC : 2018-12-22 14:59:21
 -->
