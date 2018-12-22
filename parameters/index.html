@@ -81,8 +81,7 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#parameters">Parameters</a></li>
-            <li><a href="#gvel_par">gvel_par</a></li>
-            <li><a href="#bdrag_par">bdrag_par</a></li>
+            <li><a href="#to-do">To do</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -94,65 +93,7 @@ outline a specific parameter or set of related parameters.
 The author of each section and the date last updated
 will apear in the heading, to maintain traceability
 in the documentation (since code usually changes over time).</p>
-<h2 id="gvel_par">gvel_par</h2>
-<p><strong>Alexander Robinson, 2016-11-06</strong></p>
-<pre><code>&amp;gvel_par
-    mix_method  = 2      ! 0: None, 1: ssa+sia 2: ssa vel. fraction 3: Hwat fraction
-    ssa_vref    = 100    ! [m/a] Reference SSA velocity (denominator in tanh function)
-    Hmin        = 0      ! [m] Minimum water pressure to activate ssa
-    Hmax        = 50     ! [m] Maximum water pressure to reach full ssa conditions (mix_method=3)
-/
-</code></pre>
-
-<p>These parameters control the <em>hybrid</em> nature of <strong>Yelmo</strong>.
-<code>mix_method</code> (formerly known as <code>i_resolmeca</code>) is a switch that
-specifies how the SIA and SSA velocity solutions should be combined:</p>
-<ul>
-<li><code>mix_method=0</code>: None, SIA and SSA domains are treated separately.</li>
-<li><code>mix_method=1</code>: At any point where SSA is calculated, the SIA and SSA solutions are added.</li>
-<li><code>mix_method=2</code>: SIA and SSA solutions are combined as a weighted average with the fraction of SSA determined by the SSA velocities (ie, method of Bueler and Brown, 2009).</li>
-<li><code>mix_method=3</code>: SIA and SSA solutions are combined as a weighted average with the fraction of SSA determined by the basal water pressure.</li>
-</ul>
-<p><em>Note that the case <code>i_resolmeca=1</code> (ssa+sia, if ssa&gt;sia) no longer exists.</em></p>
-<p><code>ssa_vref</code> <strong>[m/a]</strong> is a scaling coefficient for <code>mix_method=3</code>. Default value is <code>ssa_vref=100</code>.</p>
-<p><code>Hmin</code> and <code>Hmax</code> are the minimum and maximum water pressure values, respectively, that define a linear transition between SIA and SSA (ie, below <code>Hmin</code> velocity is defined solely by SIA, while above <code>Hmax</code>, velocity is defined solely by SSA).</p>
-<p>Note that <code>Hmax</code> is only used with <code>mix_method=3</code>, however <code>Hmin</code> is also
-the threshold for calculating the SSA solution. Typically <code>Hmin</code> is set to a low value to avoid artificially constraining the SSA regions.</p>
-<h2 id="bdrag_par">bdrag_par</h2>
-<p><strong>Alexander Robinson, 2016-10-31</strong></p>
-<pre><code>&amp;bdrag_par
-    toblim            = 0.7e5  ! creo que no sirven
-    tobmax            = 1000.0 ! creo que no sirven
-    hmin_rock         = 0.0    ! North=400.0; South=50.0
-    hmax_rock         = 500.0
-    hmin_sed          = 1.0
-    beta_lim          = 1500.0    ! [Pa??]
-    beta_max          = 1000.0
-    beta_max_island   =  500.0
-    beta_min          =   10.0
-    beta_sia          = 1e5
-    cf_stream         = 20.0
-    cf_fac_sed        = 0.1
-    cf_fac_coast      = 0.01
-    cf_fac_island     = 0.01
-    stream_choice     = 0     ! 0: water-pressure; 1: stream-tracing
-    limit_friction    = FALSE ! True: the beta has boundaries &amp; SSA points are eliminated if beta is big enough
-                              ! False: beta is not limited and SSA can occupate whatever point for whatever beta
-
-/
-</code></pre>
-
-<p>The parameters in this section control the calculation of dragging in <strong>Yelmo</strong>, in particular the dragging coefficient <em>Βeta</em>.
-For now, most of the parameters are in fact either no longer used, or
-in the process of being phased out in favor of new approaches.
-However, the four <code>cf_*</code> parameters are critical:</p>
-<ul>
-<li><code>cf_stream</code> <strong>[1e5 (m/a)^-1]</strong> This defines the base dragging coefficient, which applies for inland ice streams without sediments.</li>
-<li><code>cf_fac_sed</code> The scaling factor relative to <code>cf_stream</code> for sediment-covered points, ∈ (0,1).</li>
-<li><code>cf_fac_coast</code> The scaling factor relative to <code>cf_stream</code> for coastal points, ∈ (0,1).</li>
-<li><code>cf_fac_island</code> The scaling factor relative to <code>cf_stream</code> for "island" points, ∈ (0,1).</li>
-</ul>
-<p>Normally <code>cf_fac_coast</code> and <code>cf_fac_island</code> are close to zero.</p></div>
+<h2 id="to-do">To do</h2></div>
         </div>
 
         <footer class="col-md-12">
