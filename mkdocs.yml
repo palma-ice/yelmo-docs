@@ -2,5 +2,6 @@ site_name: Yelmo-docs
 pages:
     - Home: index.md
     - Getting started: getting-started.md
+    - Dependencies: dependencies.md
     - Parameters: parameters.md
 theme: mkdocs
