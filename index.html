@@ -105,15 +105,16 @@ Robinson et al., 2019, in prep.</p>
 <p>The Yelmo class defines all data related to a model domain, such as Greenland or Antarctica. As seen below in the yelmo_class defintion, the 'class' is simply a user-defined Fortran type that contains additional types representing various parameters, variables or sets of module variables.</p>
 <pre><code class="fortran">    type yelmo_class
         type(yelmo_param_class) :: par      ! General domain parameters
-        type(grid_class)        :: grid     ! Grid definition
+        type(ygrid_class)       :: grd      ! Grid definition
         type(ytopo_class)       :: tpo      ! Topography variables
         type(ydyn_class)        :: dyn      ! Dynamics variables
         type(ymat_class)        :: mat      ! Material variables
         type(ytherm_class)      :: thrm     ! Thermodynamics variables
         type(ybound_class)      :: bnd      ! Boundary variables to drive model
         type(ydata_class)       :: dta      ! Data variables for comparison
-        type(yregions_class)    :: reg      ! Regionally aggregated variables  
+        type(yregions_class)    :: reg      ! Regionally aggregated variables
     end type
+
 </code></pre>
 
 <p>Likewise the module variables are defined in a similar way, e.g. ytopo_class that defines variables and parameters associated with the topography:</p>
@@ -283,5 +284,5 @@ compile a test program and run simulations.</p></div>
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-05-08 14:20:39
+Build Date UTC : 2019-05-08 14:27:18
 -->

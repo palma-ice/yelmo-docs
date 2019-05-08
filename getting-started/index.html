@@ -128,7 +128,7 @@ and the use of the script <code>run_yelmo.py</code> for job preparation and subm
 <p><strong>Yelmo</strong> is hosted in a git repository. Follow the steps below to
 obtain the code, compile it and run a test simulation.</p>
 <h3 id="1-get-the-code">1. Get the code.</h3>
-<p>Clone the repository and check out a new branch:</p>
+<p>Clone the repository from <a href="https://github.com/palma-ice/yelmo">https://github.com/palma-ice/yelmo</a>:</p>
 <pre><code>git clone git@github.com:palma-ice/yelmo.git $YELMOROOT
 cd $YELMOROOT 
 </code></pre>
@@ -140,7 +140,7 @@ cd $YELMOROOT
 
 <p>You should now be working on the branch <code>user-dev</code>.</p>
 <h3 id="2-create-the-system-specific-makefile">2. Create the system-specific Makefile.</h3>
-<p>To compile Yelmo, you need to generate the Makefile that is appropriate for your system. In the folder config, you need to specify a configuration file that defines the compiler and flags, including definition of the paths to the <code>NetCDF</code> and <code>LIS</code> libraries. You can use another file in the config folder as a template, e.g.,</p>
+<p>To compile Yelmo, you need to generate a Makefile that is appropriate for your system. In the folder <code>config</code>, you need to specify a configuration file that defines the compiler and flags, including definition of the paths to the <code>NetCDF</code> and <code>LIS</code> libraries. You can use another file in the config folder as a template, e.g.,</p>
 <pre><code>cd config
 cp pik_ifort myhost_mycompiler
 </code></pre>
@@ -153,19 +153,21 @@ python config.py config/myhost_mycompiler
 <p>The result should be a Makefile in <code>$YELMOROOT</code> that is ready for use. </p>
 <h3 id="3-compile-the-code">3. Compile the code.</h3>
 <p>Now you are ready to compile Yelmo as a static library:</p>
-<pre><code>make clean    *This step is very important to avoid errors!!
+<pre><code>make clean    # This step is very important to avoid errors!!
 make yelmo-static [debug=1]
 </code></pre>
 
 <p>This will compile all of the Yelmo modules and libraries (as defined in <code>config/Makefile_yelmo.mk</code>),
 and link them in a static library. All compiled files can be found in the folder <code>libyelmo/</code>. </p>
-<p>Once the static library has been compiled, it can be used inside of external programs via <code>use yelmo</code>. 
+<p>Once the static library has been compiled, it can be used inside of external Fortran programs and modules
+via the statement <code>use yelmo</code>. 
 To include/link yelmo-static during compilation of another program, its location must be defined:</p>
 <pre><code>INC_YELMO = -I${YELMOROOT}/include
 LIB_YELMO = -L${YELMOROOT}/include -lyelmo
 </code></pre>
 
-<p>Or, several stand-alone programs exist in the folder <code>tests/</code> to run Yelmo as a stand-alone ice sheet.
+<p>Alternatively, several test programs exist in the folder <code>tests/</code> to run Yelmo 
+as a stand-alone ice sheet.
 For example, it's possible to run different EISMINT benchmarks, MISMIP benchmarks and the
 ISIMIP6 INITMIP simulation for Greenland, respectively:</p>
 <pre><code>make benchmarks    # compiles the program `libyelmo/bin/yelmo_benchmarks.x`
@@ -173,10 +175,10 @@ make mismip        # compiles the program `libyelmo/bin/yelmo_mismip.x`
 make initmip       # compiles the program `libyelmo/bin/yelmo_initmip.x`
 </code></pre>
 
-<p>The Makefile additionally allows you to specify debugging compiler flags with the option <code>debug=1</code>, in case you need to debug the code (e.g., <code>make benchmarks debug=1</code>). Using this option, the code will run much slower, so this option is not recommended for real simulations.</p>
+<p>The Makefile additionally allows you to specify debugging compiler flags with the option <code>debug=1</code>, in case you need to debug the code (e.g., <code>make benchmarks debug=1</code>). Using this option, the code will run much slower, so this option is not recommended unless necessary.</p>
 <h3 id="4-run-the-model">4. Run the model.</h3>
 <p>Once an executable has been created, you can run the model. This can be
-achieved via a Python job submission script <code>run_yelmo.py</code>. The following steps
+achieved via the included Python job submission script <code>run_yelmo.py</code>. The following steps
 are carried out via the script:</p>
 <ol>
 <li>The output directory is created.</li>
