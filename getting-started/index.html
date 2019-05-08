@@ -84,37 +84,29 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#dependencies">Dependencies</a></li>
-        <li class="main "><a href="#directory-structure">Directory structure</a></li>
-        <li class="main "><a href="#usage">Usage</a></li>
-            <li><a href="#1-get-the-code">1. Get the code.</a></li>
-            <li><a href="#2-housekeeping">2. Housekeeping.</a></li>
-            <li><a href="#3-compile-the-code">3. Compile the code.</a></li>
-            <li><a href="#4-run-the-model">4. Run the model.</a></li>
-            <li><a href="#troubleshooting">Troubleshooting</a></li>
+        <li class="main active"><a href="#getting-started">Getting started</a></li>
+            <li><a href="#dependencies">Dependencies</a></li>
+            <li><a href="#directory-structure">Directory structure</a></li>
+            <li><a href="#usage">Usage</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<p>This file describes the basic steps needed to get <strong>Yelmo</strong>
+<h1 id="getting-started">Getting started</h1>
+<p>This file describes the basic information and steps needed to get <strong>Yelmo</strong>
 running.</p>
 <h2 id="dependencies">Dependencies</h2>
 <ul>
 <li>NetCDF library (preferably version 4.0 or higher)</li>
 <li>LIS: <a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
-<li><a href="https://github.com/alex-robinson/coordinates" title="alex-robinson/coordinates">Coordinates library</a></li>
 </ul>
+<p>See: <a href="https://palma-ice.github.io/yelmo-docs/dependencies/">Dependencies</a></p>
 <p>OPTIONAL:
-- Python 2.7.x or 3.x, which is only needed for automation of configuration of Makefile
-and the use of the <code>run_yelmo.py</code> script for job preparation and submission.
-- <a href="https://gitlab.pik-potsdam.de/greenrise/runner" title="runner library">Python library <code>runner</code></a>, which extends the <code>run_yelmo.py</code> functionality to facilitate running ensembles of simulations.
-- Access to the <code>ice_data</code> repository of pre-processed
-input data for the model on different domains (North, Eurasia, Greenland, Antarctica)</p>
+- Python 3.x, which is only needed for automatic configuration of the Makefile
+and the use of the script <code>run_yelmo.py</code> for job preparation and submission.</p>
 <h2 id="directory-structure">Directory structure</h2>
 <pre><code class="fortran">    config/
         Configuration files for compilation on different systems.
-    docs/
-        Model documentation.
     input/
         Location of any input data needed by the model.
     libs/
@@ -136,83 +128,97 @@ input data for the model on different domains (North, Eurasia, Greenland, Antarc
 <p><strong>Yelmo</strong> is hosted in a git repository. Follow the steps below to
 obtain the code, compile it and run a test simulation.</p>
 <h3 id="1-get-the-code">1. Get the code.</h3>
-<p>Clone the repository, check out a new branch and make sure it is linked 'upstream' to the same branch in the central repository:</p>
-<pre><code>git clone user@airara.fis.ucm.es:/palma/repos/yelmo.git yelmo
-git checkout -b user-dev
-git push -u origin user-dev
+<p>Clone the repository and check out a new branch:</p>
+<pre><code>git clone git@github.com:palma-ice/yelmo.git $YELMOROOT
+cd $YELMOROOT 
+</code></pre>
+
+<p>where <code>$YELMOROOT</code> is the installation directory.</p>
+<p>If you plan to make changes to the code, it is wise to check out a new branch:</p>
+<pre><code>git checkout -b user-dev
 </code></pre>
 
 <p>You should now be working on the branch <code>user-dev</code>.</p>
-<h3 id="2-housekeeping">2. Housekeeping.</h3>
-<ul>
-<li>You need to generate a symbolic link to the input (2D/3D/+) data folder that the model uses (typically the location of the <code>ice_data</code> repository), e.g.,</li>
-</ul>
-<pre><code>ln -s PATH/TO/ice_data ice_data
-</code></pre>
-
-<ul>
-<li>You need to generate the Makefile that is appropriate for your system. In the folder config, you need to specify a configuration file with the name of your system that contains the paths to the <code>NetCDF</code>, <code>LIS</code> and <code>coordinates</code> libraries. See others in the config folder for a template, e.g.,</li>
-</ul>
+<h3 id="2-create-the-system-specific-makefile">2. Create the system-specific Makefile.</h3>
+<p>To compile Yelmo, you need to generate the Makefile that is appropriate for your system. In the folder config, you need to specify a configuration file that defines the compiler and flags, including definition of the paths to the <code>NetCDF</code> and <code>LIS</code> libraries. You can use another file in the config folder as a template, e.g.,</p>
 <pre><code>cd config
-cp eolo your_system
+cp pik_ifort myhost_mycompiler
 </code></pre>
 
-<p>then modify the file <code>your_system</code> to match your paths. This file should have the name that is output from your system when you run the bash command <code>hostname</code>. Back in the main <code>yelmo</code> directory, you can then generate your Makefile with the provided python configuration script:</p>
-<pre><code>cd ..
-python config.py
+<p>then modify the file <code>myhost_mycompiler</code> to match your paths. Back in <code>$YELMOROOT</code>, you can then generate your Makefile with the provided python configuration script:</p>
+<pre><code>cd $YELMOROOT
+python config.py config/myhost_mycompiler
 </code></pre>
 
+<p>The result should be a Makefile in <code>$YELMOROOT</code> that is ready for use. </p>
 <h3 id="3-compile-the-code">3. Compile the code.</h3>
-<p>Now you are ready to compile the <strong>Yelmo</strong> program you desire (eg, <code>yelmo_benchmarks</code>) :</p>
+<p>Now you are ready to compile Yelmo as a static library:</p>
 <pre><code>make clean    *This step is very important to avoid errors!!
-make yelmo_benchmarks [debug=1]
+make yelmo-static [debug=1]
 </code></pre>
 
-<p>(or other program <code>yelmo_test</code>, <code>yelmo_mismip</code>, <code>yelmo_stommel</code> or <code>yelmo_optbeta</code>). The <code>debug=1</code> option allows you to compile with debugging compiler options enabled, in case you need to debug the code. Using this option, the code will run much slower, so this option is not recommended for real simulations.</p>
+<p>This will compile all of the Yelmo modules and libraries (as defined in <code>config/Makefile_yelmo.mk</code>),
+and link them in a static library. All compiled files can be found in the folder <code>libyelmo/</code>. </p>
+<p>Once the static library has been compiled, it can be used inside of external programs via <code>use yelmo</code>. 
+To include/link yelmo-static during compilation of another program, its location must be defined:</p>
+<pre><code>INC_YELMO = -I${YELMOROOT}/include
+LIB_YELMO = -L${YELMOROOT}/include -lyelmo
+</code></pre>
+
+<p>Or, several stand-alone programs exist in the folder <code>tests/</code> to run Yelmo as a stand-alone ice sheet.
+For example, it's possible to run different EISMINT benchmarks, MISMIP benchmarks and the
+ISIMIP6 INITMIP simulation for Greenland, respectively:</p>
+<pre><code>make benchmarks    # compiles the program `libyelmo/bin/yelmo_benchmarks.x`
+make mismip        # compiles the program `libyelmo/bin/yelmo_mismip.x`
+make initmip       # compiles the program `libyelmo/bin/yelmo_initmip.x`
+</code></pre>
+
+<p>The Makefile additionally allows you to specify debugging compiler flags with the option <code>debug=1</code>, in case you need to debug the code (e.g., <code>make benchmarks debug=1</code>). Using this option, the code will run much slower, so this option is not recommended for real simulations.</p>
 <h3 id="4-run-the-model">4. Run the model.</h3>
-<p>Once the executable has been created, you can run the model. This can be
+<p>Once an executable has been created, you can run the model. This can be
 achieved via a Python job submission script <code>run_yelmo.py</code>. The following steps
 are carried out via the script:</p>
 <ol>
 <li>The output directory is created.</li>
 <li>The executable is copied to the output directory</li>
-<li>The parameter files are copied to the output directory.</li>
-<li>Links to the input data paths (<code>input</code> and <code>ice_data</code>) are created in the output directory.</li>
-<li>The executable is run from the output directory, either as a background process or it is submitted to the queue (currently supports <code>qsubmit</code> and <code>sbatch</code> commands).</li>
+<li>The relevant parameter files are copied to the output directory.</li>
+<li>Links to the input data paths (<code>input</code> and <code>ice_data</code>) are created in the output directory. (Note <code>ice_data</code> is typically linked to an external data repository, and is not necessary.)</li>
+<li>The executable is run from the output directory, either as a background process or it is submitted to the queue (the script currently supports <code>qsubmit</code> and <code>sbatch</code> commands).</li>
 </ol>
-<p>To run a test simulation on a cluster using the executable <code>yelmo_benchmarks.x</code>, use the following command:</p>
-<pre><code>./run_yelmo.py -s -e benchmarks output/test par/yelmo_EISMINT.nml 
+<p>To run a benchmark simulation, for example, use the following command:</p>
+<pre><code>python run_yelmo.py -r -e benchmarks output/test par/yelmo_EISMINT.nml 
 </code></pre>
 
-<p>where <code>-s</code> implies submission to the cluster queue, and <code>-e</code> lets you specify the executable. For some standard cases, shortcuts have been created:</p>
+<p>where the option <code>-r</code> implies that the model should be run as a background process. If this is omitted, then the output directory will be populated, but no executable will be run, while <code>-s</code> instead will submit the simulation to cluster queue system instead of running in the background. The option <code>-e</code> lets you specify the executable. For some standard cases, shortcuts have been created:</p>
 <pre><code>benchmarks = libyelmo/bin/yelmo_benchmarks.x 
-test       = libyelmo/bin/yelmo_test.x 
 mismip     = libyelmo/bin/yemo_mismip.x 
+initmip    = libyelmo/bin/yelmo_initmip.x 
 </code></pre>
 
-<p>The last two mandatory arguments are always the output/run directory and the parameter file to be used for this simulation. </p>
-<p>Additional powerful job submission functionality is available by using the Python <code>runner</code> tool. The <code>job run</code> command of the <code>runner</code> package allows you to change parameter values at the command line and perform large ensembles. For example, you can run an ensemble of two simulations as above but with different grid resolutions using:</p>
+<p>The last two mandatory arguments are always the output/run directory and the parameter file to be used for this simulation. In the case of the above simulation, the output directory is defined as <code>output/test</code>, where all model parameters (loaded from the file <code>par/yelmo_EISMINT.nml</code>) and model output can be found. </p>
+<!--
+Additional powerful job submission functionality is available by using the Python `runner` tool. The `job run` command of the `runner` package allows you to change parameter values at the command line and perform large ensembles. For example, you can run an ensemble of two simulations as above but with different grid resolutions using:
+
 <pre><code>job run -f -o output/test -p eismint.dx=25.0,50.0 -- python run_yelmo.py -s -x -e benchmarks {} par/yelmo_EISMINT.nml
 </code></pre>
 
-<p>where <code>-f</code> means execute the command without confirmation, <code>-o</code> is the parent ensemble directory, <code>-p</code> is the argument to allow you to list parameters to modify and <code>eismint.dx=25.0,50.0</code> specifies that the parameter <code>dx</code> in the namelist group <code>eismint</code> should be given a value of <code>25.0</code> in one simulation and <code>50.0</code> in the second simulation. This command will modify the specified parameters found in the parameter file <code>par_yelmo_EISMINT.nml</code> and then run the simulation from the run directory <code>output/test/{}</code> where <code>{}</code> is the name of the directory corresponding to that parameter combination. Using the option <code>-o</code> means that the specific run directory name is simply the number of the simulation, so the run directory for the above command would be <code>output/test/0</code>. Using the option <code>-a</code> means that the run directory will have a name corresponding to the parameter combination specified. Also note that for <code>run_yelmo.py</code> to work properly when called by <code>job run</code>, the additional option <code>-x</code> must be specified.</p>
-<p>The list of parameter choices corresponding to each directory can be found in the file:</p>
+where `-f` means execute the command without confirmation, `-o` is the parent ensemble directory, `-p` is the argument to allow you to list parameters to modify and `eismint.dx=25.0,50.0` specifies that the parameter `dx` in the namelist group `eismint` should be given a value of `25.0` in one simulation and `50.0` in the second simulation. This command will modify the specified parameters found in the parameter file `par_yelmo_EISMINT.nml` and then run the simulation from the run directory `output/test/{}` where `{}` is the name of the directory corresponding to that parameter combination. Using the option `-o` means that the specific run directory name is simply the number of the simulation, so the run directory for the above command would be `output/test/0`. Using the option `-a` means that the run directory will have a name corresponding to the parameter combination specified. Also note that for `run_yelmo.py` to work properly when called by `job run`, the additional option `-x` must be specified.
+
+The list of parameter choices corresponding to each directory can be found in the file:
+
 <pre><code>output/test/params.txt
 </code></pre>
 
-<p>More information about running jobs can be found in the help of <code>run_yelmo.py</code> and <code>runner</code>:</p>
+
+More information about running jobs can be found in the help of `run_yelmo.py` and `runner`:
+
+
 <pre><code>./run_yelmo.py -h
 job -h 
 job run -h 
 </code></pre>
 
-<h3 id="troubleshooting">Troubleshooting</h3>
-<p><code>Runtime error: liblis.so.0 not found</code>
-It may be necessary to export the LIS lib path to the linker, in order to avoid a runtime error. This can be achieved by including the following lines in the <code>.bash_profile</code> file:</p>
-<pre><code># lis library paths 
-LD_LIBRARY_PATH=/home/fispalma25/apps/lis/lis/lib:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH
-</code></pre></div>
+--></div>
         </div>
 
         <footer class="col-md-12">
