@@ -7,11 +7,11 @@
         
         
         
-        <link rel="shortcut icon" href="/img/favicon.ico">
-        <title>Yelmo-docs</title>
-        <link href="/css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="/css/font-awesome.min.css" rel="stylesheet">
-        <link href="/css/base.css" rel="stylesheet">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Dependencies - Yelmo-docs</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="/js/jquery-1.10.2.min.js" defer></script>
-        <script src="/js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/.">Yelmo-docs</a>
+                    <a class="navbar-brand" href="..">Yelmo-docs</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -47,16 +47,16 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="/.">Home</a>
+                                <a href="..">Home</a>
                             </li>
                             <li >
-                                <a href="/getting-started/">Getting started</a>
+                                <a href="../getting-started/">Getting started</a>
+                            </li>
+                            <li class="active">
+                                <a href="./">Dependencies</a>
                             </li>
                             <li >
-                                <a href="/dependencies/">Dependencies</a>
-                            </li>
-                            <li >
-                                <a href="/parameters/">Parameters</a>
+                                <a href="../parameters/">Parameters</a>
                             </li>
                         </ul>
 
@@ -66,21 +66,73 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+                            <li >
+                                <a rel="next" href="../getting-started/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../parameters/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
                     </ul>
                 </div>
             </div>
         </div>
 
         <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#installing-netcdf-preferably-version-40-or-higher">Installing NetCDF (preferably version 4.0 or higher)</a></li>
+        <li class="main "><a href="#installing-lis">Installing LIS</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
 
-    <div class="row-fluid">
-      <div id="main-content" class="span12">
-        <h1 id="404-page-not-found" style="text-align: center">404</h1>
-        <p style="text-align: center"><strong>Page not found</strong></p>
-      </div>
-    </div>
+<p>Yelmo is dependent on the following libraries:</p>
+<p><a href="https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html">NetCDF</a>
+<a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></p>
+<h2 id="installing-netcdf-preferably-version-40-or-higher">Installing NetCDF (preferably version 4.0 or higher)</h2>
+<p>The NetCDF library is typically available with different distributions (Linux, Mac, etc).
+Along with installing <code>libnetcdf</code>, it will be necessary to install the package <code>libnetcdf-dev</code>.
+Installing the NetCDF viewing program <code>ncview</code> is also recommended. </p>
+<p>If you want to install NetCDF from source, then you must install both the
+<code>netcdf-c</code> and subsequently <code>netcdf-fortran</code> libraries. The source code and
+installation instructions are available from the Unidata website:
+https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html</p>
+<h2 id="installing-lis">Installing LIS</h2>
+<ol>
+<li>
+<p>Download the LIS source:
+https://www.ssisc.org/lis/</p>
+</li>
+<li>
+<p>Configure the package (where  is the desired installation location),
+and install it in the location of your choice (below defined as <code>$LISROOT</code>). Also, make sure to enable the Fortran90 interface:</p>
+</li>
+</ol>
+<pre><code>cd lis-2.0.18
+./configure --prefix=$LISROOT --enable-f90
+make
+make install
+make install check
+</code></pre>
 
+<p>Note: make sure to set the environment variables <code>CC</code> and <code>FC</code>, in order to set 
+a specific compiler, for example for gcc/gfortran use the following configure command:</p>
+<pre><code>CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90
+</code></pre>
 
+<ol>
+<li>Add LIS path to the LD_LIBRARY_PATH in .bash_profile, .bashrc or .bash_aliases:</li>
+</ol>
+<pre><code># lis library paths
+LD_LIBRARY_PATH=$LISROOT/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH
+</code></pre>
+
+<p>That' it. LIS should now be available to use with Yelmo.</p></div>
         </div>
 
         <footer class="col-md-12">
@@ -88,11 +140,11 @@
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "/",
+            var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="/js/base.js" defer></script>
-        <script src="/search/main.js" defer></script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
