@@ -1,6 +1,6 @@
 # Yelmo
 
-![Yelmo, Gaudarrama Mountains](/assets/yelmo.jpg)
+![Yelmo, Gaudarrama Mountains](img/yelmo.jpg)
 
 Welcome to **Yelmo**, an easy to use continental ice sheet model.
 **Yelmo** is a 3D thermomechanical ice sheet model that
