@@ -1,16 +1,21 @@
 # Yelmo
 
+![Yelmo, Gaudarrama Mountains](/assets/yelmo.jpg)
+
 Welcome to **Yelmo**, an easy to use continental ice sheet model.
 **Yelmo** is a 3D thermomechanical ice sheet model that
 simulates continental scale ice sheets. The ice dynamics can 
 be treated via the Shallow Ice Approximation (SIA) for
 land-based ice driven by deformation, the Shallow Shelf
-Approximation (SSA) for faster moving ice streams and ice shelves and a hybrid configuration that hueristically combines the two approximations into one solution.
+Approximation (SSA) for faster moving ice streams and ice shelves and a hybrid configuration that heuristically combines the two approximations into one solution.
 
 **Yelmo** has been designed to operate as a stand-alone model or to be easily plugged in as a module in another program. The key to its flexibility is that no variables are defined globally and parameters are defined according to the domain being modeled. In this way, all variables and calculations are store in an object that entirely represents the model domain.
 
 A description of **Yelmo** along with validation tests has been published here:
-Robinson et al., 2019...
+Robinson et al., 2019, in prep.
+
+The Yelmo code repository can be found here:
+[https://github.com/palma-ice/yelmo](https://github.com/palma-ice/yelmo) 
 
 ## General model structure - classes and usage
 
@@ -20,15 +25,16 @@ The Yelmo class defines all data related to a model domain, such as Greenland or
 ```fortran
     type yelmo_class
         type(yelmo_param_class) :: par      ! General domain parameters
-        type(grid_class)        :: grid     ! Grid definition
+        type(ygrid_class)       :: grd      ! Grid definition
         type(ytopo_class)       :: tpo      ! Topography variables
         type(ydyn_class)        :: dyn      ! Dynamics variables
         type(ymat_class)        :: mat      ! Material variables
         type(ytherm_class)      :: thrm     ! Thermodynamics variables
         type(ybound_class)      :: bnd      ! Boundary variables to drive model
         type(ydata_class)       :: dta      ! Data variables for comparison
-        type(yregions_class)    :: reg      ! Regionally aggregated variables  
+        type(yregions_class)    :: reg      ! Regionally aggregated variables
     end type
+
 ```
 Likewise the module variables are defined in a similar way, e.g. ytopo_class that defines variables and parameters associated with the topography:
 ```fortran
@@ -54,14 +60,11 @@ inside of a program, run the model forward in time and then terminate the instan
 
     ! Initialize Yelmo objects (multiple yelmo objects can be initialized if needed)
     ! In this case `yelmo1` is the Yelmo object to initialize and `path_par` is the
-    ! path to the parameter file to load for the configuration information.
+    ! path to the parameter file to load for the configuration information. This 
+    ! command will also initialize the domain grid and load initial topographic
+    ! variables. 
     
-    call yelmo_init(yelmo1,filename=path_par)
-    
-    ! Next initialize the state of yelmo variables, first only the topography
-    ! related variables (which can be useful for defining boundary conditions)
-    
-    call yelmo_init_state_1(yelmo1,path_par,time=time_init)
+    call yelmo_init(yelmo1,filename=path_par,grid_def="file",time=time_init)
     
     ! === Load initial boundary conditions for current time and yelmo state =====
     ! These variables can be loaded from a file, or passed from another 
@@ -83,10 +86,10 @@ inside of a program, run the model forward in time and then terminate the instan
     call yelmo_print_bound(yelmo1%bnd)
 
     
-    ! Next, initialize remaining state variables (dyn,therm,mat)
+    ! Next, initialize the state variables (dyn,therm,mat)
     ! (in this case, initialize temps with robin method)
     
-    call yelmo_init_state_2(yelmo1,path_par,time=time_init,thrm_method="robin")
+    call yelmo_init_state(yelmo1,path_par,time=time_init,thrm_method="robin")
 
     ! Run yelmo for eg 100.0 years with constant boundary conditions and topo
     ! to equilibrate thermodynamics and dynamics
@@ -95,9 +98,8 @@ inside of a program, run the model forward in time and then terminate the instan
     call yelmo_update_equil(yelmo1,time,time_tot=100.0,topo_fixed=.FALSE.,dt=1.0)
 
     ! == YELMO INITIALIZATION COMPLETE ==
-    ! Note: the above routines `yelmo_update_equil`, `yelmo_init_state_1` and
-    ! `yelmo_init_state_2` are optional, if the user prefers another way
-    ! to initialize the state variables.
+    ! Note: the above routines `yelmo_init_state` and `yelmo_update_equil`
+    ! are optional, if the user prefers another way to initialize the state variables.
 
     ! == Start time looping and run the model == 
 
@@ -110,9 +112,9 @@ inside of a program, run the model forward in time and then terminate the instan
         ! Update the Yelmo ice sheet
         call yelmo_update(yelmo1,time)
 
+        ! Here you may be updating `yelmo1%bnd` variables to drive the model transiently.
 
     end do 
-
 
     ! == Finalize Yelmo instance == 
     call yelmo_end(yelmo1,time=time)

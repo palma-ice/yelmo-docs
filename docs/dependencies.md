@@ -1,7 +1,11 @@
+# Dependencies 
+
 Yelmo is dependent on the following libraries:
 
-[NetCDF](https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html)
-[Library of Iterative Solvers for Linear Systems](http://www.ssisc.org/lis/)
+- [NetCDF](https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html)
+- [Library of Iterative Solvers for Linear Systems](http://www.ssisc.org/lis/)
+
+Installation tips can be found below. 
 
 ## Installing NetCDF (preferably version 4.0 or higher)
 
@@ -17,7 +21,7 @@ https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.ht
 ## Installing LIS
 
 1. Download the LIS source:
-https://www.ssisc.org/lis/
+[https://www.ssisc.org/lis/](https://www.ssisc.org/lis/)
 
 2. Configure the package (where  is the desired installation location),
 and install it in the location of your choice (below defined as `$LISROOT`). Also, make sure to enable the Fortran90 interface:
@@ -40,5 +44,5 @@ CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90
 LD_LIBRARY_PATH=$LISROOT/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 ```
-That' it. LIS should now be available to use with Yelmo.
+That's it. LIS should now be available to use with Yelmo.
 

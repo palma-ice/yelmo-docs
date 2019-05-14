@@ -4,4 +4,6 @@ pages:
     - Getting started: getting-started.md
     - Dependencies: dependencies.md
     - Parameters: parameters.md
-theme: mkdocs
+#theme: mkdocs
+theme:
+    name: readthedocs
