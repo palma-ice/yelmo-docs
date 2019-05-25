@@ -4,6 +4,7 @@ nav:
     - Getting started: getting-started.md
     - Dependencies: dependencies.md
     - Parameters: parameters.md
+    - Examples: example-programs.md
 #theme: mkdocs
 theme:
     name: readthedocs

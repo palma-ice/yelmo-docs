@@ -5,13 +5,13 @@ Yelmo is dependent on the following libraries:
 - [NetCDF](https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html)
 - [Library of Iterative Solvers for Linear Systems](http://www.ssisc.org/lis/)
 
-Installation tips can be found below. 
+Installation tips can be found below.
 
 ## Installing NetCDF (preferably version 4.0 or higher)
 
 The NetCDF library is typically available with different distributions (Linux, Mac, etc).
 Along with installing `libnetcdf`, it will be necessary to install the package `libnetcdf-dev`.
-Installing the NetCDF viewing program `ncview` is also recommended. 
+Installing the NetCDF viewing program `ncview` is also recommended.
 
 If you want to install NetCDF from source, then you must install both the
 `netcdf-c` and subsequently `netcdf-fortran` libraries. The source code and
@@ -32,7 +32,7 @@ make
 make install
 make install check
 ```
-Note: make sure to set the environment variables `CC` and `FC`, in order to set 
+Note: make sure to set the environment variables `CC` and `FC`, in order to set
 a specific compiler, for example for gcc/gfortran use the following configure command:
 ```
 CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90
@@ -45,4 +45,3 @@ LD_LIBRARY_PATH=$LISROOT/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 ```
 That's it. LIS should now be available to use with Yelmo.
-
