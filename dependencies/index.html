@@ -82,6 +82,11 @@
     <a class="" href="../parameters/">Parameters</a>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../example-programs/">Examples</a>
+	    </li>
+          
         </ul>
       </div>
       &nbsp;
@@ -120,11 +125,11 @@
 <li><a href="https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html">NetCDF</a></li>
 <li><a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
 </ul>
-<p>Installation tips can be found below. </p>
+<p>Installation tips can be found below.</p>
 <h2 id="installing-netcdf-preferably-version-40-or-higher">Installing NetCDF (preferably version 4.0 or higher)</h2>
 <p>The NetCDF library is typically available with different distributions (Linux, Mac, etc).
 Along with installing <code>libnetcdf</code>, it will be necessary to install the package <code>libnetcdf-dev</code>.
-Installing the NetCDF viewing program <code>ncview</code> is also recommended. </p>
+Installing the NetCDF viewing program <code>ncview</code> is also recommended.</p>
 <p>If you want to install NetCDF from source, then you must install both the
 <code>netcdf-c</code> and subsequently <code>netcdf-fortran</code> libraries. The source code and
 installation instructions are available from the Unidata website:
@@ -147,7 +152,7 @@ make install
 make install check
 </code></pre>
 
-<p>Note: make sure to set the environment variables <code>CC</code> and <code>FC</code>, in order to set 
+<p>Note: make sure to set the environment variables <code>CC</code> and <code>FC</code>, in order to set
 a specific compiler, for example for gcc/gfortran use the following configure command:</p>
 <pre><code>CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90
 </code></pre>

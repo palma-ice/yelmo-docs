@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Parameters - Yelmo-docs</title>
+  <title>Examples - Yelmo-docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Parameters";
-    var mkdocs_page_input_path = "parameters.md";
+    var mkdocs_page_name = "Examples";
+    var mkdocs_page_input_path = "example-programs.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -63,26 +63,28 @@
     <a class="" href="../dependencies/">Dependencies</a>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../parameters/">Parameters</a>
+	    </li>
+          
             <li class="toctree-l1 current">
 		
-    <a class="current" href="./">Parameters</a>
+    <a class="current" href="./">Examples</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#parameters">Parameters</a></li>
+    <li class="toctree-l2"><a href="#example-programs">Example programs</a></li>
     
         <ul>
         
-            <li><a class="toctree-l3" href="#to-do">To do</a></li>
+            <li><a class="toctree-l3" href="#program-template">Program template</a></li>
+        
+            <li><a class="toctree-l3" href="#stand-alone-ice-sheet-with-full-boundary-forcing-yelmox">Stand-alone ice sheet with full boundary forcing (yelmox)</a></li>
         
         </ul>
     
 
     </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../example-programs/">Examples</a>
 	    </li>
           
         </ul>
@@ -107,7 +109,7 @@
     
       
     
-    <li>Parameters</li>
+    <li>Examples</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,14 +119,26 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="parameters">Parameters</h1>
-<p>Here important parameter choices pertinent to running
-<strong>Yelmo</strong> will be documented. Each section will
-outline a specific parameter or set of related parameters.
-The author of each section and the date last updated
-will apear in the heading, to maintain traceability
-in the documentation (since code usually changes over time).</p>
-<h2 id="to-do">To do</h2>
+                <h1 id="example-programs">Example programs</h1>
+<p>The Yelmo base code provides a static library interface that can be used in
+other programs, as well as a couple of stand-alone programs for running
+certain benchmarks. Here we provide more examples of how to use
+Yelmo:
+1) Program template to connect with other models/components.
+2) Stand-alone ice sheet with full boundary forcing.
+In both cases, it is necessary to download the Yelmo repository
+separately, as well as compile the Yelmo static library
+(see <a href="getting-started">Getting started</a>).</p>
+<h2 id="program-template">Program template</h2>
+<p>This is a minimalistic setup that allows you to run Yelmo with
+no dependencies and a straightforward Makefile. This template
+can be used to design a new stand-alone Yelmo experiment, or
+to provide guidance when adding Yelmo to another program.</p>
+<p>Clone the repository from <a href="https://github.com/palma-ice/yelmot">https://github.com/palma-ice/yelmot</a></p>
+<h2 id="stand-alone-ice-sheet-with-full-boundary-forcing-yelmox">Stand-alone ice sheet with full boundary forcing (yelmox)</h2>
+<p>This setup is suitable for glacial-cycle simulations, future simulations
+or any other typical (realistic) ice-sheet model simulation.</p>
+<p>Clone the repository from <a href="https://github.com/palma-ice/yelmox">https://github.com/palma-ice/yelmox</a></p>
               
             </div>
           </div>
@@ -132,10 +146,8 @@ in the documentation (since code usually changes over time).</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../example-programs/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-      
-        <a href="../dependencies/" class="btn btn-neutral" title="Dependencies"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../parameters/" class="btn btn-neutral" title="Parameters"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -161,10 +173,8 @@ in the documentation (since code usually changes over time).</p>
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../dependencies/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../parameters/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-      
-        <span style="margin-left: 15px"><a href="../example-programs/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
