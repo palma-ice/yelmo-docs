@@ -4,8 +4,10 @@ The Yelmo base code provides a static library interface that can be used in
 other programs, as well as a couple of stand-alone programs for running
 certain benchmarks. Here we provide more examples of how to use
 Yelmo:
-1) Program template to connect with other models/components.
-2) Stand-alone ice sheet with full boundary forcing.
+
+1. Program template to connect with other models/components.
+2. Stand-alone ice sheet with full boundary forcing.
+
 In both cases, it is necessary to download the Yelmo repository
 separately, as well as compile the Yelmo static library
 (see [Getting started](getting-started)).
