@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Snapshot climate (snapclim) - Yelmo-docs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Snapshot climate (snapclim)";
+    var mkdocs_page_input_path = "snapclim.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Yelmo-docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../getting-started/">Getting started</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dependencies/">Dependencies</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../parameters/">Parameters</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../example-programs/">Examples</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Yelmo-docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Snapshot climate (snapclim)</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="snapshot-climate-snapclim">Snapshot climate (snapclim)</h1>
+<p>The snapclim module is designed to determine climatic forcing, i.e., monthly temperature and precipitation, for a given point in time. This can be acheived by applying a temperature anomaly, or by interpolating snapshots of climate states available for different times. </p>
+<h2 id="the-hybrid-method">The "hybrid" method.</h2>
+<p>This is my preferred method and is set up to be rather flexible, and I think is a good place to start for these simulations. It is comprised of an annual mean temperature anomaly time series from 300 kyr ago to today obtained from several spliced paleo reconstructions plus a monthly seasonal cycle over the 300 kyr obtained from a climber2 paleo run. So with the monthly values and the annual mean, you can get monthly temp anomalies over 300 kyr. There are more details in the attached manuscript that was never yet submitted...</p>
+<p>To activate this method, in the parameter file, set the following parameters in the group "snapclim":</p>
+<pre><code>atm_type = &quot;hybrid&quot;
+ocn_type = &quot;hybrid&quot; 
+</code></pre>
+
+<p>Then in the group "snapclim_hybrid", you can specify:</p>
+<pre><code>    f_eem              = 0.4     # Controls the maximum temp anomaly during the Eemian
+    f_glac             = 1.0     # Controls the minimum temp anomaly during the glacial period 
+    f_hol              = 0.5     # Controls the maximum temp anomaly during the Holocene
+    f_seas             = 1.0     # Controls the magnitude of the seasonal cycle
+    f_to               = 0.2     # Defines the oceanic temperature anomaly relative 
+                                 # to the annual mean atmospheric temp anomaly
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
