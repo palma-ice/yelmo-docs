@@ -148,10 +148,10 @@ via the function <code>update_cf_ref_thickness_simple</code>. The model is again
 and the process is repeated. There are a few parameters related to the optimization
 that can change to improve the results. These step changes are controlled via the following options
 hard-coded at the start of the program:
-- <code>iter_steps</code>: array that holds the number of iterations for which the optimization parameters should be set.<br />
-- <code>topo_rels</code>: array that holds the values of the parameter <code>topo_rel</code> to be updated.
-- <code>topo_rel_taus</code>: array that holds the values of the parameter <code>topo_rel_tau</code> to be updated.
-- <code>H_scales</code>: array that holds the values of the parameter <code>H_scale</code> to be updated.
+    - <code>iter_steps</code>: array that holds the number of iterations for which the optimization parameters should be set.<br />
+    - <code>topo_rels</code>: array that holds the values of the parameter <code>topo_rel</code> to be updated.
+    - <code>topo_rel_taus</code>: array that holds the values of the parameter <code>topo_rel_tau</code> to be updated.
+    - <code>H_scales</code>: array that holds the values of the parameter <code>H_scale</code> to be updated.
 Simply put, if the total iterations surpasses the current value of <code>iter_steps</code>, then the program
 advances to the next parameter values in the list. When <code>topo_rel=1</code>, the ice thickness in Yelmo
 is relaxed to the reference thickess over the ice shelves, where <code>topo_rel_tau</code> is the time scale of
