@@ -141,26 +141,40 @@ like normal. Thus we are left with a unitless field <code>cf_ref</code>, which f
 friction law varies within the range of about [0:1]. When <code>cf_ref=1.0</code>, sliding will
 diminish to near zero, and <code>cf_ref~0.0</code> (near, but not zero) will give fast sliding.
 This gives a convenient range for optimization.  </p>
-<p>The program runs for <code>time_iter=500</code> years with a given initial field of <code>cf_ref</code>
+<p>Parameters that control the total run time are hard coded:</p>
+<ul>
+<li><code>qmax</code>: number of total iterations to run, where <code>qmax-1</code> is the number of optimization steps,
+during which <code>cf_ref</code> is updated, and the last step is a steady-state run with <code>cf_ref</code> held constant.</li>
+<li><code>time_iter</code>: time to run the model for each iteration before updating <code>cf_ref</code>.</li>
+<li><code>time_steady</code>: Time to run the model to steady state with <code>cf_ref</code> held constant (last iteration step).</li>
+</ul>
+<p>So, the program runs for, e.g., <code>time_iter=500</code> years with a given initial field of <code>cf_ref</code>
 (with <code>C_bed</code> and <code>beta</code> updating every time step to follow changes in <code>u/v</code> and <code>N_eff</code>). At the end
 of <code>time_iter</code>, the error in ice thickness is determined and used to update <code>cf_ref</code>
 via the function <code>update_cf_ref_thickness_simple</code>. The model is again run for <code>time_iter</code> years
-and the process is repeated. There are a few parameters related to the optimization
-that can change to improve the results. These step changes are controlled via the following options
-hard-coded at the start of the program:</p>
-<ul>
-<li><code>iter_steps</code>: array that holds the number of iterations for which the optimization parameters should be set.  </li>
-<li><code>topo_rels</code>: array that holds the values of the parameter <code>topo_rel</code> to be updated.</li>
-<li><code>topo_rel_taus</code>: array that holds the values of the parameter <code>topo_rel_tau</code> to be updated.</li>
-<li><code>H_scales</code>: array that holds the values of the parameter <code>H_scale</code> to be updated.</li>
-</ul>
-<p>Simply put, if the total iterations surpasses the current value of <code>iter_steps</code>, then the program
-advances to the next parameter values in the list. When <code>topo_rel=1</code>, the ice thickness in Yelmo
-is relaxed to the reference thickess over the ice shelves, where <code>topo_rel_tau</code> is the time scale of
-that relaxation. A lower value of <code>topo_rel_tau</code> means the ice shelves are held closer to the observed
-values. <code>H_scale</code> controls the scaling of the ice thickness error, which determines how to modify
-<code>cf_ref</code> at each iteration. A higher value of <code>H_scale</code> means that changes to <code>cf_ref</code> will be
-applied more slowly.</p>
+and the process is repeated.</p>
+<p>Two important parameters control the optimization process: <code>tau</code> and <code>H_scale</code>.
+The optimization works best when the ice shelves are relaxed to the reference
+(observed) ice thickness in the beginning of the simulation, and then gradually
+allowed to freely evolve. <code>tau</code> is the time scale of relaxation, which is applied
+in Yelmo as <code>yelmo1%tpo%par%topo_rel_tau</code>. A lower value of <code>tau</code> means that the
+ice shelves are more tightly held to the observed thickness. Likewise, H_scale<code>controls the scaling
+of the ice thickness error, which determines how to modify</code>cf_ref<code>at each iteration.
+A higher value of</code>H_scale<code>means that changes to</code>cf_ref` will be applied more slowly.</p>
+<p>These parameters are designed to change over time with the simulation. <code>tau</code> is
+set to <code>rel_tau1</code> from the start of the simulation until <code>rel_time1</code>. Between <code>rel_time1</code>
+and <code>rel_time2</code>, <code>tau</code> is linearly scaled from the value of <code>rel_tau1</code> to <code>rel_tau2</code>.
+Once <code>rel_time2</code> is reached, relaxation in the model is disabled, and the ice shelves
+are allowed to freely evolve. Analogously, <code>H_scale</code> is modified the same way:
+it is constant at the value of <code>scale_H1</code> until <code>scale_time1</code>,
+linearly scaled between <code>scale_time1</code> and <code>scale_time2</code>,
+and then constant thereafter at the value of <code>scale_H2</code>. Increasing the value of
+<code>H_scale</code> over time helps to avoid oscillations in the optimization procedure as
+<code>cf_ref</code> approaches the best fit.</p>
+<p>Finally, after <code>qmax-1</code> iterations or <code>time=(qmax-1)*time_iter</code>, <code>cf_ref</code> is held
+constant, and the simulation runs for <code>time_steady</code> years to equilibrate the model
+with the current conditions. This step minimizes drift in the final result and
+confirms that the optimized <code>cf_ref</code> field works well.</p>
               
             </div>
           </div>
