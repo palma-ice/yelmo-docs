@@ -43,21 +43,40 @@ friction law varies within the range of about [0:1]. When `cf_ref=1.0`, sliding 
 diminish to near zero, and `cf_ref~0.0` (near, but not zero) will give fast sliding.
 This gives a convenient range for optimization.  
 
-The program runs for `time_iter=500` years with a given initial field of `cf_ref`
+Parameters that control the total run time are hard coded:
+
+- `qmax`: number of total iterations to run, where `qmax-1` is the number of optimization steps,
+during which `cf_ref` is updated, and the last step is a steady-state run with `cf_ref` held constant.
+- `time_iter`: time to run the model for each iteration before updating `cf_ref`.
+- `time_steady`: Time to run the model to steady state with `cf_ref` held constant (last iteration step).
+
+So, the program runs for, e.g., `time_iter=500` years with a given initial field of `cf_ref`
 (with `C_bed` and `beta` updating every time step to follow changes in `u/v` and `N_eff`). At the end
 of `time_iter`, the error in ice thickness is determined and used to update `cf_ref`
 via the function `update_cf_ref_thickness_simple`. The model is again run for `time_iter` years
-and the process is repeated. There are a few parameters related to the optimization
-that can change to improve the results. These step changes are controlled via the following options
-hard-coded at the start of the program:
-- `iter_steps`: array that holds the number of iterations for which the optimization parameters should be set.  
-- `topo_rels`: array that holds the values of the parameter `topo_rel` to be updated.
-- `topo_rel_taus`: array that holds the values of the parameter `topo_rel_tau` to be updated.
-- `H_scales`: array that holds the values of the parameter `H_scale` to be updated.
-Simply put, if the total iterations surpasses the current value of `iter_steps`, then the program
-advances to the next parameter values in the list. When `topo_rel=1`, the ice thickness in Yelmo
-is relaxed to the reference thickess over the ice shelves, where `topo_rel_tau` is the time scale of
-that relaxation. A lower value of `topo_rel_tau` means the ice shelves are held closer to the observed
-values. `H_scale` controls the scaling of the ice thickness error, which determines how to modify
-`cf_ref` at each iteration. A higher value of `H_scale` means that changes to `cf_ref` will be
-applied more slowly.
+and the process is repeated.
+
+Two important parameters control the optimization process: `tau` and `H_scale`.
+The optimization works best when the ice shelves are relaxed to the reference
+(observed) ice thickness in the beginning of the simulation, and then gradually
+allowed to freely evolve. `tau` is the time scale of relaxation, which is applied
+in Yelmo as `yelmo1%tpo%par%topo_rel_tau`. A lower value of `tau` means that the
+ice shelves are more tightly held to the observed thickness. Likewise, H_scale` controls the scaling
+of the ice thickness error, which determines how to modify `cf_ref` at each iteration.
+A higher value of `H_scale` means that changes to `cf_ref` will be applied more slowly.
+
+These parameters are designed to change over time with the simulation. `tau` is
+set to `rel_tau1` from the start of the simulation until `rel_time1`. Between `rel_time1`
+and `rel_time2`, `tau` is linearly scaled from the value of `rel_tau1` to `rel_tau2`.
+Once `rel_time2` is reached, relaxation in the model is disabled, and the ice shelves
+are allowed to freely evolve. Analogously, `H_scale` is modified the same way:
+it is constant at the value of `scale_H1` until `scale_time1`,
+linearly scaled between `scale_time1` and `scale_time2`,
+and then constant thereafter at the value of `scale_H2`. Increasing the value of
+`H_scale` over time helps to avoid oscillations in the optimization procedure as
+`cf_ref` approaches the best fit.
+
+Finally, after `qmax-1` iterations or `time=(qmax-1)*time_iter`, `cf_ref` is held
+constant, and the simulation runs for `time_steady` years to equilibrate the model
+with the current conditions. This step minimizes drift in the final result and
+confirms that the optimized `cf_ref` field works well.
