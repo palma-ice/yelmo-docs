@@ -164,6 +164,8 @@ A higher value of</code>H_scale<code>means that changes to</code>cf_ref` will be
 <p>These parameters are designed to change over time with the simulation. <code>tau</code> is
 set to <code>rel_tau1</code> from the start of the simulation until <code>rel_time1</code>. Between <code>rel_time1</code>
 and <code>rel_time2</code>, <code>tau</code> is linearly scaled from the value of <code>rel_tau1</code> to <code>rel_tau2</code>.
+Or, if <code>rel_q &gt; 1</code>, then the scaling is non-linear with an exponent of <code>rel_q</code> (this helps
+maintain small values of <code>tau</code> longer which seems to help keep errors low). 
 Once <code>rel_time2</code> is reached, relaxation in the model is disabled, and the ice shelves
 are allowed to freely evolve. Analogously, <code>H_scale</code> is modified the same way:
 it is constant at the value of <code>scale_H1</code> until <code>scale_time1</code>,
