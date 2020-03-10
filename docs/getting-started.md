@@ -1,4 +1,4 @@
-# Getting started 
+# Getting started
 
 This file describes the basic information and steps needed to get **Yelmo**
 running.
@@ -27,11 +27,11 @@ and the use of the script `run_yelmo.py` for job preparation and submission.
         lib/, include/ and bin/ folders.
     output/
         Default location for model output.
-    par/ 
+    par/
         Default parameter files that manage the model configuration.
     src/
         Source code for Yelmo.
-    tests/ 
+    tests/
         Source code and analysis scripts for specific model benchmarks and tests.
 ```
 
@@ -45,7 +45,7 @@ obtain the code, compile it and run a test simulation.
 Clone the repository from [https://github.com/palma-ice/yelmo](https://github.com/palma-ice/yelmo):
 ```
 git clone git@github.com:palma-ice/yelmo.git $YELMOROOT
-cd $YELMOROOT 
+cd $YELMOROOT
 ```
 where `$YELMOROOT` is the installation directory.
 
@@ -69,7 +69,7 @@ then modify the file `myhost_mycompiler` to match your paths. Back in `$YELMOROO
 cd $YELMOROOT
 python config.py config/myhost_mycompiler
 ```
-The result should be a Makefile in `$YELMOROOT` that is ready for use. 
+The result should be a Makefile in `$YELMOROOT` that is ready for use.
 
 ### 3. Compile the code.
 
@@ -79,17 +79,17 @@ make clean    # This step is very important to avoid errors!!
 make yelmo-static [debug=1]
 ```
 This will compile all of the Yelmo modules and libraries (as defined in `config/Makefile_yelmo.mk`),
-and link them in a static library. All compiled files can be found in the folder `libyelmo/`. 
+and link them in a static library. All compiled files can be found in the folder `libyelmo/`.
 
 Once the static library has been compiled, it can be used inside of external Fortran programs and modules
-via the statement `use yelmo`. 
+via the statement `use yelmo`.
 To include/link yelmo-static during compilation of another program, its location must be defined:
 ```
 INC_YELMO = -I${YELMOROOT}/include
 LIB_YELMO = -L${YELMOROOT}/include -lyelmo
 ```
 
-Alternatively, several test programs exist in the folder `tests/` to run Yelmo 
+Alternatively, several test programs exist in the folder `tests/` to run Yelmo
 as a stand-alone ice sheet.
 For example, it's possible to run different EISMINT benchmarks, MISMIP benchmarks and the
 ISIMIP6 INITMIP simulation for Greenland, respectively:
@@ -116,35 +116,57 @@ are carried out via the script:
 To run a benchmark simulation, for example, use the following command:
 
 ```
-python run_yelmo.py -r -e benchmarks output/test par/yelmo_EISMINT.nml 
+python run_yelmo.py -r -e benchmarks output/test par/yelmo_EISMINT.nml
 ```
 where the option `-r` implies that the model should be run as a background process. If this is omitted, then the output directory will be populated, but no executable will be run, while `-s` instead will submit the simulation to cluster queue system instead of running in the background. The option `-e` lets you specify the executable. For some standard cases, shortcuts have been created:
 ```
-benchmarks = libyelmo/bin/yelmo_benchmarks.x 
-mismip     = libyelmo/bin/yemo_mismip.x 
-initmip    = libyelmo/bin/yelmo_initmip.x 
+benchmarks = libyelmo/bin/yelmo_benchmarks.x
+mismip     = libyelmo/bin/yemo_mismip.x
+initmip    = libyelmo/bin/yelmo_initmip.x
 ```
-The last two mandatory arguments are always the output/run directory and the parameter file to be used for this simulation. In the case of the above simulation, the output directory is defined as `output/test`, where all model parameters (loaded from the file `par/yelmo_EISMINT.nml`) and model output can be found. 
+The last two mandatory arguments are always the output/run directory and the parameter file to be used for this simulation. In the case of the above simulation, the output directory is defined as `output/test`, where all model parameters (loaded from the file `par/yelmo_EISMINT.nml`) and model output can be found.
 
-<!--
-Additional powerful job submission functionality is available by using the Python `runner` tool. The `job run` command of the `runner` package allows you to change parameter values at the command line and perform large ensembles. For example, you can run an ensemble of two simulations as above but with different grid resolutions using:
+### 5. Running ensembles
 
+The script `run_yelmo.py` has been designed to work with the Python ensemble
+generation library `runner`. This page gives instructions on how to run ensembles
+of Yelmo simulations using `run_yelmo.py` and `runner`.
+
+#### Installing `runner`
+
+I recommend installing a Python version using the Anaconda installer, even
+on a high performance computing cluster, in order to improve control of installing packages.
+
+`runner` can be installed like any Python library. The source code can be downloaded
+or cloned from here:
+[https://github.com/perrette/runner](https://github.com/perrette/runner)
+
+From inside the main directory, run the following command to install the library:
 ```
-job run -f -o output/test -p eismint.dx=25.0,50.0 -- python run_yelmo.py -s -x -e benchmarks {} par/yelmo_EISMINT.nml
+cd runner
+python setup.py install
 ```
-where `-f` means execute the command without confirmation, `-o` is the parent ensemble directory, `-p` is the argument to allow you to list parameters to modify and `eismint.dx=25.0,50.0` specifies that the parameter `dx` in the namelist group `eismint` should be given a value of `25.0` in one simulation and `50.0` in the second simulation. This command will modify the specified parameters found in the parameter file `par_yelmo_EISMINT.nml` and then run the simulation from the run directory `output/test/{}` where `{}` is the name of the directory corresponding to that parameter combination. Using the option `-o` means that the specific run directory name is simply the number of the simulation, so the run directory for the above command would be `output/test/0`. Using the option `-a` means that the run directory will have a name corresponding to the parameter combination specified. Also note that for `run_yelmo.py` to work properly when called by `job run`, the additional option `-x` must be specified.
+You can check that it was installed properly by running the job command:
+```
+job run -h
+```
 
-The list of parameter choices corresponding to each directory can be found in the file:
+#### Ensembles
+
+The command `job run` acts as a wrapper around your normal `run_yelmo.py` command
+to run a single simulation of Yelmo. As an example, you can run an ensemble of
+two simulations as above for the EISMINT1 moving margin experiment,
+but with different grid resolutions using:
+```
+job run --shell -f -o output/test -p eismint.dx=25.0,50.0 -- python run_yelmo.py -x -s -e benchmarks {} par/gmd/yelmo_EISMINT_moving.nml
+```
+where `--shell` outputs the call to the screen, `-f` means execute the command without confirmation, `-o` is the parent ensemble directory, `-p` is the argument to allow you to list parameters to modify and `eismint.dx=25.0,50.0` specifies that the parameter `dx` in the namelist group `eismint` should be given a value of `25.0` in one simulation and `50.0` in the second simulation. This command will modify the specified parameters found in the parameter file `par/gmd/yelmo_EISMINT_moving.nml` and then run the simulation from the run directory `output/test/{}` where `{}` is the name of the directory corresponding to that parameter combination. Using the option `-o` means that the specific run directory name is simply the number of the simulation, so the run directory for the above command would be `output/test/0`. If you also add the option `-a`, then each run directory will have a name corresponding to the parameter combination specified instead of a number. Also note that for `run_yelmo.py` to work properly when called by `job run`, the additional option `-x` must be specified.
+
+`job run` also generates a list of parameter choices corresponding to each ensemble can be found in the file:
 ```
 output/test/params.txt
 ```
 
-More information about running jobs can be found in the help of `run_yelmo.py` and `runner`:
-
-```
-./run_yelmo.py -h
-job -h 
-job run -h 
-```
--->
-
+More documentation for the options related to ensemble generation (for example, using Latin Hypercube sampling, etc)
+can be found on the `runner` homepage:
+[https://github.com/perrette/runner](https://github.com/perrette/runner)
