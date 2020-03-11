@@ -167,6 +167,19 @@ where `--shell` outputs the call to the screen, `-f` means execute the command w
 output/test/params.txt
 ```
 
-More documentation for the options related to ensemble generation (for example, using Latin Hypercube sampling, etc)
-can be found on the `runner` homepage:
+By default, `job run` will generate parameter combinations by permuting the given values
+at the command line. However, it is possible to sample the parameters using,
+eg, Latin-Hypercube sampling by first calling the `job sample` command, and then `job run`. 
+So, for example, to run the moving margin ensemble experiment with a range of 100 randomly sampled resolutions
+and imposed surface temperature anomalies in a given range, the following two commands could be used:
+```
+job sample eismint.dx=U?25.0,50.0 eismint.dT_test=U?-5.0,5.0 --size 100 --seed 4 > ensemble_params.txt
+job run --shell -f -o ${fldr}/ensemble1 -i ensemble_params.txt -- python run_yelmo.py -x -s -e benchmarks {} par/gmd/yelmo_EISMINT_moving.nml
+```
+The first command simply produces an ascii file "ensemble_params.txt" that contains one column for each parameter being modified.
+It uses Latin Hypercube sampling of a uniform distribution of grid resolutions between 25 and 50 km, and a uniform distribution of temperature anomalies between -5.0 and 5.0. This exact ensemble can be reproduced by specifying the same `seed` value. The second command calls the `run_yelmo.py` script for each parameter combination, but the parameters are loaded from
+the file specified with the `-i` option, instead of from parameter values specified inline.
+
+More documentation for `runner` can be found in the help (`job run -h`; `job sample -h`) and
+on the `runner` homepage:
 [https://github.com/perrette/runner](https://github.com/perrette/runner)
