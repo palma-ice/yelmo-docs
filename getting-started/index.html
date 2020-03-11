@@ -269,7 +269,7 @@ job run --shell -f -o ${fldr}/ensemble1 -i ensemble_params.txt -- python run_yel
 </code></pre>
 
 <p>The first command simply produces an ascii file "ensemble_params.txt" that contains one column for each parameter being modified.
-It uses Latin Hypercube sampling of a uniform distribution of grid resolutions between 25 and 50 km, and a uniform distribution of temperature anomalies between -5.0 and 5.0. This exact ensemble can be reproduced by specifying the same <code>seed</code> value. The second command runs the job script for each parameter combination, but the parameters are loaded from
+It uses Latin Hypercube sampling of a uniform distribution of grid resolutions between 25 and 50 km, and a uniform distribution of temperature anomalies between -5.0 and 5.0. This exact ensemble can be reproduced by specifying the same <code>seed</code> value. The second command calls the <code>run_yelmo.py</code> script for each parameter combination, but the parameters are loaded from
 the file specified with the <code>-i</code> option, instead of from parameter values specified inline.</p>
 <p>More documentation for <code>runner</code> can be found in the help (<code>job run -h</code>; <code>job sample -h</code>) and
 on the <code>runner</code> homepage:
