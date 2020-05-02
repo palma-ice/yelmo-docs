@@ -251,10 +251,10 @@ python setup.py install
 to run a single simulation of Yelmo. As an example, you can run an ensemble of
 two simulations as above for the EISMINT1 moving margin experiment,
 but with different grid resolutions using:</p>
-<pre><code>job run --shell -f -o output/test -p eismint.dx=25.0,50.0 -- python run_yelmo.py -x -s -e benchmarks {} par/gmd/yelmo_EISMINT_moving.nml
+<pre><code>job run --shell -f -o output/test -p eismint.dx=25.0,50.0 -- python run_yelmo.py -x -s -e benchmarks {} par-gmd/yelmo_EISMINT_moving.nml
 </code></pre>
 
-<p>where <code>--shell</code> outputs the call to the screen, <code>-f</code> means execute the command without confirmation, <code>-o</code> is the parent ensemble directory, <code>-p</code> is the argument to allow you to list parameters to modify and <code>eismint.dx=25.0,50.0</code> specifies that the parameter <code>dx</code> in the namelist group <code>eismint</code> should be given a value of <code>25.0</code> in one simulation and <code>50.0</code> in the second simulation. This command will modify the specified parameters found in the parameter file <code>par/gmd/yelmo_EISMINT_moving.nml</code> and then run the simulation from the run directory <code>output/test/{}</code> where <code>{}</code> is the name of the directory corresponding to that parameter combination. Using the option <code>-o</code> means that the specific run directory name is simply the number of the simulation, so the run directory for the above command would be <code>output/test/0</code>. If you also add the option <code>-a</code>, then each run directory will have a name corresponding to the parameter combination specified instead of a number. Also note that for <code>run_yelmo.py</code> to work properly when called by <code>job run</code>, the additional option <code>-x</code> must be specified.</p>
+<p>where <code>--shell</code> outputs the call to the screen, <code>-f</code> means execute the command without confirmation, <code>-o</code> is the parent ensemble directory, <code>-p</code> is the argument to allow you to list parameters to modify and <code>eismint.dx=25.0,50.0</code> specifies that the parameter <code>dx</code> in the namelist group <code>eismint</code> should be given a value of <code>25.0</code> in one simulation and <code>50.0</code> in the second simulation. This command will modify the specified parameters found in the parameter file <code>par-gmd/yelmo_EISMINT_moving.nml</code> and then run the simulation from the run directory <code>output/test/{}</code> where <code>{}</code> is the name of the directory corresponding to that parameter combination. Using the option <code>-o</code> means that the specific run directory name is simply the number of the simulation, so the run directory for the above command would be <code>output/test/0</code>. If you also add the option <code>-a</code>, then each run directory will have a name corresponding to the parameter combination specified instead of a number. Also note that for <code>run_yelmo.py</code> to work properly when called by <code>job run</code>, the additional option <code>-x</code> must be specified.</p>
 <p><code>job run</code> also generates a list of parameter choices corresponding to each ensemble can be found in the file:</p>
 <pre><code>output/test/params.txt
 </code></pre>
@@ -265,7 +265,7 @@ eg, Latin-Hypercube sampling by first calling the <code>job sample</code> comman
 So, for example, to run the moving margin ensemble experiment with a range of 100 randomly sampled resolutions
 and imposed surface temperature anomalies in a given range, the following two commands could be used:</p>
 <pre><code>job sample eismint.dx=U?25.0,50.0 eismint.dT_test=U?-5.0,5.0 --size 100 --seed 4 &gt; ensemble_params.txt
-job run --shell -f -o ${fldr}/ensemble1 -i ensemble_params.txt -- python run_yelmo.py -x -s -e benchmarks {} par/gmd/yelmo_EISMINT_moving.nml
+job run --shell -f -o ${fldr}/ensemble1 -i ensemble_params.txt -- python run_yelmo.py -x -s -e benchmarks {} par-gmd/yelmo_EISMINT_moving.nml
 </code></pre>
 
 <p>The first command simply produces an ascii file "ensemble_params.txt" that contains one column for each parameter being modified.
