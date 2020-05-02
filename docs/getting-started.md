@@ -158,9 +158,9 @@ to run a single simulation of Yelmo. As an example, you can run an ensemble of
 two simulations as above for the EISMINT1 moving margin experiment,
 but with different grid resolutions using:
 ```
-job run --shell -f -o output/test -p eismint.dx=25.0,50.0 -- python run_yelmo.py -x -s -e benchmarks {} par/gmd/yelmo_EISMINT_moving.nml
+job run --shell -f -o output/test -p eismint.dx=25.0,50.0 -- python run_yelmo.py -x -s -e benchmarks {} par-gmd/yelmo_EISMINT_moving.nml
 ```
-where `--shell` outputs the call to the screen, `-f` means execute the command without confirmation, `-o` is the parent ensemble directory, `-p` is the argument to allow you to list parameters to modify and `eismint.dx=25.0,50.0` specifies that the parameter `dx` in the namelist group `eismint` should be given a value of `25.0` in one simulation and `50.0` in the second simulation. This command will modify the specified parameters found in the parameter file `par/gmd/yelmo_EISMINT_moving.nml` and then run the simulation from the run directory `output/test/{}` where `{}` is the name of the directory corresponding to that parameter combination. Using the option `-o` means that the specific run directory name is simply the number of the simulation, so the run directory for the above command would be `output/test/0`. If you also add the option `-a`, then each run directory will have a name corresponding to the parameter combination specified instead of a number. Also note that for `run_yelmo.py` to work properly when called by `job run`, the additional option `-x` must be specified.
+where `--shell` outputs the call to the screen, `-f` means execute the command without confirmation, `-o` is the parent ensemble directory, `-p` is the argument to allow you to list parameters to modify and `eismint.dx=25.0,50.0` specifies that the parameter `dx` in the namelist group `eismint` should be given a value of `25.0` in one simulation and `50.0` in the second simulation. This command will modify the specified parameters found in the parameter file `par-gmd/yelmo_EISMINT_moving.nml` and then run the simulation from the run directory `output/test/{}` where `{}` is the name of the directory corresponding to that parameter combination. Using the option `-o` means that the specific run directory name is simply the number of the simulation, so the run directory for the above command would be `output/test/0`. If you also add the option `-a`, then each run directory will have a name corresponding to the parameter combination specified instead of a number. Also note that for `run_yelmo.py` to work properly when called by `job run`, the additional option `-x` must be specified.
 
 `job run` also generates a list of parameter choices corresponding to each ensemble can be found in the file:
 ```
@@ -174,7 +174,7 @@ So, for example, to run the moving margin ensemble experiment with a range of 10
 and imposed surface temperature anomalies in a given range, the following two commands could be used:
 ```
 job sample eismint.dx=U?25.0,50.0 eismint.dT_test=U?-5.0,5.0 --size 100 --seed 4 > ensemble_params.txt
-job run --shell -f -o ${fldr}/ensemble1 -i ensemble_params.txt -- python run_yelmo.py -x -s -e benchmarks {} par/gmd/yelmo_EISMINT_moving.nml
+job run --shell -f -o ${fldr}/ensemble1 -i ensemble_params.txt -- python run_yelmo.py -x -s -e benchmarks {} par-gmd/yelmo_EISMINT_moving.nml
 ```
 The first command simply produces an ascii file "ensemble_params.txt" that contains one column for each parameter being modified.
 It uses Latin Hypercube sampling of a uniform distribution of grid resolutions between 25 and 50 km, and a uniform distribution of temperature anomalies between -5.0 and 5.0. This exact ensemble can be reproduced by specifying the same `seed` value. The second command calls the `run_yelmo.py` script for each parameter combination, but the parameters are loaded from
