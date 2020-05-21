@@ -143,8 +143,12 @@ or cloned from here:
 
 From inside the main directory, run the following command to install the library:
 ```
+# Deprecated:
 cd runner
 python setup.py install
+
+# Now suggested method is to use pip to install:
+pip install ./runner 
 ```
 You can check that it was installed properly by running the job command:
 ```
