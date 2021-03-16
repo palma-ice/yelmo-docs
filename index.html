@@ -118,14 +118,14 @@ be treated via the Shallow Ice Approximation (SIA) for
 land-based ice driven by deformation, the Shallow Shelf
 Approximation (SSA) for faster moving ice streams and ice shelves and a hybrid configuration that heuristically combines the two approximations into one solution.</p>
 <p><strong>Yelmo</strong> has been designed to operate as a stand-alone model or to be easily plugged in as a module in another program. The key to its flexibility is that no variables are defined globally and parameters are defined according to the domain being modeled. In this way, all variables and calculations are store in an object that entirely represents the model domain.</p>
-<p>A description of <strong>Yelmo</strong> along with validation tests has been published here:
-Robinson et al., 2019, in prep.</p>
+<p>The physics and design of <strong>Yelmo</strong> are described in the following article:</p>
+<p>Robinson, A., Alvarez-Solas, J., Montoya, M., Goelzer, H., Greve, R., and Ritz, C.: Description and validation of the ice-sheet model Yelmo (version 1.0), Geosci. Model Dev., 13, 2805–2823, <a href="https://doi.org/10.5194/gmd-13-2805-2020">https://doi.org/10.5194/gmd-13-2805-2020</a>, 2020.</p>
 <p>The Yelmo code repository can be found here:
 <a href="https://github.com/palma-ice/yelmo">https://github.com/palma-ice/yelmo</a></p>
 <h2 id="general-model-structure-classes-and-usage">General model structure - classes and usage</h2>
 <h3 id="yelmo_class">yelmo_class</h3>
 <p>The Yelmo class defines all data related to a model domain, such as Greenland or Antarctica. As seen below in the yelmo_class defintion, the 'class' is simply a user-defined Fortran type that contains additional types representing various parameters, variables or sets of module variables.</p>
-<pre><code class="fortran">    type yelmo_class
+<pre><code class="language-fortran">    type yelmo_class
         type(yelmo_param_class) :: par      ! General domain parameters
         type(ygrid_class)       :: grd      ! Grid definition
         type(ytopo_class)       :: tpo      ! Topography variables
@@ -138,21 +138,19 @@ Robinson et al., 2019, in prep.</p>
     end type
 
 </code></pre>
-
 <p>Likewise the module variables are defined in a similar way, e.g. ytopo_class that defines variables and parameters associated with the topography:</p>
-<pre><code class="fortran">    type ytopo_class
+<pre><code class="language-fortran">    type ytopo_class
 
         type(ytopo_param_class) :: par        ! Parameters
         type(ytopo_state_class) :: now        ! Variables
 
     end type
 </code></pre>
-
 <p>Submodules such as ytopo_class include parameter definitions relevant to topography calculations, as well as all variables that define the state of the domain being modeled.</p>
 <h3 id="example-model-domain-intialization">Example model domain intialization</h3>
 <p>The below code snippet shows an example of how to initialize an instance of Yelmo
 inside of a program, run the model forward in time and then terminate the instance.</p>
-<pre><code class="fortran">    ! === Initialize ice sheet model =====
+<pre><code class="language-fortran">    ! === Initialize ice sheet model =====
 
     ! General initialization of yelmo constants (used globally, only once per program)
 
@@ -220,7 +218,6 @@ inside of a program, run the model forward in time and then terminate the instan
     call yelmo_end(yelmo1,time=time)
 
 </code></pre>
-
 <p>That's it!</p>
 <p>See <a href="getting-started">Getting started</a> to see how to get the code, 
 compile a test program and run simulations.</p>
@@ -277,5 +274,5 @@ compile a test program and run simulations.</p>
 
 <!--
 MkDocs version : 1.1.2
-Build Date UTC : 2020-05-21 21:30:43.961479+00:00
+Build Date UTC : 2021-03-16 18:29:09.569058+00:00
 -->

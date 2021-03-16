@@ -137,12 +137,10 @@ make
 make install
 make install check
 </code></pre>
-
 <p>Note: make sure to set the environment variables <code>CC</code> and <code>FC</code>, in order to set
 a specific compiler, for example for gcc/gfortran use the following configure command:</p>
 <pre><code>CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90
 </code></pre>
-
 <ol>
 <li>Add LIS path to the LD_LIBRARY_PATH in .bash_profile, .bashrc or .bash_aliases:</li>
 </ol>
@@ -150,7 +148,6 @@ a specific compiler, for example for gcc/gfortran use the following configure co
 LD_LIBRARY_PATH=$LISROOT/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 </code></pre>
-
 <p>That's it. LIS should now be available to use with Yelmo.</p>
               
             </div>

@@ -116,7 +116,6 @@ followed by another 10 kyr using SIA+SSA, as seen in the following lines of code
 <pre><code>call yelmo_update_equil_external(yelmo1,hyd1,cf_ref,time_init,time_tot=20e3,topo_fixed=.TRUE.,dt=5.0,ssa_vel_max=0.0)
 call yelmo_update_equil_external(yelmo1,hyd1,cf_ref,time_init,time_tot=10e3, topo_fixed=.TRUE.,dt=1.0,ssa_vel_max=5000.0)
 </code></pre>
-
 <p>Note that this spin-up is obtained with a fixed topography set to the present-day
 observed fields (<code>H_ice</code>,<code>z_bed</code>). After the spin-up finishes, a restart file is
 written in the output directory with the name <code>yelmo_restart.nc</code>. The simulation

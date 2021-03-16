@@ -54,6 +54,8 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Getting started</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#super-quick-start">Super-quick start</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory structure</a>
@@ -63,18 +65,30 @@
     <li class="toctree-l3"><a class="reference internal" href="#1-get-the-code">1. Get the code.</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#2-create-the-system-specific-makefile">2. Create the system-specific Makefile.</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#alternative-quickstart-with-docker-and-vs-code">Alternative - quickstart with Docker and VS Code</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#3-compile-the-code">3. Compile the code.</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#4-run-the-model">4. Run the model.</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#5-running-ensembles">5. Running ensembles</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#installing-runner">Installing runner</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#ensembles">Ensembles</a>
-    </li>
         </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test-cases">Test cases</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-eismint1-moving-margin-experiment">1. EISMINT1 moving margin experiment</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-eismint2-expa">2. EISMINT2 EXPA</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-eismint2-expf">3. EISMINT2 EXPF</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-mismip-rf">4. MISMIP RF</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#5-age-profile-experiments">5. Age profile experiments</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#6-antarctica-present-day-and-glacial-simulations">6. Antarctica present-day and glacial simulations</a>
     </li>
         </ul>
     </li>
@@ -126,19 +140,40 @@
             <div class="section">
               
                 <h1 id="getting-started">Getting started</h1>
-<p>This file describes the basic information and steps needed to get <strong>Yelmo</strong>
-running.</p>
+<p>Here you can find the basic information and steps needed to get <strong>Yelmo</strong> running.</p>
+<h2 id="super-quick-start">Super-quick start</h2>
+<p>A summary of commands to get started is given below. For more detailed information see subsequent sections.</p>
+<pre><code># Clone repository
+git clone git@github.com:palma-ice/yelmo.git
+
+# Enter directory and run configuration script
+cd yelmo
+python config.py config/pik_ifort 
+
+# Compile the benchmarks program
+make clean 
+make benchmarks 
+
+# Run a test simulation of the EISMINT1-moving experiment
+./runylmo -r -e benchmarks -o output/eismint1-moving -n par-gmd/yelmo_EISMINT-moving.nml
+
+# Compile the initmip program and run a simulation of Antarctica
+make initmip 
+./runylmo -r -e initmip -o output/ant-pd -n par/yelmo_initmip.nml -p ctrl.clim_nm=&quot;clim_pd&quot;
+</code></pre>
 <h2 id="dependencies">Dependencies</h2>
 <ul>
 <li>NetCDF library (preferably version 4.0 or higher)</li>
 <li>LIS: <a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
 </ul>
 <p>See: <a href="https://palma-ice.github.io/yelmo-docs/dependencies/">Dependencies</a></p>
-<p>OPTIONAL:
-- Python 3.x, which is only needed for automatic configuration of the Makefile
-and the use of the script <code>run_yelmo.py</code> for job preparation and submission.</p>
+<p>OPTIONAL:</p>
+<ul>
+<li>Python 3.x, which is only needed for automatic configuration of the Makefile and the use of the script <code>runylmo</code> for job preparation and submission.</li>
+<li>Python library <code>runner</code> for changing parameters at the command line using <code>runylmo</code>, and for running ensembles. Installation instructions here <a href="https://github.com/alex-robinson/runner">https://github.com/alex-robinson/runner</a></li>
+</ul>
 <h2 id="directory-structure">Directory structure</h2>
-<pre><code class="fortran">    config/
+<pre><code class="language-fortran">    config/
         Configuration files for compilation on different systems.
     input/
         Location of any input data needed by the model.
@@ -156,40 +191,43 @@ and the use of the script <code>run_yelmo.py</code> for job preparation and subm
     tests/
         Source code and analysis scripts for specific model benchmarks and tests.
 </code></pre>
-
 <h2 id="usage">Usage</h2>
-<p><strong>Yelmo</strong> is hosted in a git repository. Follow the steps below to
-obtain the code, compile it and run a test simulation.</p>
+<p>Follow the steps below to (1) obtain the code, (2) configure the Makefile for your system,
+(3) compile the Yelmo static library and an executable program and (4) run a test simulation.</p>
 <h3 id="1-get-the-code">1. Get the code.</h3>
 <p>Clone the repository from <a href="https://github.com/palma-ice/yelmo">https://github.com/palma-ice/yelmo</a>:</p>
 <pre><code>git clone git@github.com:palma-ice/yelmo.git $YELMOROOT
 cd $YELMOROOT
 </code></pre>
-
 <p>where <code>$YELMOROOT</code> is the installation directory.</p>
 <p>If you plan to make changes to the code, it is wise to check out a new branch:</p>
 <pre><code>git checkout -b user-dev
 </code></pre>
-
 <p>You should now be working on the branch <code>user-dev</code>.</p>
 <h3 id="2-create-the-system-specific-makefile">2. Create the system-specific Makefile.</h3>
 <p>To compile Yelmo, you need to generate a Makefile that is appropriate for your system. In the folder <code>config</code>, you need to specify a configuration file that defines the compiler and flags, including definition of the paths to the <code>NetCDF</code> and <code>LIS</code> libraries. You can use another file in the config folder as a template, e.g.,</p>
 <pre><code>cd config
 cp pik_ifort myhost_mycompiler
 </code></pre>
-
 <p>then modify the file <code>myhost_mycompiler</code> to match your paths. Back in <code>$YELMOROOT</code>, you can then generate your Makefile with the provided python configuration script:</p>
 <pre><code>cd $YELMOROOT
 python config.py config/myhost_mycompiler
 </code></pre>
-
 <p>The result should be a Makefile in <code>$YELMOROOT</code> that is ready for use.</p>
+<h4 id="alternative-quickstart-with-docker-and-vs-code">Alternative - quickstart with Docker and VS Code</h4>
+<p>Instead of a manual install, one way to get up and running quickly with Yelmo is with VS Code and Docker. It works on any plattform and uses a Linux based container. You don't need to know Docker or VS Code to get started. Just install the following:</p>
+<p>1) <a href="https://docs.docker.com/engine/install/">Docker</a>
+2) <a href="https://code.visualstudio.com">VS Code</a> 
+3) <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">install the remote development extension</a>
+4) get the code (see below)</p>
+<p>Then make sure that Docker is running and start VS Code. 
+Open the folder with the Yelmo code. Say Yes, when VS Code asks you if you want to open it in the container.</p>
+<p>Now you can directly go to step 3 below, just make sure that you use the terminal in VS Code.</p>
 <h3 id="3-compile-the-code">3. Compile the code.</h3>
 <p>Now you are ready to compile Yelmo as a static library:</p>
 <pre><code>make clean    # This step is very important to avoid errors!!
 make yelmo-static [debug=1]
 </code></pre>
-
 <p>This will compile all of the Yelmo modules and libraries (as defined in <code>config/Makefile_yelmo.mk</code>),
 and link them in a static library. All compiled files can be found in the folder <code>libyelmo/</code>.</p>
 <p>Once the static library has been compiled, it can be used inside of external Fortran programs and modules
@@ -198,7 +236,6 @@ To include/link yelmo-static during compilation of another program, its location
 <pre><code>INC_YELMO = -I${YELMOROOT}/include
 LIB_YELMO = -L${YELMOROOT}/include -lyelmo
 </code></pre>
-
 <p>Alternatively, several test programs exist in the folder <code>tests/</code> to run Yelmo
 as a stand-alone ice sheet.
 For example, it's possible to run different EISMINT benchmarks, MISMIP benchmarks and the
@@ -207,81 +244,84 @@ ISIMIP6 INITMIP simulation for Greenland, respectively:</p>
 make mismip        # compiles the program `libyelmo/bin/yelmo_mismip.x`
 make initmip       # compiles the program `libyelmo/bin/yelmo_initmip.x`
 </code></pre>
-
 <p>The Makefile additionally allows you to specify debugging compiler flags with the option <code>debug=1</code>, in case you need to debug the code (e.g., <code>make benchmarks debug=1</code>). Using this option, the code will run much slower, so this option is not recommended unless necessary.</p>
 <h3 id="4-run-the-model">4. Run the model.</h3>
 <p>Once an executable has been created, you can run the model. This can be
-achieved via the included Python job submission script <code>run_yelmo.py</code>. The following steps
+achieved via the included Python job submission script <code>runylmo</code>. The following steps
 are carried out via the script:</p>
 <ol>
 <li>The output directory is created.</li>
 <li>The executable is copied to the output directory</li>
 <li>The relevant parameter files are copied to the output directory.</li>
-<li>Links to the input data paths (<code>input</code> and <code>ice_data</code>) are created in the output directory. (Note <code>ice_data</code> is typically linked to an external data repository, and is not necessary.)</li>
-<li>The executable is run from the output directory, either as a background process or it is submitted to the queue (the script currently supports <code>qsubmit</code> and <code>sbatch</code> commands).</li>
+<li>Links to the input data paths (<code>input</code> and <code>ice_data</code>) are created in the output directory. Note that many simulations, such as benchmark experiments, do not depend on these external data sources, but the links are made anyway.</li>
+<li>The executable is run from the output directory, either as a background process or it is submitted to the queue via <code>sbatch</code> (the SLURM workload manager).</li>
 </ol>
 <p>To run a benchmark simulation, for example, use the following command:</p>
-<pre><code>python run_yelmo.py -r -e benchmarks output/test par/yelmo_EISMINT.nml
+<pre><code>./runylmo -r -e benchmarks -o output/test -n par/yelmo_EISMINT.nml
 </code></pre>
-
 <p>where the option <code>-r</code> implies that the model should be run as a background process. If this is omitted, then the output directory will be populated, but no executable will be run, while <code>-s</code> instead will submit the simulation to cluster queue system instead of running in the background. The option <code>-e</code> lets you specify the executable. For some standard cases, shortcuts have been created:</p>
 <pre><code>benchmarks = libyelmo/bin/yelmo_benchmarks.x
 mismip     = libyelmo/bin/yemo_mismip.x
 initmip    = libyelmo/bin/yelmo_initmip.x
 </code></pre>
-
-<p>The last two mandatory arguments are always the output/run directory and the parameter file to be used for this simulation. In the case of the above simulation, the output directory is defined as <code>output/test</code>, where all model parameters (loaded from the file <code>par/yelmo_EISMINT.nml</code>) and model output can be found.</p>
-<h3 id="5-running-ensembles">5. Running ensembles</h3>
-<p>The script <code>run_yelmo.py</code> has been designed to work with the Python ensemble
-generation library <code>runner</code>. This page gives instructions on how to run ensembles
-of Yelmo simulations using <code>run_yelmo.py</code> and <code>runner</code>.</p>
-<h4 id="installing-runner">Installing <code>runner</code></h4>
-<p>I recommend installing a Python version using the Anaconda installer, even
-on a high performance computing cluster, in order to improve control of installing packages.</p>
-<p><code>runner</code> can be installed like any Python library. The source code can be downloaded
-or cloned from here:
-<a href="https://github.com/perrette/runner">https://github.com/perrette/runner</a></p>
-<p>From inside the main directory, run the following command to install the library:</p>
-<pre><code># Deprecated:
-cd runner
-python setup.py install
-
-# Now suggested method is to use pip to install:
-pip install ./runner 
+<p>The last two mandatory arguments <code>-o OUTDIR</code> and <code>-n PAR_PATH</code> are the output/run directory and the parameter file to be used for this simulation, respectively. In the case of the above simulation, the output directory is defined as <code>output/test</code>, where all model parameters (loaded from the file <code>par/yelmo_EISMINT.nml</code>) and model output can be found.</p>
+<p>It is also possible to modify parameters inline via the option <code>-p KEY=VAL [KEY=VAL ...]</code>. The parameter should be specified with its namelist group and its name. E.g., to change the resolution of the EISMINT benchmark experiment to 10km, use:</p>
+<pre><code>./runylmo -r -e benchmarks -o output/test -n par/yelmo_EISMINT.nml -p ctrl.dx=10
 </code></pre>
-
-<p>You can check that it was installed properly by running the job command:</p>
-<pre><code>job run -h
+<p>See <code>runylmo -h</code> for more details on the run script. </p>
+<h2 id="test-cases">Test cases</h2>
+<p>The published model description includes several test simulations for validation
+of the model's performance. The following section describes how to perform these
+tests using the same model version documented in the article. From this point,
+it is assumed that the user has already configured the model for their system
+(see https://palma-ice.github.io/yelmo-docs) and is ready to compile the mode.</p>
+<h3 id="1-eismint1-moving-margin-experiment">1. EISMINT1 moving margin experiment</h3>
+<p>To perform the moving margin experiment, compile the benchmarks
+executable and call it with the EISMINT parameter file:</p>
+<pre><code>make benchmarks
+./runylmo -r -e benchmarks -o output/eismint-moving -n par-gmd/yelmo_EISMINT_moving.nml
 </code></pre>
-
-<h4 id="ensembles">Ensembles</h4>
-<p>The command <code>job run</code> acts as a wrapper around your normal <code>run_yelmo.py</code> command
-to run a single simulation of Yelmo. As an example, you can run an ensemble of
-two simulations as above for the EISMINT1 moving margin experiment,
-but with different grid resolutions using:</p>
-<pre><code>job run --shell -f -o output/test -p eismint.dx=25.0,50.0 -- python run_yelmo.py -x -s -e benchmarks {} par-gmd/yelmo_EISMINT_moving.nml
+<h3 id="2-eismint2-expa">2. EISMINT2 EXPA</h3>
+<p>To perform Experiment A from the EISMINT2 benchmarks, compile the benchmarks
+executable and call it with the EXPA parameter file:</p>
+<pre><code>make benchmarks
+./runylmo -r -e benchmarks -o output/eismint-expa -n par-gmd/yelmo_EISMINT_expa.nml
 </code></pre>
-
-<p>where <code>--shell</code> outputs the call to the screen, <code>-f</code> means execute the command without confirmation, <code>-o</code> is the parent ensemble directory, <code>-p</code> is the argument to allow you to list parameters to modify and <code>eismint.dx=25.0,50.0</code> specifies that the parameter <code>dx</code> in the namelist group <code>eismint</code> should be given a value of <code>25.0</code> in one simulation and <code>50.0</code> in the second simulation. This command will modify the specified parameters found in the parameter file <code>par-gmd/yelmo_EISMINT_moving.nml</code> and then run the simulation from the run directory <code>output/test/{}</code> where <code>{}</code> is the name of the directory corresponding to that parameter combination. Using the option <code>-o</code> means that the specific run directory name is simply the number of the simulation, so the run directory for the above command would be <code>output/test/0</code>. If you also add the option <code>-a</code>, then each run directory will have a name corresponding to the parameter combination specified instead of a number. Also note that for <code>run_yelmo.py</code> to work properly when called by <code>job run</code>, the additional option <code>-x</code> must be specified.</p>
-<p><code>job run</code> also generates a list of parameter choices corresponding to each ensemble can be found in the file:</p>
-<pre><code>output/test/params.txt
+<h3 id="3-eismint2-expf">3. EISMINT2 EXPF</h3>
+<p>To perform Experiment F from the EISMINT2 benchmarks, compile the benchmarks
+executable and call it with the EXPF parameter file:</p>
+<pre><code>make benchmarks
+./runylmo -r -e benchmarks -o output/eismint-expf -n par-gmd/yelmo_EISMINT_expf.nml
 </code></pre>
-
-<p>By default, <code>job run</code> will generate parameter combinations by permuting the given values
-at the command line. However, it is possible to sample the parameters using,
-eg, Latin-Hypercube sampling by first calling the <code>job sample</code> command, and then <code>job run</code>. 
-So, for example, to run the moving margin ensemble experiment with a range of 100 randomly sampled resolutions
-and imposed surface temperature anomalies in a given range, the following two commands could be used:</p>
-<pre><code>job sample eismint.dx=U?25.0,50.0 eismint.dT_test=U?-5.0,5.0 --size 100 --seed 4 &gt; ensemble_params.txt
-job run --shell -f -o ${fldr}/ensemble1 -i ensemble_params.txt -- python run_yelmo.py -x -s -e benchmarks {} par-gmd/yelmo_EISMINT_moving.nml
+<h3 id="4-mismip-rf">4. MISMIP RF</h3>
+<p>To perform the MISMIP rate factor experiment, compile the mismip executable
+and call it with the MISMIP parameter file the three parameter permutations of interest (default, subgrid and subgrid+gl-scaling):</p>
+<pre><code>make mismip
+./runylmo -r -e mismip -o output/mismip-rf-0 -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=0 ydyn.beta_gl_scale=0
+./runylmo -r -e mismip -o output/mismip-rf-1 -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=3 ydyn.beta_gl_scale=0
+./runylmo -r -e mismip -o output/mismip-rf-2 -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=3 ydyn.beta_gl_scale=2
 </code></pre>
-
-<p>The first command simply produces an ascii file "ensemble_params.txt" that contains one column for each parameter being modified.
-It uses Latin Hypercube sampling of a uniform distribution of grid resolutions between 25 and 50 km, and a uniform distribution of temperature anomalies between -5.0 and 5.0. This exact ensemble can be reproduced by specifying the same <code>seed</code> value. The second command calls the <code>run_yelmo.py</code> script for each parameter combination, but the parameters are loaded from
-the file specified with the <code>-i</code> option, instead of from parameter values specified inline.</p>
-<p>More documentation for <code>runner</code> can be found in the help (<code>job run -h</code>; <code>job sample -h</code>) and
-on the <code>runner</code> homepage:
-<a href="https://github.com/perrette/runner">https://github.com/perrette/runner</a></p>
+<p>To additionally change the resolution of the simulations change the parameter <code>mismip.dx</code>, e.g. for the default simulation with 10km resolution , call:</p>
+<pre><code>./runylmo -r -e mismip -o output/mismip-rf-0-10km -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=0 ydyn.beta_gl_scale=0 mismip.dx=10
+</code></pre>
+<h3 id="5-age-profile-experiments">5. Age profile experiments</h3>
+<p>To perform the age profile experiments, compile the Fortran program <code>tests/test_icetemp.f90</code>
+and run it:</p>
+<pre><code>make icetemp
+./libyelmo/bin/test_icetemp.x
+</code></pre>
+<p>To perform the different permutations, it is necessary to recompile for
+single or double precision after changing the precision parameter <code>prec</code> in the file
+<code>src/yelmo_defs.f90</code>. The number of vertical grid points can be specified in the main
+program file, as well as the output filename.</p>
+<h3 id="6-antarctica-present-day-and-glacial-simulations">6. Antarctica present-day and glacial simulations</h3>
+<p>To perform the Antarctica simulations as presented in the paper, it is necessary
+to compile the <code>initmip</code> executable and run with the present-day (pd) and
+glacial (lgm) parameter values:</p>
+<pre><code>make initmip
+./runylmo -r -e initmip -o output/ant-pd -n par-gmd/yelmo_Antarctica.nml -p ctrl.clim_nm=&quot;clim_pd&quot;
+./runylmo -r -e initmip -o output/ant-lgm -n par-gmd/yelmo_Antarctica.nml -p ctrl.clim_nm=&quot;clim_lgm&quot;
+</code></pre>
               
             </div>
           </div>
