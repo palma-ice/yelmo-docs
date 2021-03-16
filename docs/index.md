@@ -11,8 +11,9 @@ Approximation (SSA) for faster moving ice streams and ice shelves and a hybrid c
 
 **Yelmo** has been designed to operate as a stand-alone model or to be easily plugged in as a module in another program. The key to its flexibility is that no variables are defined globally and parameters are defined according to the domain being modeled. In this way, all variables and calculations are store in an object that entirely represents the model domain.
 
-A description of **Yelmo** along with validation tests has been published here:
-Robinson et al., 2019, in prep.
+The physics and design of **Yelmo** are described in the following article:
+
+Robinson, A., Alvarez-Solas, J., Montoya, M., Goelzer, H., Greve, R., and Ritz, C.: Description and validation of the ice-sheet model Yelmo (version 1.0), Geosci. Model Dev., 13, 2805–2823, [https://doi.org/10.5194/gmd-13-2805-2020](https://doi.org/10.5194/gmd-13-2805-2020), 2020.
 
 The Yelmo code repository can be found here:
 [https://github.com/palma-ice/yelmo](https://github.com/palma-ice/yelmo)
@@ -51,6 +52,7 @@ Submodules such as ytopo_class include parameter definitions relevant to topogra
 
 The below code snippet shows an example of how to initialize an instance of Yelmo
 inside of a program, run the model forward in time and then terminate the instance.
+
 ```fortran
     ! === Initialize ice sheet model =====
 
@@ -120,6 +122,7 @@ inside of a program, run the model forward in time and then terminate the instan
     call yelmo_end(yelmo1,time=time)
 
 ```
+
 That's it!
 
 See [Getting started](getting-started) to see how to get the code, 
