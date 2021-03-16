@@ -62,6 +62,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#installing-lis">Installing LIS</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installing-runner">Installing runner</a>
+    </li>
     </ul>
                     </li>
                 </ul>
@@ -110,16 +112,17 @@
 <ul>
 <li><a href="https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html">NetCDF</a></li>
 <li><a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
+<li>[Optional] <a href="https://github.com/alex-robinson/runner">'runner' Python library (alex-robinson fork)</a></li>
 </ul>
-<p>Installation tips can be found below.</p>
+<p>Installation tips for each dependency can be found below.</p>
 <h2 id="installing-netcdf-preferably-version-40-or-higher">Installing NetCDF (preferably version 4.0 or higher)</h2>
 <p>The NetCDF library is typically available with different distributions (Linux, Mac, etc).
 Along with installing <code>libnetcdf</code>, it will be necessary to install the package <code>libnetcdf-dev</code>.
 Installing the NetCDF viewing program <code>ncview</code> is also recommended.</p>
 <p>If you want to install NetCDF from source, then you must install both the
 <code>netcdf-c</code> and subsequently <code>netcdf-fortran</code> libraries. The source code and
-installation instructions are available from the Unidata website:
-https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html</p>
+installation instructions are available from the Unidata website:</p>
+<p><a href="https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html">https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html</a></p>
 <h2 id="installing-lis">Installing LIS</h2>
 <ol>
 <li>
@@ -127,7 +130,7 @@ https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.ht
 <a href="https://www.ssisc.org/lis/">https://www.ssisc.org/lis/</a></p>
 </li>
 <li>
-<p>Configure the package (where  is the desired installation location),
+<p>Configure the package (where is the desired installation location),
 and install it in the location of your choice (below defined as <code>$LISROOT</code>). Also, make sure to enable the Fortran90 interface:</p>
 </li>
 </ol>
@@ -142,13 +145,24 @@ a specific compiler, for example for gcc/gfortran use the following configure co
 <pre><code>CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90
 </code></pre>
 <ol>
-<li>Add LIS path to the LD_LIBRARY_PATH in .bash_profile, .bashrc or .bash_aliases:</li>
+<li>Add LIS path to the <code>LD_LIBRARY_PATH</code> in <code>.bash_profile</code>, <code>.bashrc</code> or <code>.bash_aliases</code>:</li>
 </ol>
 <pre><code># lis library paths
 LD_LIBRARY_PATH=$LISROOT/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 </code></pre>
 <p>That's it. LIS should now be available to use with Yelmo.</p>
+<h2 id="installing-runner">Installing runner</h2>
+<ol>
+<li>Clone / download the <code>runner</code> repository from <a href="https://github.com/alex-robinson/runner">https://github.com/alex-robinson/runner</a>. Save it an any location you want.</li>
+<li>Install <code>runner</code> to your system's Python installation via <code>pip</code>.</li>
+</ol>
+<pre><code>git clone https://github.com/alex-robinson/runner.git
+cd runner 
+pip install ./ 
+</code></pre>
+<p>That's it! Now check that system command <code>job</code> is available by running <code>job -h</code>. </p>
+<p>Note that install method <code>python setup.py install</code> should be avoided if possible to maintain Python system integrity.</p>
               
             </div>
           </div>
