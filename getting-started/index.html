@@ -66,7 +66,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#2-create-the-system-specific-makefile">2. Create the system-specific Makefile.</a>
         <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#alternative-quickstart-with-docker-and-vs-code">Alternative - quickstart with Docker and VS Code</a>
+    <li class="toctree-l4"><a class="reference internal" href="#alternative-configuration-quickstart-with-docker-and-vs-code">Alternative configuration - quickstart with Docker and VS Code</a>
     </li>
         </ul>
     </li>
@@ -162,15 +162,12 @@ make initmip
 ./runylmo -r -e initmip -o output/ant-pd -n par/yelmo_initmip.nml -p ctrl.clim_nm=&quot;clim_pd&quot;
 </code></pre>
 <h2 id="dependencies">Dependencies</h2>
+<p>See: <a href="https://palma-ice.github.io/yelmo-docs/dependencies/">Dependencies</a> for installation tips.</p>
 <ul>
 <li>NetCDF library (preferably version 4.0 or higher)</li>
 <li>LIS: <a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
-</ul>
-<p>See: <a href="https://palma-ice.github.io/yelmo-docs/dependencies/">Dependencies</a></p>
-<p>OPTIONAL:</p>
-<ul>
-<li>Python 3.x, which is only needed for automatic configuration of the Makefile and the use of the script <code>runylmo</code> for job preparation and submission.</li>
-<li>Python library <code>runner</code> for changing parameters at the command line using <code>runylmo</code>, and for running ensembles. Installation instructions here <a href="https://github.com/alex-robinson/runner">https://github.com/alex-robinson/runner</a></li>
+<li>[Optional] Python 3.x, which is only needed for automatic configuration of the Makefile and the use of the script <code>runylmo</code> for job preparation and submission.</li>
+<li>[Optional] 'runner' Python library: <a href="https://github.com/alex-robinson/runner">https://github.com/alex-robinson/runner</a>. Used for changing parameters at the command line using <code>runylmo</code>, and for running ensembles. </li>
 </ul>
 <h2 id="directory-structure">Directory structure</h2>
 <pre><code class="language-fortran">    config/
@@ -214,12 +211,13 @@ cp pik_ifort myhost_mycompiler
 python config.py config/myhost_mycompiler
 </code></pre>
 <p>The result should be a Makefile in <code>$YELMOROOT</code> that is ready for use.</p>
-<h4 id="alternative-quickstart-with-docker-and-vs-code">Alternative - quickstart with Docker and VS Code</h4>
+<h4 id="alternative-configuration-quickstart-with-docker-and-vs-code">Alternative configuration - quickstart with Docker and VS Code</h4>
 <p>Instead of a manual install, one way to get up and running quickly with Yelmo is with VS Code and Docker. It works on any plattform and uses a Linux based container. You don't need to know Docker or VS Code to get started. Just install the following:</p>
-<p>1) <a href="https://docs.docker.com/engine/install/">Docker</a>
-2) <a href="https://code.visualstudio.com">VS Code</a> 
-3) <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">install the remote development extension</a>
-4) get the code (see below)</p>
+<ol>
+<li><a href="https://docs.docker.com/engine/install/">Docker</a></li>
+<li><a href="https://code.visualstudio.com">VS Code</a> </li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">install the remote development extension</a></li>
+</ol>
 <p>Then make sure that Docker is running and start VS Code. 
 Open the folder with the Yelmo code. Say Yes, when VS Code asks you if you want to open it in the container.</p>
 <p>Now you can directly go to step 3 below, just make sure that you use the terminal in VS Code.</p>
