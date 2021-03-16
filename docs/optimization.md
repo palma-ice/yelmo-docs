@@ -7,20 +7,26 @@ are minimized.
 
 Program: `tests/yelmo_opt.f90`
 To compile: `make opt`
-To run: `python run_yelmo.py -s -e opt output/test par/yelmo_Antarctica_opt.nml`
+To run: 
+
+```
+./runylmo -s -e opt -o output/test -n par/yelmo_Antarctica_opt.nml
+```
 
 The program consists of the following steps:
 
 ### 1. Spin-up a steady-state ice sheet with constant forcing and fixed topography.
 
-For this step, the restart parameter should be set to `&yelmo:restart='none'`, to
+For this step, the restart parameter should be set to `yelmo.restart='none'`, to
 ensure that the spin-up is performed with the current parameters. Currently,
 the program is hard-coded to spin-up the ice sheet for 20 kyr using SIA only,
-followed by another 10 kyr using SIA+SSA, as seen in the following lines of code:
+followed by another 10 kyr using the solver of choice, as seen in the following lines of code:
+
 ```
 call yelmo_update_equil_external(yelmo1,hyd1,cf_ref,time_init,time_tot=20e3,topo_fixed=.TRUE.,dt=5.0,ssa_vel_max=0.0)
 call yelmo_update_equil_external(yelmo1,hyd1,cf_ref,time_init,time_tot=10e3, topo_fixed=.TRUE.,dt=1.0,ssa_vel_max=5000.0)
 ```
+
 Note that this spin-up is obtained with a fixed topography set to the present-day
 observed fields (`H_ice`,`z_bed`). After the spin-up finishes, a restart file is
 written in the output directory with the name `yelmo_restart.nc`. The simulation
@@ -30,7 +36,7 @@ will terminate at this point.
 
 The restart file from Step 1 should be saved somewhere convenient for the model
 (like in the `input` folder). Then the restart parameter should be set to that
-location `&yelmo:restart='PATH_TO_RESTART.nc'`. This will ensure that the spin-up
+location `yelmo.restart='PATH_TO_RESTART.nc'`. This will ensure that the spin-up
 step is skipped, and instead the program will start directly with the optimization
 iterations.
 
@@ -61,7 +67,7 @@ The optimization works best when the ice shelves are relaxed to the reference
 (observed) ice thickness in the beginning of the simulation, and then gradually
 allowed to freely evolve. `tau` is the time scale of relaxation, which is applied
 in Yelmo as `yelmo1%tpo%par%topo_rel_tau`. A lower value of `tau` means that the
-ice shelves are more tightly held to the observed thickness. Likewise, H_scale` controls the scaling
+ice shelves are more tightly held to the observed thickness. Likewise, `H_scale` controls the scaling
 of the ice thickness error, which determines how to modify `cf_ref` at each iteration.
 A higher value of `H_scale` means that changes to `cf_ref` will be applied more slowly.
 

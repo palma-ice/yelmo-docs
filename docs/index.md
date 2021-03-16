@@ -3,26 +3,26 @@
 ![Yelmo, Gaudarrama Mountains](img/yelmo.jpg)
 
 Welcome to **Yelmo**, an easy to use continental ice sheet model.
-**Yelmo** is a 3D thermomechanical ice sheet model that
-simulates continental scale ice sheets. The ice dynamics can
-be treated via the Shallow Ice Approximation (SIA) for
-land-based ice driven by deformation, the Shallow Shelf
-Approximation (SSA) for faster moving ice streams and ice shelves and a hybrid configuration that heuristically combines the two approximations into one solution.
+**Yelmo** is a 3D ice-sheet-shelf model solving
+for the coupled dynamics and thermodynamics of the ice sheet system. Yelmo
+can be used for idealized simulations, stand-alone ice sheet simulations
+and fully coupled ice-sheet and climate simulations.
 
 **Yelmo** has been designed to operate as a stand-alone model or to be easily plugged in as a module in another program. The key to its flexibility is that no variables are defined globally and parameters are defined according to the domain being modeled. In this way, all variables and calculations are store in an object that entirely represents the model domain.
 
 The physics and design of **Yelmo** are described in the following article:
 
-Robinson, A., Alvarez-Solas, J., Montoya, M., Goelzer, H., Greve, R., and Ritz, C.: Description and validation of the ice-sheet model Yelmo (version 1.0), Geosci. Model Dev., 13, 2805–2823, [https://doi.org/10.5194/gmd-13-2805-2020](https://doi.org/10.5194/gmd-13-2805-2020), 2020.
+> Robinson, A., Alvarez-Solas, J., Montoya, M., Goelzer, H., Greve, R., and Ritz, C.: Description and validation of the ice-sheet model Yelmo (version 1.0), Geosci. Model Dev., 13, 2805–2823, [https://doi.org/10.5194/gmd-13-2805-2020](https://doi.org/10.5194/gmd-13-2805-2020), 2020.
 
 The Yelmo code repository can be found here:
 [https://github.com/palma-ice/yelmo](https://github.com/palma-ice/yelmo)
 
 ## General model structure - classes and usage
 
-### yelmo_class
+### yelmo\_class
 
-The Yelmo class defines all data related to a model domain, such as Greenland or Antarctica. As seen below in the yelmo_class defintion, the 'class' is simply a user-defined Fortran type that contains additional types representing various parameters, variables or sets of module variables.
+The Yelmo class defines all data related to a model domain, such as Greenland or Antarctica. As seen below in the yelmo\_class defintion, the 'class' is simply a user-defined Fortran type that contains additional types representing various parameters, variables or sets of module variables.
+
 ```fortran
     type yelmo_class
         type(yelmo_param_class) :: par      ! General domain parameters
@@ -37,7 +37,8 @@ The Yelmo class defines all data related to a model domain, such as Greenland or
     end type
 
 ```
-Likewise the module variables are defined in a similar way, e.g. ytopo_class that defines variables and parameters associated with the topography:
+Likewise the module variables are defined in a similar way, e.g. ytopo\_class that defines variables and parameters associated with the topography:
+
 ```fortran
     type ytopo_class
 
@@ -46,7 +47,7 @@ Likewise the module variables are defined in a similar way, e.g. ytopo_class tha
 
     end type
 ```
-Submodules such as ytopo_class include parameter definitions relevant to topography calculations, as well as all variables that define the state of the domain being modeled.
+Submodules such as ytopo\_class include parameter definitions relevant to topography calculations, as well as all variables that define the state of the domain being modeled.
 
 ### Example model domain intialization
 
@@ -91,7 +92,7 @@ inside of a program, run the model forward in time and then terminate the instan
     ! Next, initialize the state variables (dyn,therm,mat)
     ! (in this case, initialize temps with robin method)
 
-    call yelmo_init_state(yelmo1,path_par,time=time_init,thrm_method="robin")
+    call yelmo_init_state(yelmo1,time=time_init,thrm_method="robin")
 
     ! Run yelmo for eg 100.0 years with constant boundary conditions and topo
     ! to equilibrate thermodynamics and dynamics
