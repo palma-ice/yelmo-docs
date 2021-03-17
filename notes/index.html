@@ -100,6 +100,30 @@
             <div class="section">
               
                 <h1 id="notes">Notes</h1>
+<h2 id="master-to-main"><code>master</code> to <code>main</code></h2>
+<p>Following updated conventions, the default branch is now called <code>main</code> and the branch <code>master</code> has been deleted. </p>
+<p>To update a working copy locally that already contains a <code>master</code> branch and therefore points to it as the default branch, the following steps should be applied:</p>
+<ol>
+<li>Get the branch <code>main</code>.</li>
+<li>Delete the local branch <code>master</code>.</li>
+<li>Make sure your local repository sees <code>main</code> as the default branch.</li>
+</ol>
+<pre><code># Get all branch information from the origin (github):
+git fetch --all
+
+# Get onto the new default branch:
+git checkout main 
+
+# Delete the branch master:
+git branch -d master
+
+# Clean up any branches that no longer exist at origin:
+git fetch --prune origin
+
+# Set the local 'head' to whatever is specified at the origin (which will be main):
+git remote set-head origin -a
+</code></pre>
+<p>Done! Now your local copy should work like normal, with <code>main</code> instead of <code>master</code>.</p>
 <h2 id="thermodynamics-equations">Thermodynamics equations</h2>
 <h3 id="ice-column">Ice column</h3>
 <p>Prognostic equation:</p>
