@@ -129,8 +129,7 @@ kt = 6.3e7     ! [J a-1 m-1 K-1]
 This value is supported by Lösing et al. (2020), who perform a Bayesian inversion for GHF in Antarctica. Assuming exponentially decreasing heat production with depth, lower values of `kt` are supported (see Fig. 7b). In a study on the global thermal characteristics of the lithosphere, Cammarano and Guerri (2017) adopt an upper crust thermal conductivity of `kt = 2.5 [W m-1 K-1]`.
 
 To do: This study is also potentially relevant: 
-https://link.springer.com/article/10.1186/s40517-020-0159-y
-They show ranges of on the order of `kt = 2-3 [W m-1 K-1] for the Canadian shield.
+[https://link.springer.com/article/10.1186/s40517-020-0159-y](https://link.springer.com/article/10.1186/s40517-020-0159-y). They show ranges of on the order of `kt = 2-3 [W m-1 K-1]` for the Canadian shield.
 
 The above value of `kt = 2 [W m-1 K-1] = 6.3e7 [J a-1 m-1 K-1]` is adopted as the default thermal conductivity of the upper crust in Yelmo. For historical context, see other estimates below. 
 
