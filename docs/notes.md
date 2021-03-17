@@ -1,5 +1,34 @@
 # Notes
 
+## `master` to `main`
+
+Following updated conventions, the default branch is now called `main` and the branch `master` has been deleted. 
+
+To update a working copy locally that already contains a `master` branch and therefore points to it as the default branch, the following steps should be applied:
+
+1. Get the branch `main`.
+2. Delete the local branch `master`.
+3. Make sure your local repository sees `main` as the default branch.
+
+```
+# Get all branch information from the origin (github):
+git fetch --all
+
+# Get onto the new default branch:
+git checkout main 
+
+# Delete the branch master:
+git branch -d master
+
+# Clean up any branches that no longer exist at origin:
+git fetch --prune origin
+
+# Set the local 'head' to whatever is specified at the origin (which will be main):
+git remote set-head origin -a
+```
+
+Done! Now your local copy should work like normal, with `main` instead of `master`.
+
 ## Thermodynamics equations 
 
 ### Ice column
