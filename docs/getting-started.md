@@ -8,7 +8,8 @@ A summary of commands to get started is given below. For more detailed informati
 
 ```
 # Clone repository
-git clone git@github.com:palma-ice/yelmo.git
+git clone https://github.com/palma-ice/yelmo.git
+git clone git@github.com:palma-ice/yelmo.git # via ssh
 
 # Enter directory and run configuration script
 cd yelmo
@@ -19,7 +20,7 @@ make clean
 make benchmarks 
 
 # Run a test simulation of the EISMINT1-moving experiment
-./runylmo -r -e benchmarks -o output/eismint1-moving -n par-gmd/yelmo_EISMINT-moving.nml
+./runylmo -r -e benchmarks -o output/eismint1-moving -n par-gmd/yelmo_EISMINT_moving.nml
 
 # Compile the initmip program and run a simulation of Antarctica
 make initmip 
@@ -67,7 +68,10 @@ Follow the steps below to (1) obtain the code, (2) configure the Makefile for yo
 Clone the repository from [https://github.com/palma-ice/yelmo](https://github.com/palma-ice/yelmo):
 
 ```
-git clone git@github.com:palma-ice/yelmo.git $YELMOROOT
+# Clone repository
+git clone https://github.com/palma-ice/yelmo.git $YELMOROOT
+git clone git@github.com:palma-ice/yelmo.git  $YELMOROOT # via ssh
+
 cd $YELMOROOT
 ```
 
