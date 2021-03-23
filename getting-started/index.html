@@ -158,9 +158,9 @@ make benchmarks
 # Run a test simulation of the EISMINT1-moving experiment
 ./runylmo -r -e benchmarks -o output/eismint1-moving -n par-gmd/yelmo_EISMINT_moving.nml
 
-# Compile the initmip program and run a simulation of Antarctica
+# Compile the initmip program and run the default simulation of Antarctica
 make initmip 
-./runylmo -r -e initmip -o output/ant-pd -n par/yelmo_initmip.nml -p ctrl.clim_nm=&quot;clim_pd&quot;
+./runylmo -r -e initmip -o output/ant-pd -n par-gmd/yelmo_Antarctica.nml
 </code></pre>
 <h2 id="dependencies">Dependencies</h2>
 <p>See: <a href="https://palma-ice.github.io/yelmo-docs/dependencies/">Dependencies</a> for installation tips.</p>

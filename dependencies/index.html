@@ -154,12 +154,10 @@ export LD_LIBRARY_PATH
 <p>That's it. LIS should now be available to use with Yelmo.</p>
 <h2 id="installing-runner">Installing runner</h2>
 <ol>
-<li>Clone / download the <code>runner</code> repository from <a href="https://github.com/alex-robinson/runner">https://github.com/alex-robinson/runner</a>. Save it an any location you want.</li>
-<li>Install <code>runner</code> to your system's Python installation via <code>pip</code>.</li>
+<li>Install <code>runner</code> to your system's Python installation via <code>pip</code>, along with dependency <code>tabulate</code>.</li>
 </ol>
-<pre><code>git clone https://github.com/alex-robinson/runner.git
-cd runner 
-pip install ./ 
+<pre><code>pip install https://github.com/alex-robinson/runner/archive/refs/heads/master.zip
+pip install tabulate
 </code></pre>
 <p>That's it! Now check that system command <code>job</code> is available by running <code>job -h</code>. </p>
 <p>Note that install method <code>python setup.py install</code> should be avoided if possible to maintain Python system integrity.</p>
