@@ -144,7 +144,8 @@
 <h2 id="super-quick-start">Super-quick start</h2>
 <p>A summary of commands to get started is given below. For more detailed information see subsequent sections.</p>
 <pre><code># Clone repository
-git clone git@github.com:palma-ice/yelmo.git
+git clone https://github.com/palma-ice/yelmo.git
+git clone git@github.com:palma-ice/yelmo.git # via ssh
 
 # Enter directory and run configuration script
 cd yelmo
@@ -155,7 +156,7 @@ make clean
 make benchmarks 
 
 # Run a test simulation of the EISMINT1-moving experiment
-./runylmo -r -e benchmarks -o output/eismint1-moving -n par-gmd/yelmo_EISMINT-moving.nml
+./runylmo -r -e benchmarks -o output/eismint1-moving -n par-gmd/yelmo_EISMINT_moving.nml
 
 # Compile the initmip program and run a simulation of Antarctica
 make initmip 
@@ -193,7 +194,10 @@ make initmip
 (3) compile the Yelmo static library and an executable program and (4) run a test simulation.</p>
 <h3 id="1-get-the-code">1. Get the code.</h3>
 <p>Clone the repository from <a href="https://github.com/palma-ice/yelmo">https://github.com/palma-ice/yelmo</a>:</p>
-<pre><code>git clone git@github.com:palma-ice/yelmo.git $YELMOROOT
+<pre><code># Clone repository
+git clone https://github.com/palma-ice/yelmo.git $YELMOROOT
+git clone git@github.com:palma-ice/yelmo.git  $YELMOROOT # via ssh
+
 cd $YELMOROOT
 </code></pre>
 <p>where <code>$YELMOROOT</code> is the installation directory.</p>
