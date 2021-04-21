@@ -2,6 +2,10 @@
 
 YelmoX is a separate repository that is designed to provide supplementary libraries and programs that allow running ice-sheet simulations with realistic boundary (e.g., climate and ocean) forcing and interactions (e.g., isostatic rebound).
 
+![Ice sheet interactions](img/yelmo_test_color.png)
+
+![YelmoX interface](img/yelmox_overview.png)
+
 Here you can find the basic information and steps needed to get **YelmoX** running.
 
 ## Super-quick start
