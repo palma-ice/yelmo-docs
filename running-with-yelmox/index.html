@@ -72,6 +72,8 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#super-quick-start">Super-quick start</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ismip6-simulations">ISMIP6 simulations</a>
+    </li>
     </ul>
                     </li>
                 </ul>
@@ -138,6 +140,23 @@ ln -s path_to/ice_data
 
 # Run a test simulation of Antarctica for 1000 yrs
 ./runylmox -r -e yelmox -o output/ant-test -n par/yelmo_Antarctica.nml
+</code></pre>
+<h2 id="ismip6-simulations">ISMIP6 simulations</h2>
+<pre><code># First run spinup simulation
+# (steady-state present day boundary conditions)
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/spinup_opt11
+
+# Next run different experiments of interest
+
+# exp05
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp05 -p yelmo.restart=&quot;../spin_opt10/yelmo_restart.nc&quot; transient_proj.scenario=&quot;rcp85&quot;
+
+# exp09
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp09 -p yelmo.restart=&quot;../spin_opt10/yelmo_restart.nc&quot; transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_95&quot; marine_shelf.gamma_quad_nl=21000
+
+# exp10
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp10 -p yelmo.restart=&quot;../spin_opt10/yelmo_restart.nc&quot; transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_5&quot; marine_shelf.gamma_quad_nl=9620
+
 </code></pre>
               
             </div>
