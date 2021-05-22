@@ -39,3 +39,54 @@ ln -s path_to/ice_data
 ./runylmox -r -e yelmox -o output/ant-test -n par/yelmo_Antarctica.nml
 ```
 
+## ISMIP6 simulations 
+
+First make sure your distribution of `yelmox` and `yelmo` are up to date.
+
+```
+cd yelmox
+git pull 
+cd yelmo
+git pull 
+cd ..
+
+# From yelmox main directoyr, also reconfigure to adopt all changes:
+python config.py config/snowball_gfortran 
+cp config/runylmox.js ./
+```
+
+Now compile as normal, but with the `yelmox_ismip6` program:
+
+```
+make clean 
+make yelmox_ismip6 
+```
+
+That's it, you are now ready to run some ISMIP6 simulations. 
+
+If you need to run a spinup simulation that also optimizes basal friction, run the following command:
+
+```
+# First run spinup simulation
+# (steady-state present day boundary conditions)
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/spinup_opt11
+```
+
+If you already have a spinup simulation available, you can skip that step. 
+
+Next run different experiments of interest that restart from the spinup experiment.
+
+```
+# ctrl
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/ctrl -p ctrl.run_step="transient_proj" yelmo.restart="../spinup_opt11/yelmo_restart.nc" transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500
+
+# exp05
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp05 -p ctrl.run_step="transient_proj" yelmo.restart="../spinup_opt11/yelmo_restart.nc" transient_proj.scenario="rcp85" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500
+
+# exp09
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp09 -p ctrl.run_step="transient_proj" yelmo.restart="../spinup_opt11/yelmo_restart.nc" transient_proj.scenario="rcp85" tf_cor.name="dT_nl_95" marine_shelf.gamma_quad_nl=21000
+
+# exp10
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp10 -p ctrl.run_step="transient_proj" yelmo.restart="../spinup_opt11/yelmo_restart.nc" transient_proj.scenario="rcp85" tf_cor.name="dT_nl_5" marine_shelf.gamma_quad_nl=9620
+
+```
