@@ -177,6 +177,9 @@ make yelmox_ismip6
 # exp10
 ./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp10 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=&quot;../spinup_opt11/yelmo_restart.nc&quot; transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_5&quot; marine_shelf.gamma_quad_nl=9620
 
+# exp13
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp13 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=&quot;../spinup_opt11/yelmo_restart.nc&quot; transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_pigl&quot; marine_shelf.gamma_quad_nl=159000
+
 </code></pre>
               
             </div>
