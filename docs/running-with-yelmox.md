@@ -89,4 +89,7 @@ Next run different experiments of interest that restart from the spinup experime
 # exp10
 ./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp10 -p ctrl.run_step="transient_proj" yelmo.restart="../spinup_opt11/yelmo_restart.nc" transient_proj.scenario="rcp85" tf_cor.name="dT_nl_5" marine_shelf.gamma_quad_nl=9620
 
+# exp13
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp13 -p ctrl.run_step="transient_proj" yelmo.restart="../spinup_opt11/yelmo_restart.nc" transient_proj.scenario="rcp85" tf_cor.name="dT_nl_pigl" marine_shelf.gamma_quad_nl=159000
+
 ```
