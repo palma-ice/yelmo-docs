@@ -143,11 +143,13 @@ ln -s path_to/ice_data
 </code></pre>
 <h2 id="ismip6-simulations">ISMIP6 simulations</h2>
 <p>First make sure your distribution of <code>yelmox</code> and <code>yelmo</code> are up to date.</p>
-<pre><code>cd yelmox
-git pull 
-cd yelmo
+<pre><code>cd yelmo
 git pull 
 cd ..
+
+# In the main yelmox directory, change to the branch 'tfm2021': 
+git pull 
+git checkout tfm2021
 
 # From main directory of yelmox, also reconfigure to adopt all changes:
 python config.py config/snowball_gfortran 
@@ -163,7 +165,10 @@ make yelmox_ismip6
 # (steady-state present day boundary conditions)
 ./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/spinup_opt11
 </code></pre>
-<p>If you already have a spinup simulation available, you can skip that step. </p>
+<p>If you already have a spinup simulation available, you can skip that step. You can also copy one from here:</p>
+<pre><code>mkdir output/ismip6
+cp /home/robinson/yelmox/output/ismip6/spinup_opt11 output/ismip6/
+</code></pre>
 <p>Next run different experiments of interest that restart from the spinup experiment.</p>
 <pre><code># ctrl
 ./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/ctrl -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=&quot;../spinup_opt11/yelmo_restart.nc&quot; transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500
