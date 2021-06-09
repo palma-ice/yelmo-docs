@@ -221,6 +221,51 @@ T_r(z=z_{\rm bed}) = T(z=z_{\rm bed})
 <h2 id="how-to-read-yelmo_check_kill-output">How to read <code>yelmo_check_kill</code> output</h2>
 <p>The subroutine <code>yelmo_check_kill</code> is used to see if any instability is arising in the model. If so, then a restart file is written at that moment (the earlier in the instability, the better), and the model is stopped with diagnostic output to the log file. </p>
 <p>Note that <code>pc_eps</code> is the parameter that defines our target error tolerance in the time stepping of ice thickness evolution. At each time step, the diagnosed model error <code>pc_eta</code> is compared with <code>pc_eps</code>. If <code>pc_eta &gt;&gt; pc_eps</code>, this is interpreted as instability and the model is stopped. </p>
+<h2 id="margin-front-mass-balance">Margin-front mass balance</h2>
+<p>Following Pollard and DeConto (2012,2016), an ice-margin front melting scheme has been implemented that accounts for the melt rate along the vertical face of ice submerged by seawater. </p>
+<p>The frontal mass balance ($\dot{f}$, m yr$^{-1}$) is calculated as:</p>
+<p>
+<script type="math/tex; mode=display">
+\dot{f} = \dot{b}_{\rm eff} \frac{A_f}{A_{\rm tot}} \theta_f
+</script>
+</p>
+<p>where $\dot{b}<em>{\rm eff}$ is the effective basal mass balance (the mean of the basal mass balance calculated for the ice-free neighbors), $A</em>{\rm tot}=\Delta x \Delta x$ is the horizontal grid area and $A_f$ is the area of the submerged faces (i.e., the sum of the depth of submerged ice for each face of the grid cell adjacent to an ice-free cell -- potentially four faces in total). $\theta_f=10$ is a scaling coefficient that implies the face mass balance should be ~10 times higher than the basal mass balance (Pollard and DeConto, 2016, appendix). </p>
+<h2 id="calving-schemes">Calving schemes</h2>
+<p>Here is a summary of calving schemes.</p>
+<h3 id="lipscomb-et-al-2019">Lipscomb et al. (2019)</h3>
+<p>
+<script type="math/tex; mode=display">
+c = k_\tau \tau_{\rm ec}
+</script>
+</p>
+<p>where $k_\tau$ (m yr$^{-1}$ Pa$^{-1}$) is an empirical constant and $\tau_{\rm ec}$ (Pa) is the effective calving stress, which is defined by:</p>
+<p>
+<script type="math/tex; mode=display">
+\tau_{\rm ec}^2 = \max(\tau_1,0)^2 + \omega_2 \max(\tau_2,0)^2
+</script>
+</p>
+<p>$\tau_1$ and $\tau_2$ are the eigenvalues of the 2D horizontal deviatoric stress tensor and $\omega_2$ is an empirical weighting constant. For partially ice-covered grid cells (with $f_{\rm ice} &lt; 1$), these stresses are taken from the upstream neighbor. </p>
+<p>The eigenvalues $\tau_1$ and $\tau_2$ are calculated from the depth-averaged (2D) stress tensor $\tau_{\rm ij}$ as follows. Given the stress tensor components $\tau_{\rm xx}$, $\tau_{\rm yy}$ and $\tau_{\rm xy}$, we can solve for the real roots $\lambda$ of the tensor from the quadratic equation:</p>
+<p>
+<script type="math/tex; mode=display">
+a \lambda^2 + b \lambda + c = 0 
+</script>
+</p>
+<p>where </p>
+<p>
+<script type="math/tex; mode=display">
+a = 1.0 \\
+b = -(\tau_{\rm xx} + \tau_{\rm yy}) \\
+c = \tau_{\rm xx}*\tau_{\rm yy} - \tau_{\rm xy}^2
+</script>
+</p>
+<p>glissade_velo_higher.F90:</p>
+<pre><code>tau_xz(k,i,j) = tau_xz(k,i,j) + efvs_qp * du_dz            ! 2 * efvs * eps_xz
+tau_yz(k,i,j) = tau_yz(k,i,j) + efvs_qp * dv_dz            ! 2 * efvs * eps_yz
+tau_xx(k,i,j) = tau_xx(k,i,j) + 2.d0 * efvs_qp * du_dx     ! 2 * efvs * eps_xx
+tau_yy(k,i,j) = tau_yy(k,i,j) + 2.d0 * efvs_qp * dv_dy     ! 2 * efvs * eps_yy
+tau_xy(k,i,j) = tau_xy(k,i,j) + efvs_qp * (dv_dx + du_dy)  ! 2 * efvs * eps_xy
+</code></pre>
               
             </div>
           </div>
