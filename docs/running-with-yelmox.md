@@ -35,20 +35,29 @@ make yelmox
 # Link to `ice_data` repository
 ln -s path_to/ice_data 
 
+# Copy the runylmox config file to the main directory
+cp config/runylmox.js ./
+
 # Run a test simulation of Antarctica for 1000 yrs
 ./runylmox -r -e yelmox -o output/ant-test -n par/yelmo_Antarctica.nml
 ```
+
+## Standard YelmoX simulations 
+
+To run YelmoX, by default we use the program `yelmox.f90`. This program currently makes use of `snapclim` for the climatic forcing and `smbpal` for the snowpack and surface mass balance calculations.
 
 ## ISMIP6 simulations 
 
 First make sure your distribution of `yelmox` and `yelmo` are up to date.
 
 ```
-cd yelmox
-git pull 
 cd yelmo
 git pull 
 cd ..
+
+# In the main yelmox directory, change to the branch 'tfm2021': 
+git pull 
+git checkout tfm2021
 
 # From main directory of yelmox, also reconfigure to adopt all changes:
 python config.py config/snowball_gfortran 
@@ -72,7 +81,12 @@ If you need to run a spinup simulation that also optimizes basal friction, run t
 ./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/spinup_opt11
 ```
 
-If you already have a spinup simulation available, you can skip that step. 
+If you already have a spinup simulation available, you can skip that step. You can also copy one from here:
+
+```
+mkdir output/ismip6
+cp -r /home/robinson/yelmox/output/ismip6/spinup_opt11 output/ismip6/
+```
 
 Next run different experiments of interest that restart from the spinup experiment.
 
