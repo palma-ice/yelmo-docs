@@ -214,3 +214,27 @@ tau_yy(k,i,j) = tau_yy(k,i,j) + 2.d0 * efvs_qp * dv_dy     ! 2 * efvs * eps_yy
 tau_xy(k,i,j) = tau_xy(k,i,j) + efvs_qp * (dv_dx + du_dy)  ! 2 * efvs * eps_xy
 ```
 
+## Vertical velocity
+
+$$
+w = u_b \frac{\partial b}{\partial x} + v_b \frac{\partial b}{\partial y} - \int_b^z \left( \frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} \right) dz'
+$$
+
+
+## Ice margin, calving rates, mass conservation
+
+ajr, 2021-06-22
+
+Through `v1.42`, ice margins were not fully consistently treated in Yelmo. This has been thoroughly revised. Now the following should be true:
+
+1. The variable `f_ice` contains information of the ice area fraction of a grid cell. If `f_ice=0`, no ice is present, if `f_ice=1`, the cell is fully ice covered, and for a fractional value, this cell is designated an ice margin point with partial ice cover. To determine `f_ice`, we need to calculate the "effective ice thickness" of a grid point. For floating cells at the margin, the effective ice thickness is equivalent to either the ice thickness or the minimum ice thickness of the neighboring cell, whichever is larger. For grounded cells, the effective ice thickness must at least be that of 1/2 of the minimum ice thickness of a neighboring cell. With effective ice thickness known, `f_ice = H_ice / H_eff`. 
+2. Any grid cell with fractional ice cover `0<f_ice<1` is designated dynamically inactive on its outer borders (borders with ice-free points). Thus before a new cell can be populated with ice, first the fractional cell must be filled to reach `f_ice=1`. 
+3. Velocity and the ssa solver now explicitly only treat cells with `f_ice=1`. The dynamic-inactive borders are also enforced explicitly in the mass_conservation routine for safety. 
+4. The calving rate is diagnosed as a lateral flux assuming a thickness of `H_eff`, but then is converted to a horizontal mass balance component applied to the whole cell. 
+5. Additionally, it is possible to ensure 'residual calving' is applied to the upstream grid point of a margin cell, if the calving rate is large enough. This is done via the new routine `calc_calving_residual`. In the case of the `simple` and `flux` methods, applying full residual calving rates causes far too much calving. Rather a small amount of residual calving is applied to conservatively diminish the dynamic status of the upstream cell. The latter was implemented following CISM. 
+
+Other important changes
+
+1. Major bug fix with thermodynamics and vertical velocity. The vertical velocity correction that was being applied to account for the sigma coordinates was incorrect. A correction must be applied to get the vertical velocity itself. Then another correction must be applied when calculating the vertical advection in the thermodynamics routine. Now this is hopefully done correctly. EISMINT EXPA and EXPF appear to work well. This may hopefully prove crucial for Javi's advance/retreat issues in Antarctica.
+2. Modified staggering of 3D viscosity to be done on horizontal ab-nodes, then averaged to the center. This follows a 'quadrature' approach and appears to be more rigorously close to actually integrating over the area. It's not clear how this might affect stability of ice streams (i.e., Daniel's results). 
+3. Two-step mass balance with updates to `f_ice` in between, with more explicit tracking of all mass changes. Now a new variable `mb_resid` holds any threshold changes applied at the end of the mass balance update.
