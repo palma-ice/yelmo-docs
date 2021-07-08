@@ -137,10 +137,10 @@
 <h2 id="preprocessing-data-using-cdo">Preprocessing data using <code>cdo</code></h2>
 <p>As a first step, the Climate Data Operators <code>cdo</code> package is great for most preprocessing steps. It can handle averaging data over time and space, merging data files, extracting individual variables etc. See the extensive documentation and examples online. </p>
 <p>For example, it is possible to use the command <code>cdo selvar</code> to extract specific variables from a file:</p>
-<pre><code>cdo selvar,t2m,precip diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp1.nc
+<pre><code class="language-bash">cdo selvar,t2m,precip diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp1.nc
 </code></pre>
 <p>If you have several variables in individual files, you can then conveniently merge them into one file usine <code>merge</code> (it's better if they have the same shape):</p>
-<pre><code># Extract t2m to a temporary file
+<pre><code class="language-bash"># Extract t2m to a temporary file
 cdo selvar,t2m diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp1.nc
 
 # Extract precip to a temporary file
@@ -182,11 +182,11 @@ semi_major_axis =        6378137.000
 inverse_flattening =         298.25722356
 </code></pre>
 <p>With this file defined, it's easy to perform projections using the <code>cdo remap*</code> commands. To perform a bicubic interpolation, call:</p>
-<pre><code>cdo remapbic,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-bic.nc
+<pre><code class="language-bash">cdo remapbic,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-bic.nc
 </code></pre>
 <p>Here, <code>remapbic</code> specifies bicubic interpolation and <code>grid_ANT-32KM.txt</code> defines the target grid as above. Then the source dataset is specified and the desired output file <code>ANT-32KM_test.nc</code>. </p>
 <p>To perform conservative interpolation, replace <code>remapbic</code> with <code>remapcon</code>:</p>
-<pre><code>cdo remapcon,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-con.nc
+<pre><code class="language-bash">cdo remapcon,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-con.nc
 </code></pre>
 <p>Conservative interpolation is generally preferred, especially when going from a high resolution to a lower resolution, as it avoids unwanted interpolation artifacts and conserves the quantity being remapped. However, from low resolution to high resolution, conservative interpolation can result in more "blocky" fields with abrupt changes in values. Thus, in this case, bicubic interpolation, or conservative interpolation with additional Gaussian smoothing is better. The latter is not supported by <code>cdo</code>, but can be acheived with other tools.</p>
 <h2 id="summary">Summary</h2>
