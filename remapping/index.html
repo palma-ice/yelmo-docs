@@ -189,6 +189,9 @@ inverse_flattening =         298.25722356
 <pre><code>cdo remapcon,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-con.nc
 </code></pre>
 <p>Conservative interpolation is generally preferred, especially when going from a high resolution to a lower resolution, as it avoids unwanted interpolation artifacts and conserves the quantity being remapped. However, from low resolution to high resolution, conservative interpolation can result in more "blocky" fields with abrupt changes in values. Thus, in this case, bicubic interpolation, or conservative interpolation with additional Gaussian smoothing is better. The latter is not supported by <code>cdo</code>, but can be acheived with other tools.</p>
+<h2 id="summary">Summary</h2>
+<p>It can be tedious to process data from a climate model into the right format to drive Yelmo. Tools like <code>cdo</code> help to reduce this burden. Other tools like NetCDF Operator <code>NCO</code> and today numerous Python-based libraries and tools can also be used. </p>
+<p>It is best to define a script or program with all the processing steps clearly defined. That way, when new data becomes available from the same model, it is easy to process it systematically (and reproducibly) in the same way without any trouble. </p>
               
             </div>
           </div>
