@@ -123,6 +123,8 @@ cdo smooth,radius=128km ANT-32KM_test-con.nc ANT-32KM_test-con-smooth.nc
 
 ```
 
+The smoothing radius should be chosen such that it is the smallest value possible that removes blocky artifacts from the field. 
+
 ## Summary
 
 It can be tedious to process data from a climate model into the right format to drive Yelmo. Tools like `cdo` help to reduce this burden. Other tools like NetCDF Operator `NCO` and today numerous Python-based libraries and tools can also be used. 
