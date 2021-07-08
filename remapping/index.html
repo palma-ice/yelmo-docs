@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Remapping - Yelmo-docs</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Remapping";
+    var mkdocs_page_input_path = "remapping.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Yelmo-docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Getting started</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../dependencies/">Dependencies</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../parameters/">Parameters</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../example-programs/">Examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../running-with-yelmox/">YelmoX</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Yelmo-docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Remapping</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="remapping">Remapping</h1>
+<p>Yelmo runs on a Cartesian (x/y) grid. Often input data comes in many formats, global lat/lon grids, projections and sets of points. It is important to have robust remapping tools. </p>
+<p>Typically for a given domain, we define a Polar Stereographic projection to be able to convert lat/lon data points onto a Cartesian plane. For Antarctica, for example, the standard projection has the following parameters:</p>
+<pre><code>    int polar_stereographic ;
+        polar_stereographic:grid_mapping_name = &quot;polar_stereographic&quot; ;
+        polar_stereographic:straight_vertical_longitude_from_pole = 0. ;
+        polar_stereographic:latitude_of_projection_origin = -71. ;
+        polar_stereographic:angle_of_oblique_tangent = 19. ;
+        polar_stereographic:scale_factor_at_projection_origin = 1. ;
+        polar_stereographic:false_easting = 0. ;
+        polar_stereographic:false_northing = 0. ;
+</code></pre>
+<h2 id="naming-files">Naming files</h2>
+<p>For grids used by Yelmo, we generally use an abbreviation for the domain name followed by the resolution. So for Antarctica, we could have the grids <code>ANT-32KM</code> or <code>ANT-16KM</code> for a 32km or 16km grid, respectively. Data that have been projected onto these grids are saved with the grid name as a prefix followed by a general name that specifies the type of data, e.g., <code>CLIM</code> or <code>TOPO</code>, finally followed by more descriptive information about the specific dataset <code>IPSL-14Ma</code> or <code>IPSL-PD-CTRL</code>. For example, the latest topopgraphy dataset we use is called the RTopo2.0.1 dataset, so this is processed into a file called <code>ANT-32KM_TOPO-RTOPO-2.0.1.nc</code>. </p>
+<h2 id="fields-yelmo-needs">Fields Yelmo needs</h2>
+<p>To drive Yelmo with boundary conditions derived from a climate model, it needs the following fields to be defined on the Polar Stereographic grid:</p>
+<ul>
+<li>Climatological mean near-surface air temperature [monthly]</li>
+<li>Climatological mean precipitation [monthly]</li>
+<li>Surface elevation</li>
+<li>Sea level</li>
+<li>
+<p>Ice thickness</p>
+</li>
+<li>
+<p>Climatological mean 3D ocean temperature [annual]</p>
+</li>
+<li>Climatological mean 3D ocean salinity [annual]</li>
+<li>Oceanic bathymetry</li>
+</ul>
+<p>Likely these would be processed into two or more separate files, e.g., one for climate <code>CLIM</code> variables and another for ocean <code>OCN</code> variables.</p>
+<h2 id="preprocessing-data-using-cdo">Preprocessing data using <code>cdo</code></h2>
+<p>As a first step, the Climate Data Operators <code>cdo</code> package is great for most preprocessing steps. It can handle averaging data over time and space, merging data files, extracting individual variables etc. See the extensive documentation and examples online. </p>
+<p>For example, it is possible to use the command <code>cdo selvar</code> to extract specific variables from a file:</p>
+<pre><code>cdo selvar,t2m,precip diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp1.nc
+</code></pre>
+<p>If you have several variables in individual files, you can then conveniently merge them into one file usine <code>merge</code> (it's better if they have the same shape):</p>
+<pre><code># Extract t2m to a temporary file
+cdo selvar,t2m diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp1.nc
+
+# Extract precip to a temporary file
+cdo selvar,precip diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp2.nc
+
+# Merge the two individual variable files into one convenient file
+cdo merge ipsl_tmp1.nc ipsl_tmp2.nc ipsl_tmp3.nc
+</code></pre>
+<p>There are many other useful commands, particularly for getting monthly means <code>cdo monmean ...</code> and other statistics. </p>
+<p>Resources:</p>
+<p>CDO Documentation page:
+<a href="https://code.mpimet.mpg.de/projects/cdo/wiki/Cdo#Documentation">https://code.mpimet.mpg.de/projects/cdo/wiki/Cdo#Documentation</a></p>
+<p>CDO User guide:
+<a href="https://code.mpimet.mpg.de/projects/cdo/embedded/cdo.pdf">https://code.mpimet.mpg.de/projects/cdo/embedded/cdo.pdf</a></p>
+<p>CDO Reference card:
+<a href="https://code.mpimet.mpg.de/projects/cdo/embedded/cdo_refcard.pdf">https://code.mpimet.mpg.de/projects/cdo/embedded/cdo_refcard.pdf</a></p>
+<h2 id="using-cdo-for-remapping">Using <code>cdo</code> for remapping</h2>
+<p>To remap a data file from lat/lon coordinates to our projection, <code>cdo</code> needs a grid description file that describes the target Polar Stereographic projection grid. For example, for a 32km resolution domain, we would use the following file named <code>grid_ANT-32KM.txt</code>:</p>
+<pre><code>gridtype = projection
+gridsize =      36481
+xsize    =        191
+ysize    =        191
+xname    = xc
+xunits   = km
+yname    = yc
+yunits   = km
+xfirst   =    -3040.000000
+xinc     =       32.000000
+yfirst   =    -3040.000000
+yinc     =       32.000000
+grid_mapping = crs
+grid_mapping_name = polar_stereographic
+straight_vertical_longitude_from_pole =        0.000
+latitude_of_projection_origin =      -90.000
+standard_parallel =      -71.000
+false_easting =        0.000
+false_northing =        0.000
+semi_major_axis =        6378137.000
+inverse_flattening =         298.25722356
+</code></pre>
+<p>With this file defined, it's easy to perform projections using the <code>cdo remap*</code> commands. To perform a bicubic interpolation, call:</p>
+<pre><code>cdo remapbic,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-bic.nc
+</code></pre>
+<p>Here, <code>remapbic</code> specifies bicubic interpolation and <code>grid_ANT-32KM.txt</code> defines the target grid as above. Then the source dataset is specified and the desired output file <code>ANT-32KM_test.nc</code>. </p>
+<p>To perform conservative interpolation, replace <code>remapbic</code> with <code>remapcon</code>:</p>
+<pre><code>cdo remapcon,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-con.nc
+</code></pre>
+<p>Conservative interpolation is generally preferred, especially when going from a high resolution to a lower resolution, as it avoids unwanted interpolation artifacts and conserves the quantity being remapped. However, from low resolution to high resolution, conservative interpolation can result in more "blocky" fields with abrupt changes in values. Thus, in this case, bicubic interpolation, or conservative interpolation with additional Gaussian smoothing is better. The latter is not supported by <code>cdo</code>, but can be acheived with other tools.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
