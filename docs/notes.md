@@ -237,4 +237,10 @@ Other important changes
 
 1. Major bug fix with thermodynamics and vertical velocity. The vertical velocity correction that was being applied to account for the sigma coordinates was incorrect. A correction must be applied to get the vertical velocity itself. Then another correction must be applied when calculating the vertical advection in the thermodynamics routine. Now this is hopefully done correctly. EISMINT EXPA and EXPF appear to work well. This may hopefully prove crucial for Javi's advance/retreat issues in Antarctica.
 2. Modified staggering of 3D viscosity to be done on horizontal ab-nodes, then averaged to the center. This follows a 'quadrature' approach and appears to be more rigorously close to actually integrating over the area. It's not clear how this might affect stability of ice streams (i.e., Daniel's results). 
-3. Two-step mass balance with updates to `f_ice` in between, with more explicit tracking of all mass changes. Now a new variable `mb_resid` holds any threshold changes applied at the end of the mass balance update.
+3. Two-step mass balance with updates to `f_ice` in between, with more explicit tracking of all mass changes. Now a new variable `mb_resid` holds any threshold changes applied at the end of the mass balance update. I haven't checked in detail, but I hope all mass changes are now accounted for explicitly in the model.
+
+To do...
+
+- `vm-l19` calving method seems to be too sensitive. A reasonable coefficient value is `kt=0.0001` instead of the value used by Lipscomb et al. (2019) of `kt=0.0025`. Reducing where `calv_resid` is redistributed only to cells with the same ice thickness reduces this sensitivity. Needs checking.
+- Threshold methods (`simple`,`flux`,`flux-grisli`) are not sensitive enough. Need to test how to apply `calv_resid` more robustly, or find another solution.
+

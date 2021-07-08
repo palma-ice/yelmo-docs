@@ -1,0 +1,117 @@
+# Remapping
+
+Yelmo runs on a Cartesian (x/y) grid. Often input data comes in many formats, global lat/lon grids, projections and sets of points. It is important to have robust remapping tools. 
+
+Typically for a given domain, we define a Polar Stereographic projection to be able to convert lat/lon data points onto a Cartesian plane. For Antarctica, for example, the standard projection has the following parameters:
+
+```
+	int polar_stereographic ;
+		polar_stereographic:grid_mapping_name = "polar_stereographic" ;
+		polar_stereographic:straight_vertical_longitude_from_pole = 0. ;
+		polar_stereographic:latitude_of_projection_origin = -71. ;
+		polar_stereographic:angle_of_oblique_tangent = 19. ;
+		polar_stereographic:scale_factor_at_projection_origin = 1. ;
+		polar_stereographic:false_easting = 0. ;
+		polar_stereographic:false_northing = 0. ;
+```
+
+## Naming files
+
+For grids used by Yelmo, we generally use an abbreviation for the domain name followed by the resolution. So for Antarctica, we could have the grids `ANT-32KM` or `ANT-16KM` for a 32km or 16km grid, respectively. Data that have been projected onto these grids are saved with the grid name as a prefix followed by a general name that specifies the type of data, e.g., `CLIM` or `TOPO`, finally followed by more descriptive information about the specific dataset `IPSL-14Ma` or `IPSL-PD-CTRL`. For example, the latest topopgraphy dataset we use is called the RTopo2.0.1 dataset, so this is processed into a file called `ANT-32KM_TOPO-RTOPO-2.0.1.nc`. 
+
+## Fields Yelmo needs
+
+To drive Yelmo with boundary conditions derived from a climate model, it needs the following fields to be defined on the Polar Stereographic grid:
+
+- Climatological mean near-surface air temperature [monthly]
+- Climatological mean precipitation [monthly]
+- Surface elevation
+- Sea level
+- Ice thickness
+
+- Climatological mean 3D ocean temperature [annual]
+- Climatological mean 3D ocean salinity [annual]
+- Oceanic bathymetry
+
+Likely these would be processed into two or more separate files, e.g., one for climate `CLIM` variables and another for ocean `OCN` variables.
+
+## Preprocessing data using `cdo`
+
+As a first step, the Climate Data Operators `cdo` package is great for most preprocessing steps. It can handle averaging data over time and space, merging data files, extracting individual variables etc. See the extensive documentation and examples online. 
+
+For example, it is possible to use the command `cdo selvar` to extract specific variables from a file:
+
+```
+cdo selvar,t2m,precip diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp1.nc
+```
+
+If you have several variables in individual files, you can then conveniently merge them into one file usine `merge` (it's better if they have the same shape):
+
+```
+# Extract t2m to a temporary file
+cdo selvar,t2m diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp1.nc
+
+# Extract precip to a temporary file
+cdo selvar,precip diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp2.nc
+
+# Merge the two individual variable files into one convenient file
+cdo merge ipsl_tmp1.nc ipsl_tmp2.nc ipsl_tmp3.nc
+```
+
+There are many other useful commands, particularly for getting monthly means `cdo monmean ...` and other statistics. 
+
+Resources:
+
+CDO Documentation page:
+[https://code.mpimet.mpg.de/projects/cdo/wiki/Cdo#Documentation](https://code.mpimet.mpg.de/projects/cdo/wiki/Cdo#Documentation)
+
+CDO User guide:
+[https://code.mpimet.mpg.de/projects/cdo/embedded/cdo.pdf](https://code.mpimet.mpg.de/projects/cdo/embedded/cdo.pdf)
+
+CDO Reference card:
+[https://code.mpimet.mpg.de/projects/cdo/embedded/cdo_refcard.pdf](https://code.mpimet.mpg.de/projects/cdo/embedded/cdo_refcard.pdf)
+
+## Using `cdo` for remapping
+
+To remap a data file from lat/lon coordinates to our projection, `cdo` needs a grid description file that describes the target Polar Stereographic projection grid. For example, for a 32km resolution domain, we would use the following file named `grid_ANT-32KM.txt`:
+
+```
+gridtype = projection
+gridsize =      36481
+xsize    =        191
+ysize    =        191
+xname    = xc
+xunits   = km
+yname    = yc
+yunits   = km
+xfirst   =    -3040.000000
+xinc     =       32.000000
+yfirst   =    -3040.000000
+yinc     =       32.000000
+grid_mapping = crs
+grid_mapping_name = polar_stereographic
+straight_vertical_longitude_from_pole =        0.000
+latitude_of_projection_origin =      -90.000
+standard_parallel =      -71.000
+false_easting =        0.000
+false_northing =        0.000
+semi_major_axis =        6378137.000
+inverse_flattening =         298.25722356
+```
+
+With this file defined, it's easy to perform projections using the `cdo remap*` commands. To perform a bicubic interpolation, call:
+
+```
+cdo remapbic,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-bic.nc
+```
+
+Here, `remapbic` specifies bicubic interpolation and `grid_ANT-32KM.txt` defines the target grid as above. Then the source dataset is specified and the desired output file `ANT-32KM_test.nc`. 
+
+To perform conservative interpolation, replace `remapbic` with `remapcon`:
+
+```
+cdo remapcon,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-con.nc
+```
+
+Conservative interpolation is generally preferred, especially when going from a high resolution to a lower resolution, as it avoids unwanted interpolation artifacts and conserves the quantity being remapped. However, from low resolution to high resolution, conservative interpolation can result in more "blocky" fields with abrupt changes in values. Thus, in this case, bicubic interpolation, or conservative interpolation with additional Gaussian smoothing is better. The latter is not supported by `cdo`, but can be acheived with other tools.
+
