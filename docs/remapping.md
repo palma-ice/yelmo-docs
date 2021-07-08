@@ -41,13 +41,13 @@ As a first step, the Climate Data Operators `cdo` package is great for most prep
 
 For example, it is possible to use the command `cdo selvar` to extract specific variables from a file:
 
-```
+```bash
 cdo selvar,t2m,precip diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp1.nc
 ```
 
 If you have several variables in individual files, you can then conveniently merge them into one file usine `merge` (it's better if they have the same shape):
 
-```
+```bash
 # Extract t2m to a temporary file
 cdo selvar,t2m diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp1.nc
 
@@ -101,7 +101,7 @@ inverse_flattening =         298.25722356
 
 With this file defined, it's easy to perform projections using the `cdo remap*` commands. To perform a bicubic interpolation, call:
 
-```
+```bash
 cdo remapbic,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-bic.nc
 ```
 
@@ -109,11 +109,19 @@ Here, `remapbic` specifies bicubic interpolation and `grid_ANT-32KM.txt` defines
 
 To perform conservative interpolation, replace `remapbic` with `remapcon`:
 
-```
+```bash
 cdo remapcon,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-con.nc
 ```
 
 Conservative interpolation is generally preferred, especially when going from a high resolution to a lower resolution, as it avoids unwanted interpolation artifacts and conserves the quantity being remapped. However, from low resolution to high resolution, conservative interpolation can result in more "blocky" fields with abrupt changes in values. Thus, in this case, bicubic interpolation, or conservative interpolation with additional Gaussian smoothing is better. The latter is not supported by `cdo`, but can be acheived with other tools.
+
+One option for processing may be a conservative remapping, following by a smoothing step:
+
+```bash
+cdo remapcon,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-con.nc
+cdo smooth,radius=128km ANT-32KM_test-con.nc ANT-32KM_test-con-smooth.nc
+
+```
 
 ## Summary
 
