@@ -194,6 +194,7 @@ inverse_flattening =         298.25722356
 cdo smooth,radius=128km ANT-32KM_test-con.nc ANT-32KM_test-con-smooth.nc
 
 </code></pre>
+<p>The smoothing radius should be chosen such that it is the smallest value possible that removes blocky artifacts from the field. </p>
 <h2 id="summary">Summary</h2>
 <p>It can be tedious to process data from a climate model into the right format to drive Yelmo. Tools like <code>cdo</code> help to reduce this burden. Other tools like NetCDF Operator <code>NCO</code> and today numerous Python-based libraries and tools can also be used. </p>
 <p>It is best to define a script or program with all the processing steps clearly defined. That way, when new data becomes available from the same model, it is easy to process it systematically (and reproducibly) in the same way without any trouble. </p>
