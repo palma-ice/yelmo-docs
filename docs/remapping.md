@@ -115,3 +115,10 @@ cdo remapcon,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT
 
 Conservative interpolation is generally preferred, especially when going from a high resolution to a lower resolution, as it avoids unwanted interpolation artifacts and conserves the quantity being remapped. However, from low resolution to high resolution, conservative interpolation can result in more "blocky" fields with abrupt changes in values. Thus, in this case, bicubic interpolation, or conservative interpolation with additional Gaussian smoothing is better. The latter is not supported by `cdo`, but can be acheived with other tools.
 
+## Summary
+
+It can be tedious to process data from a climate model into the right format to drive Yelmo. Tools like `cdo` help to reduce this burden. Other tools like NetCDF Operator `NCO` and today numerous Python-based libraries and tools can also be used. 
+
+It is best to define a script or program with all the processing steps clearly defined. That way, when new data becomes available from the same model, it is easy to process it systematically (and reproducibly) in the same way without any trouble. 
+
+
