@@ -13,33 +13,50 @@ Here you can find the basic information and steps needed to get **YelmoX** runni
 A summary of commands to get started is given below. For more detailed information see subsequent sections.
 
 ```
+
+# Before doing anything, make sure dependencies are installed (Lis, NetCDF, runner)
+
+##########################
+
 # Clone repository
 git clone https://github.com/palma-ice/yelmox.git
-git clone git@github.com:palma-ice/yelmox.git # via ssh
+git clone git@github.com:palma-ice/yelmox.git # or via ssh
 
-# Enter directory and run configuration script
+# Clone yelmo into a sub-directory too
 cd yelmox
-python config.py config/pik_ifort 
-
-# Clone yelmo into a sub-directory and configure it too 
 git clone https://github.com/palma-ice/yelmo.git
-git clone git@github.com:palma-ice/yelmo.git # via ssh
-cd yelmo 
-python config.py config/pik_ifort 
+git clone git@github.com:palma-ice/yelmo.git # or, via ssh
 
-# Return to the main directory and compile the default program
-cd ../
+# Check out your yelmox branch of interest (optional)
+git checkout my-branch  # for an existing branch 
+git checkout -b my-new-branch # or, to create a new one 
+
+# Do the same for yelmo branch if needed, and return to yelmox directory
+cd yelmo 
+git checkout my-branch
+cd .. 
+
+# Enter yelmo directory and configure it for compiling
+cd yelmo
+python3 config.py config/snowball_gfortran  # or the right config file for your system
+
+# Return to yelmox directory and configure it for compiling
+cd ..
+python3 config.py config/snowball_gfortran  # or the right config file for your system
+
+
+# Now, compile the default program
 make clean 
 make yelmox 
 
-# Link to `ice_data` repository
+# Link to `ice_data` repository wherever you have it saved on your system
 ln -s path_to/ice_data 
 
 # Copy the runylmox config file to the main directory
 cp config/runylmox.js ./
 
 # Run a test simulation of Antarctica for 1000 yrs
-./runylmox -r -e yelmox -o output/ant-test -n par/yelmo_Antarctica.nml
+./runylmox -r -e yelmox -n par/yelmo_Antarctica.nml -o output/ant-test -p ctrl.time_end=1e3
 ```
 
 ## Standard YelmoX simulations 
@@ -60,7 +77,7 @@ git pull
 git checkout tfm2021
 
 # From main directory of yelmox, also reconfigure to adopt all changes:
-python config.py config/snowball_gfortran 
+python3 config.py config/snowball_gfortran 
 cp config/runylmox.js ./
 ```
 
