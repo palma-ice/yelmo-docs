@@ -138,21 +138,32 @@ Next run different experiments of interest that restart from the spinup experime
 First make sure your distribution of `yelmox` and `yelmo` are up to date with the `abumip-2021` branch.
 
 ```
+# If you need to clone:
+git clone https://github.com/palma-ice/yelmox.git
+
+# Clone yelmo into a sub-directory too
+cd yelmox
+git clone https://github.com/palma-ice/yelmo.git
+
+# Link to ice_data path:
+ln -s /media/Data/ice_data ice_data
+```
+
+Next, checkout the right branches...
+
+```
 cd yelmo
 git fetch --all 
 git checkout abumip-2021
+python3 config.py config/snowball_gfortran 
 cd ..
 
-# In the main yelmox directory, change to the branch 'tfm2021': 
+# In the main yelmox directory, change to the branch 'abumip-2021' and reconfigure: 
 git fetch --all 
 git checkout abumip-2021
-
-# From main directory of yelmox, also reconfigure to adopt all changes:
 python3 config.py config/snowball_gfortran 
 cp config/runylmox.js ./
 
-# Make sure you have linked the ice data directory too
-ln -s /media/Data/ice_data ice_data
 ```
 
 Now compile as normal, but with the `yelmox_ismip6` program:
