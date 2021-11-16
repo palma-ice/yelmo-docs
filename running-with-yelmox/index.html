@@ -218,21 +218,29 @@ cp -r /home/robinson/yelmox/output/ismip6/spinup_opt11 output/ismip6/
 </code></pre>
 <h2 id="abumip">ABUMIP</h2>
 <p>First make sure your distribution of <code>yelmox</code> and <code>yelmo</code> are up to date with the <code>abumip-2021</code> branch.</p>
+<pre><code># If you need to clone:
+git clone https://github.com/palma-ice/yelmox.git
+
+# Clone yelmo into a sub-directory too
+cd yelmox
+git clone https://github.com/palma-ice/yelmo.git
+
+# Link to ice_data path:
+ln -s /media/Data/ice_data ice_data
+</code></pre>
+<p>Next, checkout the right branches...</p>
 <pre><code>cd yelmo
 git fetch --all 
 git checkout abumip-2021
+python3 config.py config/snowball_gfortran 
 cd ..
 
-# In the main yelmox directory, change to the branch 'tfm2021': 
+# In the main yelmox directory, change to the branch 'abumip-2021' and reconfigure: 
 git fetch --all 
 git checkout abumip-2021
-
-# From main directory of yelmox, also reconfigure to adopt all changes:
 python3 config.py config/snowball_gfortran 
 cp config/runylmox.js ./
 
-# Make sure you have linked the ice data directory too
-ln -s /media/Data/ice_data ice_data
 </code></pre>
 <p>Now compile as normal, but with the <code>yelmox_ismip6</code> program:</p>
 <pre><code>make clean 
