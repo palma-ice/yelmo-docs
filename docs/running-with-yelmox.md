@@ -139,12 +139,12 @@ First make sure your distribution of `yelmox` and `yelmo` are up to date with th
 
 ```
 cd yelmo
-git pull 
+git fetch --all 
 git checkout abumip-2021
 cd ..
 
 # In the main yelmox directory, change to the branch 'tfm2021': 
-git pull 
+git fetch --all 
 git checkout abumip-2021
 
 # From main directory of yelmox, also reconfigure to adopt all changes:
@@ -172,7 +172,9 @@ cp -r /home/robinson/abumip-2021/yelmox/output/ismip6/spinup11 ./
 
 Next use the following commands to run the three main experiments of interest. Note that `abuk` and `abum` may run much more slowly than `abuc`. The parameter values applied in the commands below ensure that the model parameters correspond to those used in the restart simulation, although many of them like ocean temp. anomalies in different basins or calving parameters, are no longer relevant in the ABUMIP context. It is important, however, to specify `ydyn.ssa_lat_bc='marine'`, as it is relevant for this experiment to apply `marine` boundary conditions. This is generally not used, as it makes the model much less stable. 
 
+```
 # ABUC - control experiment
+
 ./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/abuc -p abumip.scenario="abuc" ctrl.run_step="abumip_proj" yelmo.restart="../spinup11/1/yelmo_restart.nc" transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='floating'
 
 # ABUK - Ocean-kill experiment
