@@ -76,6 +76,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#ismip6-simulations">ISMIP6 simulations</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#abumip">ABUMIP</a>
+    </li>
     </ul>
                     </li>
                 </ul>
@@ -187,7 +189,11 @@ make yelmox_ismip6
 <p>If you need to run a spinup simulation that also optimizes basal friction, run the following command:</p>
 <pre><code># First run spinup simulation
 # (steady-state present day boundary conditions)
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/spinup_opt11
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/spinup_opt11 -p ctrl.run_step=&quot;spinup_ismip6&quot; opt_L21.cf_min=1e-3 ytopo.kt=0.10e-2 tf_corr_ant.ronne=0.0 tf_corr_ant.ross=0.0
+</code></pre>
+<p>Or an ensemble to test different parameters too:</p>
+<pre><code>fldr=tmp/ismip6/spinup10
+jobrun ./runylmox -s -q short -w 10 -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; opt_L21.cf_min=1e-3 ytopo.kt=0.10e-2,0.20e-2,0.30e-2,0.40e-2 tf_corr_ant.ronne=0.0,0.25 tf_corr_ant.ross=0.0,0.2
 </code></pre>
 <p>If you already have a spinup simulation available, you can skip that step. You can also copy one from here:</p>
 <pre><code>mkdir output/ismip6
@@ -210,6 +216,42 @@ cp -r /home/robinson/yelmox/output/ismip6/spinup_opt11 output/ismip6/
 ./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp13 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=&quot;../spinup_opt11/yelmo_restart.nc&quot; transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_pigl&quot; marine_shelf.gamma_quad_nl=159000
 
 </code></pre>
+<h2 id="abumip">ABUMIP</h2>
+<p>First make sure your distribution of <code>yelmox</code> and <code>yelmo</code> are up to date with the <code>abumip-2021</code> branch.</p>
+<pre><code>cd yelmo
+git pull 
+git checkout abumip-2021
+cd ..
+
+# In the main yelmox directory, change to the branch 'tfm2021': 
+git pull 
+git checkout abumip-2021
+
+# From main directory of yelmox, also reconfigure to adopt all changes:
+python3 config.py config/snowball_gfortran 
+cp config/runylmox.js ./
+
+# Make sure you have linked the ice data directory too
+ln -s /media/Data/ice_data ice_data
+</code></pre>
+<p>Now compile as normal, but with the <code>yelmox_ismip6</code> program:</p>
+<pre><code>make clean 
+make yelmox_ismip6 
+</code></pre>
+<p>Finally, copy the restart file into an output directory that we will call <code>output/ismip6</code>:</p>
+<pre><code>cd yelmox/output
+mkdir ismip6
+cd ismip6
+cp -r /home/robinson/abumip-2021/yelmox/output/ismip6/spinup11 ./
+</code></pre>
+<p>Next use the following commands to run the three main experiments of interest. Note that <code>abuk</code> and <code>abum</code> may run much more slowly than <code>abuc</code>. The parameter values applied in the commands below ensure that the model parameters correspond to those used in the restart simulation, although many of them like ocean temp. anomalies in different basins or calving parameters, are no longer relevant in the ABUMIP context. It is important, however, to specify <code>ydyn.ssa_lat_bc='marine'</code>, as it is relevant for this experiment to apply <code>marine</code> boundary conditions. This is generally not used, as it makes the model much less stable. </p>
+<h1 id="abuc-control-experiment">ABUC - control experiment</h1>
+<p>./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/abuc -p abumip.scenario="abuc" ctrl.run_step="abumip_proj" yelmo.restart="../spinup11/1/yelmo_restart.nc" transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='floating'</p>
+<h1 id="abuk-ocean-kill-experiment">ABUK - Ocean-kill experiment</h1>
+<p>./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/abuk -p abumip.scenario="abuk" ctrl.run_step="abumip_proj" yelmo.restart="../spinup11/1/yelmo_restart.nc" transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='marine'</p>
+<h1 id="abum-high-shelf-melt-400-myr">ABUM - High shelf melt (400 m/yr)</h1>
+<p>./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/abum -p abumip.scenario="abum" ctrl.run_step="abumip_proj" yelmo.restart="../spinup11/1/yelmo_restart.nc" transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='floating'</p>
+<p>```</p>
               
             </div>
           </div>
