@@ -95,7 +95,14 @@ If you need to run a spinup simulation that also optimizes basal friction, run t
 ```
 # First run spinup simulation
 # (steady-state present day boundary conditions)
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/spinup_opt11
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/spinup_opt11 -p ctrl.run_step="spinup_ismip6" opt_L21.cf_min=1e-3 ytopo.kt=0.10e-2 tf_corr_ant.ronne=0.0 tf_corr_ant.ross=0.0
+```
+
+Or an ensemble to test different parameters too:
+
+```
+fldr=tmp/ismip6/spinup10
+jobrun ./runylmox -s -q short -w 10 -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step="spinup_ismip6" opt_L21.cf_min=1e-3 ytopo.kt=0.10e-2,0.20e-2,0.30e-2,0.40e-2 tf_corr_ant.ronne=0.0,0.25 tf_corr_ant.ross=0.0,0.2
 ```
 
 If you already have a spinup simulation available, you can skip that step. You can also copy one from here:
@@ -122,5 +129,56 @@ Next run different experiments of interest that restart from the spinup experime
 
 # exp13
 ./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp13 -p ctrl.run_step="transient_proj" yelmo.restart="../spinup_opt11/yelmo_restart.nc" transient_proj.scenario="rcp85" tf_cor.name="dT_nl_pigl" marine_shelf.gamma_quad_nl=159000
+
+```
+
+
+## ABUMIP
+
+First make sure your distribution of `yelmox` and `yelmo` are up to date with the `abumip-2021` branch.
+
+```
+cd yelmo
+git pull 
+git checkout abumip-2021
+cd ..
+
+# In the main yelmox directory, change to the branch 'tfm2021': 
+git pull 
+git checkout abumip-2021
+
+# From main directory of yelmox, also reconfigure to adopt all changes:
+python3 config.py config/snowball_gfortran 
+cp config/runylmox.js ./
+
+# Make sure you have linked the ice data directory too
+ln -s /media/Data/ice_data ice_data
+```
+
+Now compile as normal, but with the `yelmox_ismip6` program:
+
+```
+make clean 
+make yelmox_ismip6 
+```
+
+Finally, copy the restart file into an output directory that we will call `output/ismip6`:
+```
+cd yelmox/output
+mkdir ismip6
+cd ismip6
+cp -r /home/robinson/abumip-2021/yelmox/output/ismip6/spinup11 ./
+```
+
+Next use the following commands to run the three main experiments of interest. Note that `abuk` and `abum` may run much more slowly than `abuc`. The parameter values applied in the commands below ensure that the model parameters correspond to those used in the restart simulation, although many of them like ocean temp. anomalies in different basins or calving parameters, are no longer relevant in the ABUMIP context. It is important, however, to specify `ydyn.ssa_lat_bc='marine'`, as it is relevant for this experiment to apply `marine` boundary conditions. This is generally not used, as it makes the model much less stable. 
+
+# ABUC - control experiment
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/abuc -p abumip.scenario="abuc" ctrl.run_step="abumip_proj" yelmo.restart="../spinup11/1/yelmo_restart.nc" transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='floating'
+
+# ABUK - Ocean-kill experiment
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/abuk -p abumip.scenario="abuk" ctrl.run_step="abumip_proj" yelmo.restart="../spinup11/1/yelmo_restart.nc" transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='marine'
+
+# ABUM - High shelf melt (400 m/yr)
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/abum -p abumip.scenario="abum" ctrl.run_step="abumip_proj" yelmo.restart="../spinup11/1/yelmo_restart.nc" transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='floating'
 
 ```
