@@ -67,23 +67,33 @@ yelmo.restart=/home/robinson/abumip-2021/yelmox/output/ismip6/spinup11/1/yelmo_r
 
 To run transient simulations the `run_step` should be specified as `ctrl.run_step="hysteresis_proj"`. Typically model parameters should be defined to be equivalent to those used by the restart simulation. The time control parameters of the simulation are defined in the parameter section `&hysteresis_proj`. Parameters associated with the hysteresis module can be changed in the `&hyster` section. 
 
+To be consistent with the restart file above, the following reference parameter values should be set in the parameter file (or at the command line, if used as part of the ensemble):
+
+```
+ctrl.run_step="hysteresis_proj"
+tf_cor.name="dT_nl"
+marine_shelf.gamma_quad_nl=14500
+yelmo.restart=/home/robinson/abumip-2021/yelmox/output/ismip6/spinup11/1/yelmo_restart.nc
+tf_corr_ant.ronne=0.25
+tf_corr_ant.ross=0.2 
+tf_corr_ant.pine=-0.5
+
+# For setting output frequency
+hysteresis_proj.dt2D_out=5e3 
+hysteresis.dt2D_small_out=100
+```
+
 Example transient simulation of `hysteresis_proj.time_end=500` years, with ramp forcing via the `hyster` module with 100 years of constant forcing, followed by a ramp over 250 years from an anomaly of 0 degC to 5 degC:
 
 ```
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/hyst/test1 -p \
-ctrl.run_step="hysteresis_proj" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 \
-yelmo.restart=/home/robinson/abumip-2021/yelmox/output/ismip6/spinup11/1/yelmo_restart.nc \
-tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 \
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/hyst/test1 -p ytopo.kt=0.001 \
 hyster.method="ramp" hyster.dt_init=100 hyster.dt_ramp=250 hyster.f_min=0 hyster.f_max=5
 ```
 
 Example transient simulation using Adaptive Quasi-Equilibrium Forcing (AQEF) with no lead-in time:
 
 ```
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/hyst/test2 -p \
-ctrl.run_step="hysteresis_proj" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 \
-yelmo.restart=/home/robinson/abumip-2021/yelmox/output/ismip6/spinup11/1/yelmo_restart.nc \
-tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 \
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/hyst/test2 -p ytopo.kt=0.001 \
 hyster.method="PI42" hyster.dt_init=0 hyster.f_min=0 hyster.f_max=5
 ```
 
