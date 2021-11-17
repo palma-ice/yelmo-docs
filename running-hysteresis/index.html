@@ -150,18 +150,25 @@ Alternatively, you can specify one that is ready on <code>snowball</code>:</p>
 </code></pre>
 <h2 id="step-2-transient-simulations">Step 2: transient simulations</h2>
 <p>To run transient simulations the <code>run_step</code> should be specified as <code>ctrl.run_step="hysteresis_proj"</code>. Typically model parameters should be defined to be equivalent to those used by the restart simulation. The time control parameters of the simulation are defined in the parameter section <code>&amp;hysteresis_proj</code>. Parameters associated with the hysteresis module can be changed in the <code>&amp;hyster</code> section. </p>
+<p>To be consistent with the restart file above, the following reference parameter values should be set in the parameter file (or at the command line, if used as part of the ensemble):</p>
+<pre><code>ctrl.run_step=&quot;hysteresis_proj&quot;
+tf_cor.name=&quot;dT_nl&quot;
+marine_shelf.gamma_quad_nl=14500
+yelmo.restart=/home/robinson/abumip-2021/yelmox/output/ismip6/spinup11/1/yelmo_restart.nc
+tf_corr_ant.ronne=0.25
+tf_corr_ant.ross=0.2 
+tf_corr_ant.pine=-0.5
+
+# For setting output frequency
+hysteresis_proj.dt2D_out=5e3 
+hysteresis.dt2D_small_out=100
+</code></pre>
 <p>Example transient simulation of <code>hysteresis_proj.time_end=500</code> years, with ramp forcing via the <code>hyster</code> module with 100 years of constant forcing, followed by a ramp over 250 years from an anomaly of 0 degC to 5 degC:</p>
-<pre><code>./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/hyst/test1 -p \
-ctrl.run_step=&quot;hysteresis_proj&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 \
-yelmo.restart=/home/robinson/abumip-2021/yelmox/output/ismip6/spinup11/1/yelmo_restart.nc \
-tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 \
+<pre><code>./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/hyst/test1 -p ytopo.kt=0.001 \
 hyster.method=&quot;ramp&quot; hyster.dt_init=100 hyster.dt_ramp=250 hyster.f_min=0 hyster.f_max=5
 </code></pre>
 <p>Example transient simulation using Adaptive Quasi-Equilibrium Forcing (AQEF) with no lead-in time:</p>
-<pre><code>./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/hyst/test2 -p \
-ctrl.run_step=&quot;hysteresis_proj&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 \
-yelmo.restart=/home/robinson/abumip-2021/yelmox/output/ismip6/spinup11/1/yelmo_restart.nc \
-tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 \
+<pre><code>./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/hyst/test2 -p ytopo.kt=0.001 \
 hyster.method=&quot;PI42&quot; hyster.dt_init=0 hyster.f_min=0 hyster.f_max=5
 </code></pre>
 <p>Or simply further constant forcing of a control run by setting <code>hyster.method="const"</code>. </p>
