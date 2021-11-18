@@ -173,25 +173,29 @@ make clean
 make yelmox_ismip6 
 ```
 
-Finally, copy the restart file into an output directory that we will call `output/ismip6`:
-```
-cd yelmox/output
-mkdir ismip6
-cd ismip6
-cp -r /home/robinson/abumip-2021/yelmox/output/ismip6/spinup11 ./
-```
+Next use the following commands to run the three main experiments of interest. Note that `abuk` and `abum` may run much more slowly than `abuc`. The parameter values applied in the commands below ensure that the model parameters correspond to those used in the restart simulation, although many of them like ocean temp. anomalies in different basins or calving parameters, are no longer relevant in the ABUMIP context. It is important, however, to specify `ydyn.ssa_lat_bc='marine'`, as it is relevant for this experiment to apply `marine` boundary conditions. This is generally not used currently, as it makes the model much less stable. 
 
-Next use the following commands to run the three main experiments of interest. Note that `abuk` and `abum` may run much more slowly than `abuc`. The parameter values applied in the commands below ensure that the model parameters correspond to those used in the restart simulation, although many of them like ocean temp. anomalies in different basins or calving parameters, are no longer relevant in the ABUMIP context. It is important, however, to specify `ydyn.ssa_lat_bc='marine'`, as it is relevant for this experiment to apply `marine` boundary conditions. This is generally not used, as it makes the model much less stable. 
+Note that an equilibrium spin-up simulation has already been performed, which gives good agreement with the present-day ice sheet. These results have been saved in a restart file, from which your simulations will begin (see below). 
 
 ```
+# Define restart file path as a bash variable
+file_restart=/home/robinson/ismip6/spinup_32km_01/5/yelmo_restart.nc
+
+# Define output folder as a bash variable
+fldr=output/ismip6/abumip32km
+
+# Call the Yelmo commands...
+
 # ABUC - control experiment
 
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/abuc -p abumip.scenario="abuc" ctrl.run_step="abumip_proj" yelmo.restart="../spinup11/1/yelmo_restart.nc" transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='floating'
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuc -p abumip.scenario="abuc" ctrl.run_step="abumip_proj" yelmo.restart=${file_restart} transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003 isostasy.method=0 ydyn.ssa_lat_bc='floating'
 
 # ABUK - Ocean-kill experiment
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/abuk -p abumip.scenario="abuk" ctrl.run_step="abumip_proj" yelmo.restart="../spinup11/1/yelmo_restart.nc" transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='marine'
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuk -p abumip.scenario="abuk" ctrl.run_step="abumip_proj" yelmo.restart=${file_restart} transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='marine'
 
 # ABUM - High shelf melt (400 m/yr)
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/abum -p abumip.scenario="abum" ctrl.run_step="abumip_proj" yelmo.restart="../spinup11/1/yelmo_restart.nc" transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.001 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='floating'
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abum -p abumip.scenario="abum" ctrl.run_step="abumip_proj" yelmo.restart=${file_restart} transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003 isostasy.method=0 ydyn.ssa_lat_bc='floating'
 
 ```
+
+That's it! 
