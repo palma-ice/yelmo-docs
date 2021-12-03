@@ -249,22 +249,27 @@ make yelmox_ismip6
 <p>Next use the following commands to run the three main experiments of interest. Note that <code>abuk</code> and <code>abum</code> may run much more slowly than <code>abuc</code>. The parameter values applied in the commands below ensure that the model parameters correspond to those used in the restart simulation, although many of them like ocean temp. anomalies in different basins or calving parameters, are no longer relevant in the ABUMIP context. It is important, however, to specify <code>ydyn.ssa_lat_bc='marine'</code>, as it is relevant for this experiment to apply <code>marine</code> boundary conditions. This is generally not used currently, as it makes the model much less stable. </p>
 <p>Note that an equilibrium spin-up simulation has already been performed, which gives good agreement with the present-day ice sheet. These results have been saved in a restart file, from which your simulations will begin (see below). </p>
 <pre><code># Define restart file path as a bash variable
-file_restart=/home/robinson/ismip6/spinup_32km_01/5/yelmo_restart.nc
+file_restart=/home/robinson/ismip6/spinup_32km_05/0/yelmo_restart.nc
 
 # Define output folder as a bash variable
-fldr=output/ismip6/abumip32km
+fldr=output/ismip6/abumip_32km
+
+# Specify run choices, to run locally in the background:
+runopt='-r'
+# or, to submit job to a cluster, eg:
+runopt='-s -q priority -w 5'
 
 # Call the Yelmo commands...
 
 # ABUC - control experiment
 
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuc -p abumip.scenario=&quot;abuc&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003 isostasy.method=0 ydyn.ssa_lat_bc='floating'
+./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuc -p abumip.scenario=&quot;abuc&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003 isostasy.method=0 ydyn.ssa_lat_bc='floating'
 
 # ABUK - Ocean-kill experiment
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuk -p abumip.scenario=&quot;abuk&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003 isostasy.method=0 ytopo.calv_tau=1e-1 ydyn.ssa_lat_bc='marine'
+./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuk -p abumip.scenario=&quot;abuk&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003 isostasy.method=0 ytopo.calv_tau=1e-3 ydyn.ssa_lat_bc='marine'
 
 # ABUM - High shelf melt (400 m/yr)
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abum -p abumip.scenario=&quot;abum&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003 isostasy.method=0 ydyn.ssa_lat_bc='floating'
+./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abum -p abumip.scenario=&quot;abum&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003 isostasy.method=0 ydyn.ssa_lat_bc='floating'
 
 </code></pre>
 <p>That's it! </p>
