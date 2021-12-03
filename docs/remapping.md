@@ -132,3 +132,49 @@ It can be tedious to process data from a climate model into the right format to 
 It is best to define a script or program with all the processing steps clearly defined. That way, when new data becomes available from the same model, it is easy to process it systematically (and reproducibly) in the same way without any trouble. 
 
 
+## Remapping restart file
+
+Sometimes we may want to restart a simulation at a new resolution - i.e., perform a spinup simulation at relatively low resolution and then continue the simulation at higher resolution. 
+
+1. Use `cdo` to remap the restart file based on the grid definition files.
+
+```
+# Define env variables as shortcuts to locations of grid files
+grid_src=/Users/robinson/models/EURICE/gridding/maps/grid_GRL-32KM.txt
+grid_tgt=/Users/robinson/models/EURICE/gridding/maps/grid_GRL-16KM.txt
+
+# Call remapping
+cdo remapcon,${grid_tgt} -setgrid,${grid_src} yelmo_restart.nc yelmo_restart_16km.nc
+```
+
+Let's do a test. First, run a short 32km Greenland simulation and generate a restart file:
+
+```
+./runylmo -r -e initmip -n par/yelmo_initmip.nml -o output/restarts/sim0-32km -p ctrl.time_end=100 ctrl.time_equil=0 ctrl.clim_nm="clim_pd_grl" yelmo.domain="Greenland" yelmo.grid_name="GRL-32KM"
+```
+
+That simulation should have produced a nice restart file. Let's test a normal 32km simulation that continues from this restart file.
+
+```
+./runylmo -r -e initmip -n par/yelmo_initmip.nml -o output/restarts/sim1-32km -p ctrl.time_end=100 ctrl.time_equil=0 ctrl.clim_nm="clim_pd_grl" yelmo.domain="Greenland" yelmo.grid_name="GRL-32KM" yelmo.restart="../sim0-32km/yelmo_restart.nc"
+```
+
+Ok, now generate scrip map file to interpolate from 32km down to 16km.
+
+```
+domain=Greenland
+grid_name_src=GRL-32KM
+grid_name_tgt=GRL-8KM
+nc_src=../ice_data/${domain}/${grid_name_src}/${grid_name_src}_REGIONS.nc 
+
+cdo gencon,grid_${grid_name_tgt}.txt -setgrid,grid_${grid_name_src}.txt ${nc_src} scrip-con_${grid_name_src}_${grid_name_tgt}.nc
+
+```
+
+Now let's try to run a simulation at 16km, loading the restart file from 32km
+
+```
+./runylmo -r -e initmip -n par/yelmo_initmip.nml -o output/restarts/sim2-16km -p ctrl.time_end=100 ctrl.time_equil=0 ctrl.clim_nm="clim_pd_grl" yelmo.domain="Greenland" yelmo.grid_name="GRL-16KM" yelmo.restart="../sim0-32km/yelmo_restart.nc"
+```
+
+The simulation is successful! (as of branch `alex-dev-2`, revision `1d9783fb`). 
