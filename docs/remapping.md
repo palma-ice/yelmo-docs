@@ -164,7 +164,7 @@ Ok, now generate scrip map file to interpolate from 32km down to 16km.
 ```
 domain=Greenland
 grid_name_src=GRL-32KM
-grid_name_tgt=GRL-8KM
+grid_name_tgt=GRL-4KM
 nc_src=../ice_data/${domain}/${grid_name_src}/${grid_name_src}_REGIONS.nc 
 
 cdo gencon,grid_${grid_name_tgt}.txt -setgrid,grid_${grid_name_src}.txt ${nc_src} scrip-con_${grid_name_src}_${grid_name_tgt}.nc
