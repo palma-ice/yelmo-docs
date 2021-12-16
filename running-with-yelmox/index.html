@@ -74,6 +74,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#standard-yelmox-simulations">Standard YelmoX simulations</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#spin-up-simulation-for-ismip6-based-runs-ismip6-abumip">Spin-up simulation for ISMIP6-based runs (ISMIP6, ABUMIP)</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#ismip6-simulations">ISMIP6 simulations</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#abumip">ABUMIP</a>
@@ -167,86 +169,73 @@ cp config/runylmox.js ./
 </code></pre>
 <h2 id="standard-yelmox-simulations">Standard YelmoX simulations</h2>
 <p>To run YelmoX, by default we use the program <code>yelmox.f90</code>. This program currently makes use of <code>snapclim</code> for the climatic forcing and <code>smbpal</code> for the snowpack and surface mass balance calculations.</p>
-<h2 id="ismip6-simulations">ISMIP6 simulations</h2>
+<h2 id="spin-up-simulation-for-ismip6-based-runs-ismip6-abumip">Spin-up simulation for ISMIP6-based runs (ISMIP6, ABUMIP)</h2>
 <p>First make sure your distribution of <code>yelmox</code> and <code>yelmo</code> are up to date.</p>
 <pre><code>cd yelmo
 git pull 
 cd ..
 
-# In the main yelmox directory, change to the branch 'tfm2021': 
+# In the main yelmox directory, change to the branch 'tfm2021' or 'abumip-2021': 
 git pull 
 git checkout tfm2021
 
 # From main directory of yelmox, also reconfigure to adopt all changes:
 python3 config.py config/snowball_gfortran 
 cp config/runylmox.js ./
+
+# Link to ice_data path as needed:
+ln -s /media/Data/ice_data ice_data
 </code></pre>
 <p>Now compile as normal, but with the <code>yelmox_ismip6</code> program:</p>
 <pre><code>make clean 
 make yelmox_ismip6 
 </code></pre>
-<p>That's it, you are now ready to run some ISMIP6 simulations. </p>
-<p>If you need to run a spinup simulation that also optimizes basal friction, run the following command:</p>
-<pre><code># First run spinup simulation
-# (steady-state present day boundary conditions)
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/spinup_opt11 -p ctrl.run_step=&quot;spinup_ismip6&quot; opt_L21.cf_min=1e-3 ytopo.kt=0.10e-2 tf_corr_ant.ronne=0.0 tf_corr_ant.ross=0.0
+<p>You are now ready to run some ISMIP6 simulations. If you have a spinup simulation available you can skip the rest of this section.</p>
+<p>The next step is to get a spin-up simulation ready. To run a reasonable simulation for Antarctica that will optimize basal friction coefficient <code>cb_ref</code>, run the following commands:</p>
+<pre><code># Specify run choices, to run locally in the background:
+runopt='-r'
+# or, to submit job to a cluster, eg:
+runopt='-s -q priority -w 5'
+
+# Define output folder 
+fldr=output/ismip6/spinup_32km
+
+./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; opt_L21.cf_min=1e-3 opt_L21.fill_method=&quot;cf_min&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003
 </code></pre>
-<p>Or an ensemble to test different parameters too:</p>
-<pre><code>fldr=tmp/ismip6/spinup10
-jobrun ./runylmox -s -q short -w 10 -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; opt_L21.cf_min=1e-3 ytopo.kt=0.10e-2,0.20e-2,0.30e-2,0.40e-2 tf_corr_ant.ronne=0.0,0.25 tf_corr_ant.ross=0.0,0.2
-</code></pre>
-<p>If you already have a spinup simulation available, you can skip that step. You can also copy one from here:</p>
-<pre><code>mkdir output/ismip6
-cp -r /home/robinson/yelmox/output/ismip6/spinup_opt11 output/ismip6/
-</code></pre>
-<p>Next run different experiments of interest that restart from the spinup experiment.</p>
-<pre><code># ctrl
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/ctrl -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=&quot;../spinup_opt11/yelmo_restart.nc&quot; transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500
+<h2 id="ismip6-simulations">ISMIP6 simulations</h2>
+<p>Make sure you already have a spinup simulation available, and that the parameters of the spinup will match those supplied here. The next step is to run different experiments of interest that restart from the spinup experiment.</p>
+<pre><code># Define restart file path as a bash variable, for example, on snowball:
+file_restart=/home/robinson/ismip6/spinup_32km_05/0/yelmo_restart.nc
+
+# Define output folder as a bash variable
+fldr=output/ismip6
+
+# Specify run choices, to run locally in the background:
+runopt='-r'
+# or, to submit job to a cluster, eg:
+runopt='-s -q priority -w 5'
+
+# Call the Yelmo commands...
+
+# ctrl
+./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/ctrl -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003
 
 # exp05
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp05 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=&quot;../spinup_opt11/yelmo_restart.nc&quot; transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500
+./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/exp05 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003
 
 # exp09
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp09 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=&quot;../spinup_opt11/yelmo_restart.nc&quot; transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_95&quot; marine_shelf.gamma_quad_nl=21000
+./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/exp09 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_95&quot; marine_shelf.gamma_quad_nl=21000 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003
 
 # exp10
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp10 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=&quot;../spinup_opt11/yelmo_restart.nc&quot; transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_5&quot; marine_shelf.gamma_quad_nl=9620
+./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/exp10 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_5&quot; marine_shelf.gamma_quad_nl=9620 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003
 
 # exp13
-./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp13 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=&quot;../spinup_opt11/yelmo_restart.nc&quot; transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_pigl&quot; marine_shelf.gamma_quad_nl=159000
+./runylmox -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o output/ismip6/exp13 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_pigl&quot; marine_shelf.gamma_quad_nl=159000 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003
 
 </code></pre>
 <h2 id="abumip">ABUMIP</h2>
-<p>First make sure your distribution of <code>yelmox</code> and <code>yelmo</code> are up to date with the <code>abumip-2021</code> branch.</p>
-<pre><code># If you need to clone:
-git clone https://github.com/palma-ice/yelmox.git
-
-# Clone yelmo into a sub-directory too
-cd yelmox
-git clone https://github.com/palma-ice/yelmo.git
-
-# Link to ice_data path:
-ln -s /media/Data/ice_data ice_data
-</code></pre>
-<p>Next, checkout the right branches...</p>
-<pre><code>cd yelmo
-git fetch --all 
-git checkout abumip-2021
-python3 config.py config/snowball_gfortran 
-cd ..
-
-# In the main yelmox directory, change to the branch 'abumip-2021' and reconfigure: 
-git fetch --all 
-git checkout abumip-2021
-python3 config.py config/snowball_gfortran 
-cp config/runylmox.js ./
-
-</code></pre>
-<p>Now compile as normal, but with the <code>yelmox_ismip6</code> program:</p>
-<pre><code>make clean 
-make yelmox_ismip6 
-</code></pre>
-<p>Next use the following commands to run the three main experiments of interest. Note that <code>abuk</code> and <code>abum</code> may run much more slowly than <code>abuc</code>. The parameter values applied in the commands below ensure that the model parameters correspond to those used in the restart simulation, although many of them like ocean temp. anomalies in different basins or calving parameters, are no longer relevant in the ABUMIP context. It is important, however, to specify <code>ydyn.ssa_lat_bc='marine'</code>, as it is relevant for this experiment to apply <code>marine</code> boundary conditions. This is generally not used currently, as it makes the model much less stable. </p>
+<p>Make sure you already have a spinup simulation available.</p>
+<p>Use the following commands to run the three main experiments of interest. Note that <code>abuk</code> and <code>abum</code> may run much more slowly than <code>abuc</code>. The parameter values applied in the commands below ensure that the model parameters correspond to those used in the restart simulation, although many of them like ocean temp. anomalies in different basins or calving parameters, are no longer relevant in the ABUMIP context. It is important, however, to specify <code>ydyn.ssa_lat_bc='marine'</code>, as it is relevant for this experiment to apply <code>marine</code> boundary conditions. This is generally not used currently, as it makes the model much less stable. </p>
 <p>Note that an equilibrium spin-up simulation has already been performed, which gives good agreement with the present-day ice sheet. These results have been saved in a restart file, from which your simulations will begin (see below). </p>
 <pre><code># Define restart file path as a bash variable
 file_restart=/home/robinson/ismip6/spinup_32km_05/0/yelmo_restart.nc
