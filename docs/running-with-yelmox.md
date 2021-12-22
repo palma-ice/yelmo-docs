@@ -107,6 +107,21 @@ fldr=output/ismip6/spinup_32km
 ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr} -p ctrl.run_step="spinup_ismip6" opt_L21.cf_min=1e-3 opt_L21.fill_method="cf_min" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25 tf_corr_ant.ross=0.2 tf_corr_ant.pine=-0.5 ytopo.kt=0.003
 ```
 
+Or it can be useful to run an ensemble of spinups with different parameter values
+
+```
+# Specify run choices, to run locally in the background:
+runopt='-r'
+# or, to submit job to a cluster, eg:
+runopt='-s -q priority -w 5'
+
+# Define output folder 
+fldr=output/ismip6/spinup_32km_01
+
+jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step="spinup_ismip6" opt_L21.cf_min=1e-3 opt_L21.fill_method="cf_min" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 tf_corr_ant.ronne=0.25,0.30 tf_corr_ant.ross=0.20,0.25,0.30 tf_corr_ant.pine=-0.5 ytopo.kt=0.001,0.003
+```
+
+
 ## ISMIP6 simulations 
 
 Make sure you already have a spinup simulation available, and that the parameters of the spinup will match those supplied here. The next step is to run different experiments of interest that restart from the spinup experiment.
