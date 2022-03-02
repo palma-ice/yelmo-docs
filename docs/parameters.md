@@ -58,7 +58,7 @@ yneff.method = [-1,0,1,2,3]
  1: Impose the overburden pressure, N_eff = rho_ice*g*H_ice
  2: Calculate N_eff following the Leguy formulation
  3: Calculate N_eff as till pressure following Bueler and van Pelt (2015). 
- 4: Calculate N_eff as a 'two-valued' function scaled by `f_pmp` using `yneff.delta`.
+ 4: Calculate N_eff as a 'two-valued' function scaled by f_pmp using yneff.delta.
  ```
 
 
