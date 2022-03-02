@@ -58,12 +58,7 @@ yneff.method = [-1,0,1,2,3]
  1: Impose the overburden pressure, N_eff = rho_ice*g*H_ice
  2: Calculate N_eff following the Leguy formulation
  3: Calculate N_eff as till pressure following Bueler and van Pelt (2015). 
+ 4: Calculate N_eff as a 'two-valued' function scaled by `f_pmp` using `yneff.delta`.
  ```
 
-*Historical note*
 
- To impose an essentially two-valued effective pressure formulation, use:
- ```
- yneff.method=3 yneff.set_water=T yneff.delta=0.02
- ```
- This is analagous to the old method where one value of `c_b` was imposed for frozen regimes and another value for temperate regimes. By using `yneff.set_water=T`, the maximum value of water thickness is imposed everywhere the model is temperate. Thus, `N_eff` should take values either of `N_eff=N_0=rho_ice*g*H_ice` in frozen areas or `N_eff=N_0*yneff.delta` in temperate regimes. 
