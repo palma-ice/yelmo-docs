@@ -40,7 +40,7 @@ Copy `runylmox.js` from `config/` and make sure it is modified as it should be f
            "omp"           : 0,
            "wall"          : 24,
            "qos"           : "normal",
-           "partition"     : "",
+           "partition"     : "long",
            "job_template"  : "config/brigit_submit_slurm"
        },
        "exe_aliases" :
