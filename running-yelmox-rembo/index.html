@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>How to install runner and run Yelmo in brigit - Yelmo-docs</title>
+  <title>Running with YelmoX-REMBO - Yelmo-docs</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "How to install runner and run Yelmo in brigit";
-    var mkdocs_page_input_path = "how-to-run-yelmo-with-runner-in-brigit.md";
+    var mkdocs_page_name = "Running with YelmoX-REMBO";
+    var mkdocs_page_input_path = "running-yelmox-rembo.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -92,7 +92,7 @@
     
       
     
-    <li>How to install runner and run Yelmo in brigit</li>
+    <li>Running with YelmoX-REMBO</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -103,75 +103,67 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="how-to-install-runner-and-run-yelmo-in-brigit">How to install runner and run Yelmo in brigit</h1>
-<h2 id="how-to-install-runner">How to install runner</h2>
+                <h1 id="running-with-yelmox-rembo">Running with YelmoX-REMBO</h1>
+<p><em>Before doing anything, make sure dependencies are installed (Lis, NetCDF, Python:runner)</em></p>
 <ol>
-<li>Install anaconda first. Create a conda environment <code>runner</code> with python=3.7 (this is not needed, just in case you want to keep things separated): 
-   <code>conda create --name runner python=3.7
-   conda activate runner</code></li>
-<li>Install <code>runner</code> from <code>pip</code>:
-   <code>pip install https://github.com/alex-robinson/runner/archive/refs/heads/master.zip
-   pip install tabulate
-   pip install numpy
-   pip install scipy
-   pip install six
-   pip install pandas</code></li>
+<li>Clone the repositories:</li>
 </ol>
-<h2 id="how-to-run-yelmo">How to run Yelmo</h2>
-<h3 id="to-run-a-simple-simulation-for-yelmox-run-in-the-background">To run a simple simulation for yelmox (run in the background)</h3>
-<p><code>./runylmox -r -e yelmox -o output/test1 -n par/yelmo_Greenland.nml</code></p>
-<h3 id="to-run-a-simulation-with-one-parameter-changed-from-the-class-ytopo-run-in-the-backgroud">To run a simulation with one parameter changed from the class ytopo (run in the backgroud)</h3>
-<p><code>./runylmox -r -e yelmox -o output/test2 -n par/yelmo_Greenland.nml -p ytopo.kt=0.10e-2</code></p>
-<h3 id="to-send-runs-to-the-queue-with-runner">To send runs to the queue (with runner):</h3>
-<p>Copy <code>runylmox.js</code> from <code>config/</code> and make sure it is modified as it should be for brigit. The form of <code>runylmox.js</code> for brigit is something like:
-   <code>{
-       "defaults" :
-       {
-           "jobname"       : "Yelmo",
-           "email"         : "USER@ucm.es",
-           "group"         : "",
-           "omp"           : 0,
-           "wall"          : 24,
-           "qos"           : "normal",
-           "partition"     : "long",
-           "job_template"  : "config/brigit_submit_slurm"
-       },
-       "exe_aliases" :
-       {
-           "yelmox" : "libyelmox/bin/yelmox.x",
-           "iso"    : "libyelmox/bin/yelmox_iso.x",
-           "hyst"   : "libyelmox/bin/yelmox_hyst.x",
-           "rembo"  : "libyelmox/bin/yelmox_rembo.x",
-           "ismip6" : "libyelmox/bin/yelmox_ismip6.x"
-       },
-       "grp_aliases" : {},
-       "par_paths" : {},
-       "files" : [],
-       "dir-special" : {},
-       "links" :
-          ["input","ice_data"],
-       "const_paths" :
-       {   "EISMINT"  : "par/yelmo_const_EISMINT.nml",
-           "MISMIP3D" : "par/yelmo_const_MISMIP3D.nml"
-       },
-       "const_path_default" : "par/yelmo_const_Earth.nml",
-       "job_queues" :
-       {     "normal" :
-            {   "wall" : 10000  }
-       }
-   }</code></p>
-<p>Then submit the job to the queue with:</p>
-<pre><code>jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test3 -p opt_L21.cf_min=1e-3,2e-3
+<pre><code># Clone repository: YelmoX
+git clone https://github.com/palma-ice/yelmox.git
+
+# Clone yelmo into a sub-directory too
+cd yelmox
+git clone https://github.com/palma-ice/yelmo.git
+
+# Clone rembo into a sub-directory too 
+git clone https://github.com/alex-robinson/rembo1
 </code></pre>
-<p>To run en ensemble:</p>
-<pre><code>jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test4 -p opt_L21.cf_min=1e-3,2e-3 ytopo.H_min_flt=0.0,10.0,50.0
+<p>At this point all the code is downloaded onto the machine.
+Now we need to configure it for compiling properly.</p>
+<ol>
+<li>Run configuration scripts for each code base:</li>
+</ol>
+<pre><code># Enter yelmo directory and configure it for compiling
+cd yelmo
+python3 config.py config/snowball_gfortran
+
+# Enter rembo1 directory and configure it for compiling 
+cd ../rembo1
+python3 config.py config/snowball_gfortran
+
+# Return to yelmox directory and configure it for compiling
+cd ..
+python3 config.py config/snowball_gfortran
+
+# Finally, also copy the runylmox config file to the main directory
+cp config/runylmox.js ./
 </code></pre>
-<p>To run an ensemble from a txt file containing the permutation of parameters:
-  <code>job product opt_L21.cf_min=1e-3,2e-3,3e-3,4e-3 ytopo.H_min_flt=0.0,10.0,50.0 &gt; params.txt
-jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test5 -i params.txt</code>
-To run an ensemble from a selection of values in the param file:</p>
-<pre><code>jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test6 -i params.txt -j 1,4,5-7
+<p>Note that the example assumes we are using the machine called <code>snowball</code> and
+we will use the compiler <code>gfortran</code>. If this is not correct, you will need
+to use the right configuration file available in the <code>config/</code> directory, or 
+make your own using the others as a template. </p>
+<ol>
+<li>Compile the default program:</li>
+</ol>
+<pre><code>make clean 
+make yelmox_rembo
 </code></pre>
+<ol>
+<li>Make a link to <code>ice_data</code>:</li>
+</ol>
+<pre><code># Link to `ice_data` repository wherever you have it saved on your system
+ln -s /media/Data/ice_data
+
+# Take a look at some data to make sure it worked well
+ncview ice_data/Greenland/GRL-16KM/GRL-16KM_TOPO-M17.nc
+</code></pre>
+<ol>
+<li>Run a test simulation:</li>
+</ol>
+<pre><code># Run a test simulation of Greenland for 100 yrs
+./runylmox -r -e rembo -n par/yelmo_Greenland_rembo.nml -o output/test1 -p ctrl.time_end=1e2
+</code></pre>
+<p>That's it, YelmoX-REMBO is working. </p>
               
             </div>
           </div>
