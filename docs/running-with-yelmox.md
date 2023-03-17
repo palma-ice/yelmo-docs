@@ -110,26 +110,89 @@ jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o $
 
 ```
 
+An alternative spinup procedure
+
+```
+# First run for 30kyr with topo relax on to spinup thermodynamics...
+
+runopt='-s -q priority -w 10'
+fldr=tmp/ismip6/spinup_32km_69
+jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step="spinup_ismip6" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 spinup_ismip6.equil_method="relax" spinup_ismip6.time_end=30e3 spinup_ismip6.time_equil=30e3 ytopo.kt=1.0e-3,1.5e-3,2.0e-3,2.5e-3 ymat.enh_shear=1
+
+
+# Testing opt spinup but with 'robin' initial temp profile
+runopt='-s -q priority -w 10'
+fldr=tmp/ismip6/spinup_32km_70
+jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step="spinup_ismip6" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 ymat.enh_shear=1 opt_L21.cf_max=1.0
+
+# robin-cold but only by -2deg instead of -10deg
+runopt='-s -q priority -w 10'
+fldr=tmp/ismip6/spinup_32km_71
+jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step="spinup_ismip6" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 ymat.enh_shear=1 opt_L21.cf_max=0.2 opt_L21.cf_init=0.2
+
+
+runopt='-s -q short -w 10'
+fldr=tmp/ismip6/spinup_32km_72
+jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step="spinup_ismip6" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 opt_L21.cf_max=10,20,40,45 ydyn.beta_u0=100,300
+
+```
+
 ## ISMIP6 simulations 
 
 Make sure you already have a spinup simulation available, and that the parameters of the spinup will match those supplied here. The next step is to run different experiments of interest that restart from the spinup experiment.
 
+Some commands for running diagnostic short runs
 ```
-# Define restart file path as a bash variable, for example, on snowball:
+### Diagnostic short runs ###
+
+# Run a 16km spinup run with relaxation
+
+runopt='-s -q priority -w 1'
+fldr=tmp/ismip6/spinup_16km_72_diag
+
+jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step="spinup_ismip6" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 spinup_ismip6.equil_method="relax" yelmo.grid_name="ANT-16KM" spinup_ismip6.time_end=20 spinup_ismip6.dt2D_out=1
+
+
+# Run with 16km restarting from 32km file
+# (currently crashes probably because tf_corr cannot be interpolated)
+
+runopt='-s -q priority -w 1'
+fldr=tmp/ismip6/ismip_32km_68_diag
 file_restart=/p/tmp/robinson/ismip6/spinup_32km_68/0/yelmo_restart.nc 
 
+./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/ctrl -p ctrl.run_step="transient_proj" yelmo.restart=${file_restart} transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 ${paropt} yelmo.grid_name="ANT-16KM" transient_proj.time_end=1920 transient_proj.dt2D_out=1 ytill.is_angle=False
+
+###
+```
+
+# Actual ISMIP6 commands
+
+```
 # Define output folder as a bash variable
-fldr=tmp/ismip6/ismip_32km_68
+fldr=tmp/ismip6/ismip_32km_71
 
 # Specify run choices, to run locally in the background:
 runopt='-r'
 # or, to submit job to a cluster, eg:
-runopt='-s -q priority -w 5'
+runopt='-s -q priority -w 10'
 
 # Set parameter choices to match those of spinup simulation
 paropt="ytopo.kt=1.0e-3"
 
-# Call the Yelmo commands...
+## First run a steady-state simulation to stabilize everything
+
+# Define restart file path as a bash variable, for example, on snowball:
+file_restart=/p/tmp/robinson/ismip6/spinup_32km_71/0/yelmo_restart.nc 
+
+# ctrl-0
+./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/ctrl-0 -p ctrl.run_step="transient_proj" yelmo.restart=${file_restart} transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 transient_proj.time_end=11900 transient_proj.dt1D_out=10 transient_proj.dt2D_out=200 ${paropt}
+
+
+## Next, call the Yelmo commands for the individual cases...
+
+# Define restart file path as a bash variable, for example, on snowball:
+#file_restart=/p/tmp/robinson/ismip6/spinup_32km_68/0/yelmo_restart.nc 
+file_restart=/p/tmp/robinson/ismip6/ismip_32km_68/ctrl-0/yelmo_restart.nc 
 
 # ctrl
 ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/ctrl -p ctrl.run_step="transient_proj" yelmo.restart=${file_restart} transient_proj.scenario="ctrl" tf_cor.name="dT_nl" marine_shelf.gamma_quad_nl=14500 ${paropt}
