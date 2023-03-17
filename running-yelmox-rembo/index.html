@@ -106,7 +106,7 @@
                 <h1 id="running-with-yelmox-rembo">Running with YelmoX-REMBO</h1>
 <p><em>Before doing anything, make sure dependencies are installed (Lis, NetCDF, Python:runner)</em></p>
 <h3 id="step-1-clone-the-repositories">Step 1: Clone the repositories:</h3>
-<pre><code># Clone repository: YelmoX
+<pre><code class="language-bash"># Clone repository: YelmoX
 git clone https://github.com/palma-ice/yelmox.git
 
 # Clone yelmo into a sub-directory too
@@ -119,7 +119,7 @@ git clone https://github.com/alex-robinson/rembo1
 <p>At this point all the code is downloaded onto the machine.
 Now we need to configure it for compiling properly.</p>
 <h3 id="step-2-run-configuration-scripts-for-each-code-base">Step 2: Run configuration scripts for each code base:</h3>
-<pre><code># Enter yelmo directory and configure it for compiling
+<pre><code class="language-bash"># Enter yelmo directory and configure it for compiling
 cd yelmo
 python3 config.py config/snowball_gfortran
 
@@ -139,18 +139,18 @@ we will use the compiler <code>gfortran</code>. If this is not correct, you will
 to use the right configuration file available in the <code>config/</code> directory, or 
 make your own using the others as a template. </p>
 <h3 id="step-3-compile-the-default-program">Step 3: Compile the default program:</h3>
-<pre><code>make clean 
+<pre><code class="language-bash">make clean 
 make yelmox_rembo
 </code></pre>
 <h3 id="step-4-make-a-link-to-ice_data">Step 4: Make a link to <code>ice_data</code>:</h3>
-<pre><code># Link to `ice_data` repository wherever you have it saved on your system
+<pre><code class="language-bash"># Link to `ice_data` repository wherever you have it saved on your system
 ln -s /media/Data/ice_data
 
 # Take a look at some data to make sure it worked well
 ncview ice_data/Greenland/GRL-16KM/GRL-16KM_TOPO-M17.nc
 </code></pre>
 <h3 id="step-5-run-a-test-simulation">Step 5: Run a test simulation:</h3>
-<pre><code># Run a test simulation of Greenland for 100 yrs
+<pre><code class="language-bash"># Run a test simulation of Greenland for 100 yrs
 ./runylmox -r -e rembo -n par/yelmo_Greenland_rembo.nml -o output/test1 -p ctrl.time_end=1e2
 </code></pre>
 <p>That's it, YelmoX-REMBO is working. </p>
