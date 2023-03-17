@@ -2,7 +2,7 @@
 
 *Before doing anything, make sure dependencies are installed (Lis, NetCDF, Python:runner)*
 
-1. Clone the repositories:
+### Step 1: Clone the repositories:
 
 ```
 # Clone repository: YelmoX
@@ -19,7 +19,7 @@ git clone https://github.com/alex-robinson/rembo1
 At this point all the code is downloaded onto the machine.
 Now we need to configure it for compiling properly.
 
-2. Run configuration scripts for each code base:
+### Step 2: Run configuration scripts for each code base:
 
 ```
 # Enter yelmo directory and configure it for compiling
@@ -43,14 +43,14 @@ we will use the compiler `gfortran`. If this is not correct, you will need
 to use the right configuration file available in the `config/` directory, or 
 make your own using the others as a template. 
 
-3. Compile the default program:
+### Step 3: Compile the default program:
 
 ```
 make clean 
 make yelmox_rembo
 ```
 
-4. Make a link to `ice_data`:
+### Step 4: Make a link to `ice_data`:
 
 ```
 # Link to `ice_data` repository wherever you have it saved on your system
@@ -60,7 +60,7 @@ ln -s /media/Data/ice_data
 ncview ice_data/Greenland/GRL-16KM/GRL-16KM_TOPO-M17.nc
 ```
 
-5. Run a test simulation:
+### Step 5: Run a test simulation:
 
 ```
 # Run a test simulation of Greenland for 100 yrs
