@@ -4,7 +4,7 @@
 
 ### Step 1: Clone the repositories:
 
-```
+```bash
 # Clone repository: YelmoX
 git clone https://github.com/palma-ice/yelmox.git
 
@@ -21,7 +21,7 @@ Now we need to configure it for compiling properly.
 
 ### Step 2: Run configuration scripts for each code base:
 
-```
+```bash
 # Enter yelmo directory and configure it for compiling
 cd yelmo
 python3 config.py config/snowball_gfortran
@@ -45,14 +45,14 @@ make your own using the others as a template.
 
 ### Step 3: Compile the default program:
 
-```
+```bash
 make clean 
 make yelmox_rembo
 ```
 
 ### Step 4: Make a link to `ice_data`:
 
-```
+```bash
 # Link to `ice_data` repository wherever you have it saved on your system
 ln -s /media/Data/ice_data
 
@@ -62,7 +62,7 @@ ncview ice_data/Greenland/GRL-16KM/GRL-16KM_TOPO-M17.nc
 
 ### Step 5: Run a test simulation:
 
-```
+```bash
 # Run a test simulation of Greenland for 100 yrs
 ./runylmox -r -e rembo -n par/yelmo_Greenland_rembo.nml -o output/test1 -p ctrl.time_end=1e2
 ```
