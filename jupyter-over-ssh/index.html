@@ -106,16 +106,16 @@
                 <h1 id="how-to-use-jupyter-notebook-over-ssh">How to use Jupyter Notebook over ssh</h1>
 <h3 id="step-1">Step 1</h3>
 <p>Open a terminal, enter the remote machine and run:</p>
-<pre><code>ssh user@snowball.fis.ucm.es
+<pre><code class="language-bash">ssh user@snowball.fis.ucm.es
 jupyter notebook --no-browser --port 1235
 </code></pre>
 <p>Here port <code>1235</code> is chosen, but another port could be used too.
 In the remote terminal, this message should appear:</p>
-<pre><code>http://localhost:1235/?token=LARGERANDOMNUMBER
+<pre><code class="language-bash">http://localhost:1235/?token=LARGERANDOMNUMBER
 </code></pre>
 <h3 id="step-2">Step 2</h3>
 <p>Open another terminal on the local machine and run:</p>
-<pre><code>ssh -L 1235:localhost:1235 user@snowball.fis.ucm.es
+<pre><code class="language-bash">ssh -L 1235:localhost:1235 user@snowball.fis.ucm.es
 </code></pre>
 <p>IMPORTANT: use the same port as chosen in step (1).</p>
 <h3 id="step-3">Step 3</h3>
