@@ -1,16 +1,5 @@
 # How to use Jupyter Notebook over ssh
 
-### Step 0
-
-Make sure you have Jupyter installed on the remote machine.
-To do so, login to the remote machine via ssh and run:
-
-```bash
-pip3 install jupyterlab
-```
-
-If it succeeds without errors, then it should be working.
-
 ### Step 1
 
 On the remote machine, open a Jupyter Notebook instance by running:
