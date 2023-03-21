@@ -4,7 +4,7 @@
 
 Open a terminal, enter the remote machine and run:
 
-```
+```bash
 ssh user@snowball.fis.ucm.es
 jupyter notebook --no-browser --port 1235
 ```
@@ -12,7 +12,7 @@ jupyter notebook --no-browser --port 1235
 Here port `1235` is chosen, but another port could be used too.
 In the remote terminal, this message should appear:
 
-```
+```bash
 http://localhost:1235/?token=LARGERANDOMNUMBER
 ```
 
@@ -20,7 +20,7 @@ http://localhost:1235/?token=LARGERANDOMNUMBER
 
 Open another terminal on the local machine and run:
 
-```
+```bash
 ssh -L 1235:localhost:1235 user@snowball.fis.ucm.es
 ```
 
