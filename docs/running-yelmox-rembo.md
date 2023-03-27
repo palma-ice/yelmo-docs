@@ -12,6 +12,9 @@ git clone https://github.com/palma-ice/yelmox.git
 cd yelmox
 git clone https://github.com/palma-ice/yelmo.git
 
+# Clone isostasy into a sub-directory too 
+git clone https://github.com/palma-ice/isostasy.git
+
 # Clone rembo into a sub-directory too 
 git clone https://github.com/alex-robinson/rembo1
 ```
@@ -22,17 +25,27 @@ Now we need to configure it for compiling properly.
 ### Step 2: Run configuration scripts for each code base:
 
 ```bash
-# Enter yelmo directory and configure it for compiling
+# Enter Yelmo directory and configure it for compiling
 cd yelmo
-python3 config.py config/snowball_gfortran
+python config.py config/snowball_gfortran
+make clean
+cd ..
+
+# Enter isostasy directory and configure it for compiling 
+cd isostasy
+python config.py config/snowball_gfortran
+make clean
+cd ..
 
 # Enter rembo1 directory and configure it for compiling 
-cd ../rembo1
-python3 config.py config/snowball_gfortran
-
-# Return to yelmox directory and configure it for compiling
+cd rembo1
+python config.py config/snowball_gfortran
+make clean
 cd ..
-python3 config.py config/snowball_gfortran
+
+# From YelmoX directory, configure it for compiling too
+python config.py config/snowball_gfortran
+make clean 
 
 # Finally, also copy the runylmox config file to the main directory
 cp config/runylmox.js ./
@@ -57,7 +70,7 @@ make yelmox_rembo
 ln -s /media/Data/ice_data
 
 # Take a look at some data to make sure it worked well
-ncview ice_data/Greenland/GRL-16KM/GRL-16KM_TOPO-M17.nc
+ncview ice_data/Greenland/GRL-16KM/GRL-16KM_TOPO-M17-v5.nc
 ```
 
 ### Step 5: Run a test simulation:

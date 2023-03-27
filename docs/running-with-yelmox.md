@@ -12,7 +12,7 @@ Here you can find the basic information and steps needed to get **YelmoX** runni
 
 A summary of commands to get started is given below. For more detailed information see subsequent sections.
 
-```
+```bash
 
 # Before doing anything, make sure dependencies are installed (Lis, NetCDF, runner)
 
@@ -22,27 +22,31 @@ A summary of commands to get started is given below. For more detailed informati
 git clone https://github.com/palma-ice/yelmox.git
 git clone git@github.com:palma-ice/yelmox.git # or via ssh
 
-# Clone yelmo into a sub-directory too
+# Clone Yelmo into a sub-directory too
 cd yelmox
 git clone https://github.com/palma-ice/yelmo.git
 git clone git@github.com:palma-ice/yelmo.git # or, via ssh
 
-# Check out your yelmox branch of interest (optional)
-git checkout my-branch  # for an existing branch 
-git checkout -b my-new-branch # or, to create a new one 
-
-# Do the same for yelmo branch if needed, and return to yelmox directory
-cd yelmo 
-git checkout my-branch
-cd .. 
-
-# Enter yelmo directory and configure it for compiling
+# Enter Yelmo directory and configure it for compiling,
+# and return to main YelmoX directory.
 cd yelmo
-python3 config.py config/snowball_gfortran  # or the right config file for your system
+python config.py config/my_config_file
+make clean
+cd ..
+
+# Close isostasy into a sub-directory too
+git clone git@github.com:palma-ice/isostasy.git # via ssh
+
+# Enter isostasy directory and configure it for compiling,
+# and return to main YelmoX directory.
+cd isostasy
+python config.py config/my_config_file
+make clean
+cd ..
 
 # Return to yelmox directory and configure it for compiling
 cd ..
-python3 config.py config/snowball_gfortran  # or the right config file for your system
+python config.py config/my_config_file
 
 
 # Now, compile the default program
