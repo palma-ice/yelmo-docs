@@ -104,6 +104,86 @@
             <div class="section">
               
                 <h1 id="notes">Notes</h1>
+<h2 id="timeout-module"><code>timeout</code> module</h2>
+<p>Example parameters for using the <code>timeout</code> module. The name of the section
+should be specified when calling <code>timeout_init</code>.</p>
+<pre><code class="language-fortran">&amp;tm_1D
+    method          = &quot;file&quot;            ! &quot;const&quot;, &quot;file&quot;, &quot;times&quot;
+    dt              = 1.0
+    file            = &quot;input/timeout_ramp_100kyr.txt&quot;
+    times           = -10, -5, 0, 1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55
+/
+
+</code></pre>
+<pre><code class="language-fortran">! Get output times
+call timeout_init(tm_1D,path_par,&quot;tm_1D&quot;,&quot;small&quot;, time_init,time_end)
+</code></pre>
+<p>If we are loading the desired output times from a file, the format is one
+time per line, or a range of times using the format <code>t0:dt:t1</code>:</p>
+<pre><code class="language-bash">0:10:200
+200:20:300
+300:50:500
+500:100:1000
+1000:200:5000
+5000:500:10000
+10e3:1e3:20e3
+20e3:2e3:200e3
+200e3:5e3:1e6
+</code></pre>
+<p>Duplicate times will be removed, as well as times outside of the range of 
+<code>time_init</code> and <code>time_end</code>. In this way, once <code>timeout_init</code> is called, 
+we know how many timesteps of output will be generated. This can help
+confirm that we designed the experiment well, and how much data to expect. </p>
+<p>Then during the timeloop, simply use the function <code>timeout_check</code> to 
+determine if the current time should be written to output:</p>
+<pre><code class="language-fortran">if (timeout_check(tm_1D,time)) then  
+    !call write_step_1D_combined(yelmo1,hyst1,file1D_hyst,time=time)
+end if 
+</code></pre>
+<h2 id="timing-module"><code>timing</code> module</h2>
+<p>All calls to the intrinsic routine <code>cpu_time()</code> have been replaced by timing
+calculations performed in the new <code>timing</code> module. This has the benefit
+of ensuring timing will work properly for parallel and serial programs,
+and allows us to keep track of multiple timing objectives with one
+simple object and subroutine.</p>
+<p>The control of a timing object is handled via <code>timer_step</code>:</p>
+<p>First, initialize and reset the <code>timer</code> object:</p>
+<pre><code class="language-fortran">call timer_step(tmrs,comp=-1)
+</code></pre>
+<p>Then, e.g., within the timeloop, get the timing for isostasy calls and for Yelmo calls:</p>
+<pre><code class="language-fortran">call timer_step(tmrs,comp=0) 
+
+! == ISOSTASY ==========================================================
+call isos_update(isos1,yelmo1%tpo%now%H_ice,yelmo1%bnd%z_sl,time,yelmo1%bnd%dzbdt_corr) 
+yelmo1%bnd%z_bed = isos1%now%z_bed
+
+call timer_step(tmrs,comp=1,time_mod=[time-dtt_now,time]*1e-3,label=&quot;isostasy&quot;) 
+
+! Update ice sheet to current time 
+call yelmo_update(yelmo1,time)
+
+call timer_step(tmrs,comp=2,time_mod=[time-dtt_now,time]*1e-3,label=&quot;yelmo&quot;)      
+</code></pre>
+<p>The option <code>comp</code> tells us which component the timing is being calculated for, and
+we can additionally provide a label to associate with this component. This is useful for 
+printing a table later. </p>
+<p>After all components have been calculated, we can print to a summary file:</p>
+<pre><code class="language-fortran">if (mod(time_elapsed,10.0)==0) then
+    ! Print timestep timing info and write log table
+    call timer_write_table(tmrs,[time,dtt_now]*1e-3,&quot;m&quot;,tmr_file,init=time_elapsed .eq. 0.0)
+end if 
+</code></pre>
+<p>The resulting file will look something like this, here for 4 components measured during
+during the time loop:</p>
+<pre><code class="language-bash">     time      dt    yelmo isostasy  climate       io    total     rate  
+    0.000   0.010    0.000    0.000    0.016    0.051    0.067    6.694
+    0.010   0.010    0.000    0.000    0.025    0.000    0.025    2.533
+    0.020   0.010    0.000    0.000    0.024    0.000    0.025    2.458
+</code></pre>
+<p>Based on the options supplied, the time units are in <code>[m]</code> and the model time in <code>[kyr]</code>. The
+rate is then calculated as <code>[m/kyr]</code> - this is the inverse of what we used to measure <code>[kyr/hr]</code>.
+The rate as defined now is easier to manage in terms of summing the contribution of different
+components, and so is preferred moving forward. To recover <code>[kyr/hr]</code>, simply take 60/rate. </p>
 <h2 id="master-to-main"><code>master</code> to <code>main</code></h2>
 <p>Following updated conventions, the default branch is now called <code>main</code> and the branch <code>master</code> has been deleted. </p>
 <p>To update a working copy locally that already contains a <code>master</code> branch and therefore points to it as the default branch, the following steps should be applied:</p>
@@ -288,11 +368,6 @@ w = u_b \frac{\partial b}{\partial x} + v_b \frac{\partial b}{\partial y} - \int
 <li>Modified staggering of 3D viscosity to be done on horizontal ab-nodes, then averaged to the center. This follows a 'quadrature' approach and appears to be more rigorously close to actually integrating over the area. It's not clear how this might affect stability of ice streams (i.e., Daniel's results). </li>
 <li>Two-step mass balance with updates to <code>f_ice</code> in between, with more explicit tracking of all mass changes. Now a new variable <code>mb_resid</code> holds any threshold changes applied at the end of the mass balance update. I haven't checked in detail, but I hope all mass changes are now accounted for explicitly in the model.</li>
 </ol>
-<p>To do...</p>
-<ul>
-<li><code>vm-l19</code> calving method seems to be too sensitive. A reasonable coefficient value is <code>kt=0.0001</code> instead of the value used by Lipscomb et al. (2019) of <code>kt=0.0025</code>. Reducing where <code>calv_resid</code> is redistributed only to cells with the same ice thickness reduces this sensitivity. Needs checking.</li>
-<li>Threshold methods (<code>simple</code>,<code>flux</code>,<code>flux-grisli</code>) are not sensitive enough. Need to test how to apply <code>calv_resid</code> more robustly, or find another solution.</li>
-</ul>
               
             </div>
           </div>
