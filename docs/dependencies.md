@@ -6,6 +6,10 @@ Yelmo is dependent on the following libraries:
 - [Library of Iterative Solvers for Linear Systems](http://www.ssisc.org/lis/)
 - [Optional] ['runner' Python library (alex-robinson fork)](https://github.com/alex-robinson/runner)
 
+YelmoX is additionally dependent on the following library:
+
+- FFTW (ver. 3.9+)
+
 Installation tips for each dependency can be found below.
 
 ## Installing NetCDF (preferably version 4.0 or higher)
