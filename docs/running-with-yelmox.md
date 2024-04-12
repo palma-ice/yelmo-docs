@@ -25,7 +25,7 @@ git clone git@github.com:palma-ice/yelmox.git # or via ssh
 # Clone Yelmo into a sub-directory too
 cd yelmox
 git clone https://github.com/palma-ice/yelmo.git
-git clone git@github.com:palma-ice/yelmo.git # or, via ssh
+git clone git@github.com:palma-ice/yelmo.git # or via ssh
 
 # Enter Yelmo directory and configure it for compiling,
 # and return to main YelmoX directory.
@@ -35,7 +35,8 @@ make clean
 cd ..
 
 # Close isostasy into a sub-directory too
-git clone git@github.com:palma-ice/isostasy.git # via ssh
+git clone https://github.com/palma-ice/FastIsostasy.git
+git clone git@github.com:palma-ice/FastIsostasy.git # or via ssh
 
 # Enter isostasy directory and configure it for compiling,
 # and return to main YelmoX directory.
@@ -55,6 +56,7 @@ make yelmox
 
 # Link to `ice_data` repository wherever you have it saved on your system
 ln -s path_to/ice_data 
+ln -s path_to/isostasy_data     # available at https://github.com/JanJereczek/isostasy_data
 
 # Copy the runylmox config file to the main directory
 cp config/runylmox.js ./
