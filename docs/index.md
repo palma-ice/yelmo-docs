@@ -58,11 +58,7 @@ inside of a program, run the model forward in time and then terminate the instan
 
 ```fortran
     ! === Initialize ice sheet model =====
-
-    ! General initialization of yelmo constants (used globally, only once per program)
-
-    call yelmo_global_init(path_const)
-
+    
     ! Initialize Yelmo objects (multiple yelmo objects can be initialized if needed)
     ! In this case `yelmo1` is the Yelmo object to initialize and `path_par` is the
     ! path to the parameter file to load for the configuration information. This
