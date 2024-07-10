@@ -129,14 +129,43 @@
                 <h1 id="getting-started">Getting started</h1>
 <p>Here you can find the basic information and steps needed to get <strong>Yelmo</strong> running.</p>
 <h2 id="super-quick-start">Super-quick start</h2>
-<p>A summary of commands to get started is given below. For more detailed information see subsequent sections.</p>
-<pre><code># Clone repository
-git clone https://github.com/palma-ice/yelmo.git
-git clone git@github.com:palma-ice/yelmo.git # via ssh
+<p>A summary of commands to get started is given below (valid for running on PIK cluster HPC2024 "Foote"). For more detailed information see subsequent sections.</p>
+<pre><code class="language-bash"># Clone repository
+git clone git@github.com:palma-ice/yelmo.git
 
 # Enter directory and run configuration script
 cd yelmo
-python config.py config/pik_ifort 
+python3 config.py config/pik_hpc2024_ifx 
+
+### Download and configure additional libraries ###
+
+# lis
+
+# Only relevant to PIK-HPC2024: error when compiling with most recent intel OneAPI 2024.0
+module load intel/oneAPI/2023.2.0
+
+# Clone the lis repository (tagged versions not available)
+git clone git@github.com:anishida/lis.git libs/lis-2.1.5
+
+# with omp enabled
+cd libs/lis-2.1.5
+./configure --prefix=$PWD/../lis-omp --enable-omp --enable-f90 CC=icc FC=ifort 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
+make
+make install
+cd ../../
+
+# no omp too
+cd libs/lis-2.1.5
+make clean
+./configure --prefix=$PWD/../lis --enable-f90 CC=icc FC=ifort 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
+make
+make install
+cd ../../
+
+# Only relevant to PIK-HPC2024: to revert previous change
+module load intel/oneAPI/2024.0.0
+
+##
 
 # Compile the benchmarks program
 make clean 
@@ -199,7 +228,7 @@ cp pik_ifort myhost_mycompiler
 </code></pre>
 <p>then modify the file <code>myhost_mycompiler</code> to match your paths. Back in <code>$YELMOROOT</code>, you can then generate your Makefile with the provided python configuration script:</p>
 <pre><code>cd $YELMOROOT
-python config.py config/myhost_mycompiler
+python3 config.py config/myhost_mycompiler
 </code></pre>
 <p>The result should be a Makefile in <code>$YELMOROOT</code> that is ready for use.</p>
 <h4 id="alternative-configuration-quickstart-with-docker-and-vs-code">Alternative configuration - quickstart with Docker and VS Code</h4>
