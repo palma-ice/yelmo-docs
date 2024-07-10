@@ -89,71 +89,79 @@
                 <h1 id="how-to-install-runner-and-run-yelmo-in-brigit">How to install runner and run Yelmo in brigit</h1>
 <h2 id="how-to-install-runner">How to install runner</h2>
 <ol>
-<li>Install anaconda first. Create a conda environment <code>runner</code> with python=3.7 (this is not needed, just in case you want to keep things separated): 
-   <code>conda create --name runner python=3.7
-   conda activate runner</code></li>
-<li>Install <code>runner</code> from <code>pip</code>:
-   <code>pip install https://github.com/alex-robinson/runner/archive/refs/heads/master.zip
-   pip install tabulate
-   pip install numpy
-   pip install scipy
-   pip install six
-   pip install pandas</code></li>
+<li>Install anaconda first. Create a conda environment <code>runner</code> with python=3.7 (this is not needed, just in case you want to keep things separated):</li>
 </ol>
+<p><code>bash
+   conda create --name runner python=3.7
+   conda activate runner</code></p>
+<ol>
+<li>Install <code>runner</code> from <code>pip</code>:</li>
+</ol>
+<pre><code class="language-bash">pip install https://github.com/alex-robinson/runner/archive/refs/heads/master.zip
+pip install tabulate
+pip install numpy
+pip install scipy
+pip install six
+pip install pandas
+</code></pre>
 <h2 id="how-to-run-yelmo">How to run Yelmo</h2>
 <h3 id="to-run-a-simple-simulation-for-yelmox-run-in-the-background">To run a simple simulation for yelmox (run in the background)</h3>
-<p><code>./runylmox -r -e yelmox -o output/test1 -n par/yelmo_Greenland.nml</code></p>
-<h3 id="to-run-a-simulation-with-one-parameter-changed-from-the-class-ytopo-run-in-the-backgroud">To run a simulation with one parameter changed from the class ytopo (run in the backgroud)</h3>
-<p><code>./runylmox -r -e yelmox -o output/test2 -n par/yelmo_Greenland.nml -p ytopo.kt=0.10e-2</code></p>
-<h3 id="to-send-runs-to-the-queue-with-runner">To send runs to the queue (with runner):</h3>
-<p>Copy <code>runylmox.js</code> from <code>config/</code> and make sure it is modified as it should be for brigit. The form of <code>runylmox.js</code> for brigit is something like:
-   <code>{
-       "defaults" :
-       {
-           "jobname"       : "Yelmo",
-           "email"         : "USER@ucm.es",
-           "group"         : "",
-           "omp"           : 0,
-           "wall"          : 24,
-           "qos"           : "normal",
-           "partition"     : "long",
-           "job_template"  : "config/brigit_submit_slurm"
-       },
-       "exe_aliases" :
-       {
-           "yelmox" : "libyelmox/bin/yelmox.x",
-           "iso"    : "libyelmox/bin/yelmox_iso.x",
-           "hyst"   : "libyelmox/bin/yelmox_hyst.x",
-           "rembo"  : "libyelmox/bin/yelmox_rembo.x",
-           "ismip6" : "libyelmox/bin/yelmox_ismip6.x"
-       },
-       "grp_aliases" : {},
-       "par_paths" : {},
-       "files" : [],
-       "dir-special" : {},
-       "links" :
-          ["input","ice_data"],
-       "const_paths" :
-       {   "EISMINT"  : "par/yelmo_const_EISMINT.nml",
-           "MISMIP3D" : "par/yelmo_const_MISMIP3D.nml"
-       },
-       "const_path_default" : "par/yelmo_const_Earth.nml",
-       "job_queues" :
-       {     "normal" :
-            {   "wall" : 10000  }
-       }
-   }</code></p>
+<pre><code class="language-bash">./runylmox -r -e yelmox -o output/test1 -n par/yelmo_Greenland.nml 
+</code></pre>
+<h3 id="to-run-a-simulation-with-one-parameter-changed-from-the-class-ytopo-run-in-the-background">To run a simulation with one parameter changed from the class ytopo (run in the background)</h3>
+<pre><code class="language-bash">./runylmox -r -e yelmox -o output/test2 -n par/yelmo_Greenland.nml -p ytopo.kt=0.10e-2
+</code></pre>
+<h3 id="to-send-runs-to-the-queue-with-runner">To send runs to the queue (with runner)</h3>
+<p>Copy <code>runylmox.js</code> from <code>config/</code> and make sure it is modified as it should be for brigit. The form of <code>runylmox.js</code> for brigit is something like:</p>
+<pre><code class="language-json">{
+      &quot;defaults&quot; :
+      {
+         &quot;jobname&quot;       : &quot;Yelmo&quot;,
+         &quot;email&quot;         : &quot;USER@ucm.es&quot;,
+         &quot;group&quot;         : &quot;&quot;,
+         &quot;omp&quot;           : 0,
+         &quot;wall&quot;          : 24,
+         &quot;qos&quot;           : &quot;normal&quot;,
+         &quot;partition&quot;     : &quot;long&quot;,
+         &quot;job_template&quot;  : &quot;config/brigit_submit_slurm&quot;
+      },
+      &quot;exe_aliases&quot; :
+      {
+         &quot;yelmox&quot; : &quot;libyelmox/bin/yelmox.x&quot;,
+         &quot;iso&quot;    : &quot;libyelmox/bin/yelmox_iso.x&quot;,
+         &quot;hyst&quot;   : &quot;libyelmox/bin/yelmox_hyst.x&quot;,
+         &quot;rembo&quot;  : &quot;libyelmox/bin/yelmox_rembo.x&quot;,
+         &quot;ismip6&quot; : &quot;libyelmox/bin/yelmox_ismip6.x&quot;
+      },
+      &quot;grp_aliases&quot; : {},
+      &quot;par_paths&quot; : {},
+      &quot;files&quot; : [],
+      &quot;dir-special&quot; : {},
+      &quot;links&quot; :
+         [&quot;input&quot;,&quot;ice_data&quot;],
+      &quot;const_paths&quot; :
+      {   &quot;EISMINT&quot;  : &quot;par/yelmo_const_EISMINT.nml&quot;,
+         &quot;MISMIP3D&quot; : &quot;par/yelmo_const_MISMIP3D.nml&quot;
+      },
+      &quot;const_path_default&quot; : &quot;par/yelmo_const_Earth.nml&quot;,
+      &quot;job_queues&quot; :
+      {     &quot;normal&quot; :
+         {   &quot;wall&quot; : 10000  }
+      }
+}
+</code></pre>
 <p>Then submit the job to the queue with:</p>
-<pre><code>jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test3 -p opt_L21.cf_min=1e-3,2e-3
+<pre><code class="language-bash">jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test3 -p opt_L21.cf_min=1e-3,2e-3
 </code></pre>
 <p>To run en ensemble:</p>
-<pre><code>jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test4 -p opt_L21.cf_min=1e-3,2e-3 ytopo.H_min_flt=0.0,10.0,50.0
+<pre><code class="language-bash">jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test4 -p opt_L21.cf_min=1e-3,2e-3 ytopo.H_min_flt=0.0,10.0,50.0
 </code></pre>
-<p>To run an ensemble from a txt file containing the permutation of parameters:
-  <code>job product opt_L21.cf_min=1e-3,2e-3,3e-3,4e-3 ytopo.H_min_flt=0.0,10.0,50.0 &gt; params.txt
-jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test5 -i params.txt</code>
-To run an ensemble from a selection of values in the param file:</p>
-<pre><code>jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test6 -i params.txt -j 1,4,5-7
+<p>To run an ensemble from a txt file containing the permutation of parameters:</p>
+<pre><code class="language-bash">job product opt_L21.cf_min=1e-3,2e-3,3e-3,4e-3 ytopo.H_min_flt=0.0,10.0,50.0 &gt; params.txt
+jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test5 -i params.txt
+</code></pre>
+<p>To run an ensemble from a selection of values in the param file:</p>
+<pre><code class="language-bash">jobrun ./runylmox -s -e yelmox -n par/yelmo_Greenland.nml -- -o output/test6 -i params.txt -j 1,4,5-7
 </code></pre>
               
             </div>

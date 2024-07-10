@@ -70,6 +70,12 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#ismip6-simulations">ISMIP6 simulations</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#actual-ismip6-commands">Actual ISMIP6 commands</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#abumip">ABUMIP</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#simulations-with-hyster">Simulations with hyster</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -188,7 +194,7 @@ cp config/runylmox.js ./
 <p>To run YelmoX, by default we use the program <code>yelmox.f90</code>. This program currently makes use of <code>snapclim</code> for the climatic forcing and <code>smbpal</code> for the snowpack and surface mass balance calculations.</p>
 <h2 id="spin-up-simulation-for-ismip6-based-runs-ismip6-abumip">Spin-up simulation for ISMIP6-based runs (ISMIP6, ABUMIP)</h2>
 <p>First make sure your distribution of <code>yelmox</code> and <code>yelmo</code> are up to date.</p>
-<pre><code>cd yelmo
+<pre><code class="language-bash">cd yelmo
 git pull 
 cd ..
 
@@ -204,12 +210,12 @@ cp config/runylmox.js ./
 ln -s /media/Data/ice_data ice_data
 </code></pre>
 <p>Now compile as normal, but with the <code>yelmox_ismip6</code> program:</p>
-<pre><code>make clean 
+<pre><code class="language-bash">make clean 
 make yelmox_ismip6 
 </code></pre>
 <p>You are now ready to run some ISMIP6 simulations. If you have a spinup simulation available you can skip the rest of this section.</p>
 <p>The next step is to get a spin-up simulation ready. To do so, we will run a small ensemble of simulations that apply different calving coefficients (<code>ytopo.kt</code>) and shear-regime enhancement factors (<code>ymat.enh_shear</code>). Each simulation will run with these parameter values set, while optimizing the basal friction coefficient field <code>cb_ref</code> and the temperature anomalies imposed in different basins <code>tf_corr</code>. To run this ensemble, use the following commands:</p>
-<pre><code># Specify run choices, to run locally in the background:
+<pre><code class="language-bash"># Specify run choices, to run locally in the background:
 runopt='-r'
 # or, to submit job to a cluster, eg:
 runopt='-s -q priority -w 10'
@@ -220,10 +226,9 @@ fldr=tmp/ismip6/spinup_32km_68
 # Run the Yelmo ensemble
 
 jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3,1.5e-3,2.0e-3,2.5e-3 ymat.enh_shear=1,3
-
 </code></pre>
 <p>An alternative spinup procedure</p>
-<pre><code># First run for 30kyr with topo relax on to spinup thermodynamics...
+<pre><code class="language-bash"># First run for 30kyr with topo relax on to spinup thermodynamics...
 
 runopt='-s -q priority -w 10'
 fldr=tmp/ismip6/spinup_32km_69
@@ -244,12 +249,11 @@ jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o $
 runopt='-s -q short -w 10'
 fldr=tmp/ismip6/spinup_32km_72
 jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 opt_L21.cf_max=10,20,40,45 ydyn.beta_u0=100,300
-
 </code></pre>
 <h2 id="ismip6-simulations">ISMIP6 simulations</h2>
 <p>Make sure you already have a spinup simulation available, and that the parameters of the spinup will match those supplied here. The next step is to run different experiments of interest that restart from the spinup experiment.</p>
 <p>Some commands for running diagnostic short runs</p>
-<pre><code>### Diagnostic short runs ###
+<pre><code class="language-bash">### Diagnostic short runs ###
 
 # Run a 16km spinup run with relaxation
 
@@ -270,8 +274,8 @@ file_restart=/p/tmp/robinson/ismip6/spinup_32km_68/0/yelmo_restart.nc
 
 ###
 </code></pre>
-<h1 id="actual-ismip6-commands">Actual ISMIP6 commands</h1>
-<pre><code># Define output folder as a bash variable
+<h2 id="actual-ismip6-commands">Actual ISMIP6 commands</h2>
+<pre><code class="language-bash"># Define output folder as a bash variable
 fldr=tmp/ismip6/ismip_32km_71
 
 # Specify run choices, to run locally in the background:
@@ -289,7 +293,6 @@ file_restart=/p/tmp/robinson/ismip6/spinup_32km_71/0/yelmo_restart.nc
 
 # ctrl-0
 ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/ctrl-0 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 transient_proj.time_end=11900 transient_proj.dt1D_out=10 transient_proj.dt2D_out=200 ${paropt}
-
 
 ## Next, call the Yelmo commands for the individual cases...
 
@@ -315,9 +318,9 @@ file_restart=/p/tmp/robinson/ismip6/ismip_32km_68/ctrl-0/yelmo_restart.nc
 </code></pre>
 <h2 id="abumip">ABUMIP</h2>
 <p>Make sure you already have a spinup simulation available.</p>
-<p>Use the following commands to run the three main experiments of interest. Note that <code>abuk</code> and <code>abum</code> may run much more slowly than <code>abuc</code>. The parameter values applied in the commands below ensure that the model parameters correspond to those used in the restart simulation, although many of them like ocean temp. anomalies in different basins or calving parameters, are no longer relevant in the ABUMIP context. It is important, however, to specify <code>ydyn.ssa_lat_bc='marine'</code>, as it is relevant for this experiment to apply <code>marine</code> boundary conditions. This is generally not used currently, as it makes the model much less stable. </p>
-<p>Note that an equilibrium spin-up simulation has already been performed, which gives good agreement with the present-day ice sheet. These results have been saved in a restart file, from which your simulations will begin (see below). </p>
-<pre><code># Define restart file path as a bash variable
+<p>Use the following commands to run the three main experiments of interest. Note that <code>abuk</code> and <code>abum</code> may run much more slowly than <code>abuc</code>. The parameter values applied in the commands below ensure that the model parameters correspond to those used in the restart simulation, although many of them like ocean temp. anomalies in different basins or calving parameters, are no longer relevant in the ABUMIP context. It is important, however, to specify <code>ydyn.ssa_lat_bc='marine'</code>, as it is relevant for this experiment to apply <code>marine</code> boundary conditions. This is generally not used currently, as it makes the model much less stable.</p>
+<p>Note that an equilibrium spin-up simulation has already been performed, which gives good agreement with the present-day ice sheet. These results have been saved in a restart file, from which your simulations will begin (see below).</p>
+<pre><code class="language-bash"># Define restart file path as a bash variable
 file_restart=/p/tmp/robinson/ismip6/spinup_32km_68/0/yelmo_restart.nc 
 
 # Define output folder as a bash variable
@@ -344,7 +347,6 @@ paropt=&quot;ytopo.kt=1.0e-3&quot;
 # ABUM - High shelf melt (400 m/yr)
 ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abum -p abumip.scenario=&quot;abum&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt} 
 
-
 # ABUK - Ocean-kill experiment (MARINE BOUNDARY CONDITIONS)
 ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuk-marine -p abumip.scenario=&quot;abuk&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt} ydyn.ssa_lat_bc=&quot;marine&quot;
 
@@ -353,7 +355,7 @@ paropt=&quot;ytopo.kt=1.0e-3&quot;
 
 </code></pre>
 <h2 id="simulations-with-hyster">Simulations with <code>hyster</code></h2>
-<pre><code># Define restart file path as a bash variable, for example, on snowball:
+<pre><code class="language-bash"># Define restart file path as a bash variable, for example, on snowball:
 file_restart=/p/tmp/robinson/ismip6/spinup_32km_68/0/yelmo_restart.nc 
 
 # Define output folder as a bash variable
@@ -376,7 +378,7 @@ paropt=&quot;ytopo.kt=1.0e-3&quot;
 
 
 </code></pre>
-<p>That's it! </p>
+<p>That's it!</p>
               
             </div>
           </div><footer>
