@@ -37,6 +37,7 @@ The Yelmo class defines all data related to a model domain, such as Greenland or
     end type
 
 ```
+
 Likewise the module variables are defined in a similar way, e.g. ytopo\_class that defines variables and parameters associated with the topography:
 
 ```fortran
@@ -47,6 +48,7 @@ Likewise the module variables are defined in a similar way, e.g. ytopo\_class th
 
     end type
 ```
+
 Submodules such as ytopo\_class include parameter definitions relevant to topography calculations, as well as all variables that define the state of the domain being modeled.
 
 ### Example model domain intialization
@@ -126,5 +128,5 @@ inside of a program, run the model forward in time and then terminate the instan
 
 That's it!
 
-See [Getting started](getting-started) to see how to get the code, 
+See [Getting started](getting-started.md) to see how to get the code,
 compile a test program and run simulations.

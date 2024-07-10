@@ -10,7 +10,7 @@ Yelmo:
 
 In both cases, it is necessary to download the Yelmo repository
 separately, as well as compile the Yelmo static library
-(see [Getting started](getting-started)).
+(see [Getting started](getting-started.md)).
 
 ## Program template
 
@@ -20,7 +20,6 @@ can be used to design a new stand-alone Yelmo experiment, or
 to provide guidance when adding Yelmo to another program.
 
 Clone the repository from [https://github.com/palma-ice/yelmot](https://github.com/palma-ice/yelmot)
-
 
 ## Stand-alone ice sheet with full boundary forcing (yelmox)
 
