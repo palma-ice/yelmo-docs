@@ -14,49 +14,79 @@ A summary of commands to get started is given below. For more detailed informati
 
 ```bash
 
-# Before doing anything, make sure dependencies are installed (Lis, NetCDF, runner)
-
-##########################
-
-# Clone repository
-git clone https://github.com/palma-ice/yelmox.git
-git clone git@github.com:palma-ice/yelmox.git # or via ssh
-
-# Clone Yelmo into a sub-directory too
+# yelmox
+git clone git@github.com:palma-ice/yelmox.git
 cd yelmox
-git clone https://github.com/palma-ice/yelmo.git
-git clone git@github.com:palma-ice/yelmo.git # or via ssh
+python3 config.py config/pik_hpc2024_ifx 
 
-# Enter Yelmo directory and configure it for compiling,
-# and return to main YelmoX directory.
+### Download and configure additional libraries ###
+
+# lis
+
+# Only relevant to PIK-HPC2024: error when compiling with most recent intel OneAPI 2024.0
+module load intel/oneAPI/2023.2.0
+
+# Clone the lis repository (tagged versions not available)
+git clone git@github.com:anishida/lis.git libs/lis-2.1.5
+
+# with omp enabled
+cd libs/lis-2.1.5
+./configure --prefix=$PWD/../lis-omp --enable-omp --enable-f90 CC=icc FC=ifort 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
+make
+make install
+cd ../../
+
+# no omp too
+cd libs/lis-2.1.5
+make clean
+./configure --prefix=$PWD/../lis --enable-f90 CC=icc FC=ifort 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
+make
+make install
+cd ../../
+
+# Only relevant to PIK-HPC2024: to revert previous change
+module load intel/oneAPI/2024.0.0
+
+##
+
+# yelmo
+git clone git@github.com:palma-ice/yelmo.git
 cd yelmo
-python config.py config/my_config_file
-make clean
+python3 config.py config/pik_hpc2024_ifx
+cd libs
+ln -s $PWD/../../libs/lis lis
+ln -s $PWD/../../libs/lis-omp lis-omp
 cd ..
 
-# Close isostasy into a sub-directory too
-git clone https://github.com/palma-ice/FastIsostasy.git
-git clone git@github.com:palma-ice/FastIsostasy.git # or via ssh
-
-# Enter isostasy directory and configure it for compiling,
-# and return to main YelmoX directory.
-cd isostasy
-python config.py config/my_config_file
-make clean
+# FastIsostasy
+git clone git@github.com:palma-ice/FastIsostasy.git
+cd FastIsostasy
+python3 config.py config/pik_hpc2024_ifx
 cd ..
 
-# Return to yelmox directory and configure it for compiling
+# coordinates
+git clone git@github.com:cxesmc/coordinates.git
+cd coordinates
+python3 config.py config/pik_hpc2024_ifx 
+cd ../../..  # Return to climber-x parent directory
+
+
+# REMBOv1
+git clone git@github.com:alex-robinson/rembo1.git
+cd rembo1
+python3 config.py config/pik_hpc2024_ifx
 cd ..
-python config.py config/my_config_file
 
 
 # Now, compile the default program
 make clean 
 make yelmox 
 
+# Get the isostasy_data repository 
+git clone git@github.com:JanJereczek/isostasy_data.git
+
 # Link to `ice_data` repository wherever you have it saved on your system
-ln -s path_to/ice_data 
-ln -s path_to/isostasy_data     # available at https://github.com/JanJereczek/isostasy_data
+ln -s /p/projects/megarun/ice_data 
 
 # Copy the runylmox config file to the main directory
 cp config/runylmox.js ./

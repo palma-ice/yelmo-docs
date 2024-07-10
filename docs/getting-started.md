@@ -4,16 +4,45 @@ Here you can find the basic information and steps needed to get **Yelmo** runnin
 
 ## Super-quick start
 
-A summary of commands to get started is given below. For more detailed information see subsequent sections.
+A summary of commands to get started is given below (valid for running on PIK cluster HPC2024 "Foote"). For more detailed information see subsequent sections.
 
-```
+```bash
 # Clone repository
-git clone https://github.com/palma-ice/yelmo.git
-git clone git@github.com:palma-ice/yelmo.git # via ssh
+git clone git@github.com:palma-ice/yelmo.git
 
 # Enter directory and run configuration script
 cd yelmo
-python config.py config/pik_ifort 
+python3 config.py config/pik_hpc2024_ifx 
+
+### Download and configure additional libraries ###
+
+# lis
+
+# Only relevant to PIK-HPC2024: error when compiling with most recent intel OneAPI 2024.0
+module load intel/oneAPI/2023.2.0
+
+# Clone the lis repository (tagged versions not available)
+git clone git@github.com:anishida/lis.git libs/lis-2.1.5
+
+# with omp enabled
+cd libs/lis-2.1.5
+./configure --prefix=$PWD/../lis-omp --enable-omp --enable-f90 CC=icc FC=ifort 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
+make
+make install
+cd ../../
+
+# no omp too
+cd libs/lis-2.1.5
+make clean
+./configure --prefix=$PWD/../lis --enable-f90 CC=icc FC=ifort 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
+make
+make install
+cd ../../
+
+# Only relevant to PIK-HPC2024: to revert previous change
+module load intel/oneAPI/2024.0.0
+
+##
 
 # Compile the benchmarks program
 make clean 
@@ -98,7 +127,7 @@ then modify the file `myhost_mycompiler` to match your paths. Back in `$YELMOROO
 
 ```
 cd $YELMOROOT
-python config.py config/myhost_mycompiler
+python3 config.py config/myhost_mycompiler
 ```
 
 The result should be a Makefile in `$YELMOROOT` that is ready for use.
