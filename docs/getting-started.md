@@ -34,7 +34,7 @@ cd ../../
 # no omp too
 cd libs/lis-2.1.5
 make clean
-./configure --prefix=$PWD/../lis --enable-f90 CC=icc FC=ifort 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
+./configure --prefix=$PWD/../lis --enable-f90 CC=icx FC=ifx 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
 make
 make install
 cd ../../

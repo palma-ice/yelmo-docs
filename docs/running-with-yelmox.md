@@ -49,6 +49,20 @@ module load intel/oneAPI/2024.0.0
 
 ##
 
+# fftw
+cd libs/
+wget https://www.fftw.org/fftw-3.3.10.tar.gz
+tar -xvf fftw-3.3.10.tar.gz
+rm fftw-3.3.10.tar.gz
+cd fftw-3.3.10
+./configure --prefix=$PWD --enable-openmp CC=icx F77=ifx 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
+make
+make install
+cd ..
+ln -s fftw-3.3.10 fftw
+cd ../../
+
+
 # yelmo
 git clone git@github.com:palma-ice/yelmo.git
 cd yelmo
