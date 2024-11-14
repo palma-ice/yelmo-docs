@@ -88,7 +88,7 @@
               
                 <h1 id="running-with-yelmox-rembo">Running with YelmoX-REMBO</h1>
 <p><em>Before doing anything, make sure dependencies are installed (Lis, NetCDF, Python:runner)</em></p>
-<h3 id="step-1-clone-the-repositories">Step 1: Clone the repositories:</h3>
+<h2 id="step-1-clone-the-repositories">Step 1: Clone the repositories</h2>
 <pre><code class="language-bash"># Clone repository: YelmoX
 git clone https://github.com/palma-ice/yelmox.git
 
@@ -104,7 +104,7 @@ git clone https://github.com/alex-robinson/rembo1
 </code></pre>
 <p>At this point all the code is downloaded onto the machine.
 Now we need to configure it for compiling properly.</p>
-<h3 id="step-2-run-configuration-scripts-for-each-code-base">Step 2: Run configuration scripts for each code base:</h3>
+<h2 id="step-2-run-configuration-scripts-for-each-code-base">Step 2: Run configuration scripts for each code base</h2>
 <pre><code class="language-bash"># Enter Yelmo directory and configure it for compiling
 cd yelmo
 python config.py config/snowball_gfortran
@@ -129,24 +129,24 @@ make clean
 </code></pre>
 <p>Note that the example assumes we are using the machine called <code>snowball</code> and
 we will use the compiler <code>gfortran</code>. If this is not correct, you will need
-to use the right configuration file available in the <code>config/</code> directory, or 
-make your own using the others as a template. </p>
-<h3 id="step-3-compile-the-default-program">Step 3: Compile the default program:</h3>
+to use the right configuration file available in the <code>config/</code> directory, or
+make your own using the others as a template.</p>
+<h2 id="step-3-compile-the-default-program">Step 3: Compile the default program</h2>
 <pre><code class="language-bash">make clean 
 make yelmox_rembo
 </code></pre>
-<h3 id="step-4-make-a-link-to-ice_data">Step 4: Make a link to <code>ice_data</code>:</h3>
+<h2 id="step-4-make-a-link-to-ice_data">Step 4: Make a link to <code>ice_data</code></h2>
 <pre><code class="language-bash"># Link to `ice_data` repository wherever you have it saved on your system
 ln -s /media/Data/ice_data
 
 # Take a look at some data to make sure it worked well
 ncview ice_data/Greenland/GRL-16KM/GRL-16KM_TOPO-M17-v5.nc
 </code></pre>
-<h3 id="step-5-run-a-test-simulation">Step 5: Run a test simulation:</h3>
+<h2 id="step-5-run-a-test-simulation">Step 5: Run a test simulation</h2>
 <pre><code class="language-bash"># Run a test simulation of Greenland for 100 yrs
 ./runylmox -r -e rembo -n par/yelmo_Greenland_rembo.nml -o output/test1 -p ctrl.time_end=1e2
 </code></pre>
-<p>That's it, YelmoX-REMBO is working. </p>
+<p>That's it, YelmoX-REMBO is working.</p>
               
             </div>
           </div><footer>

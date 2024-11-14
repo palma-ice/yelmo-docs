@@ -113,11 +113,11 @@ time per line, or a range of times using the format <code>t0:dt:t1</code>:</p>
 20e3:2e3:200e3
 200e3:5e3:1e6
 </code></pre>
-<p>Duplicate times will be removed, as well as times outside of the range of 
-<code>time_init</code> and <code>time_end</code>. In this way, once <code>timeout_init</code> is called, 
+<p>Duplicate times will be removed, as well as times outside of the range of
+<code>time_init</code> and <code>time_end</code>. In this way, once <code>timeout_init</code> is called,
 we know how many timesteps of output will be generated. This can help
-confirm that we designed the experiment well, and how much data to expect. </p>
-<p>Then during the timeloop, simply use the function <code>timeout_check</code> to 
+confirm that we designed the experiment well, and how much data to expect.</p>
+<p>Then during the timeloop, simply use the function <code>timeout_check</code> to
 determine if the current time should be written to output:</p>
 <pre><code class="language-fortran">if (timeout_check(tm_1D,time)) then  
     !call write_step_1D_combined(yelmo1,hyst1,file1D_hyst,time=time)
@@ -148,8 +148,8 @@ call yelmo_update(yelmo1,time)
 call timer_step(tmrs,comp=2,time_mod=[time-dtt_now,time]*1e-3,label=&quot;yelmo&quot;)      
 </code></pre>
 <p>The option <code>comp</code> tells us which component the timing is being calculated for, and
-we can additionally provide a label to associate with this component. This is useful for 
-printing a table later. </p>
+we can additionally provide a label to associate with this component. This is useful for
+printing a table later.</p>
 <p>After all components have been calculated, we can print to a summary file:</p>
 <pre><code class="language-fortran">if (mod(time_elapsed,10.0)==0) then
     ! Print timestep timing info and write log table
@@ -166,16 +166,16 @@ during the time loop:</p>
 <p>Based on the options supplied, the time units are in <code>[m]</code> and the model time in <code>[kyr]</code>. The
 rate is then calculated as <code>[m/kyr]</code> - this is the inverse of what we used to measure <code>[kyr/hr]</code>.
 The rate as defined now is easier to manage in terms of summing the contribution of different
-components, and so is preferred moving forward. To recover <code>[kyr/hr]</code>, simply take 60/rate. </p>
+components, and so is preferred moving forward. To recover <code>[kyr/hr]</code>, simply take 60/rate.</p>
 <h2 id="master-to-main"><code>master</code> to <code>main</code></h2>
-<p>Following updated conventions, the default branch is now called <code>main</code> and the branch <code>master</code> has been deleted. </p>
+<p>Following updated conventions, the default branch is now called <code>main</code> and the branch <code>master</code> has been deleted.</p>
 <p>To update a working copy locally that already contains a <code>master</code> branch and therefore points to it as the default branch, the following steps should be applied:</p>
 <ol>
 <li>Get the branch <code>main</code>.</li>
 <li>Delete the local branch <code>master</code>.</li>
 <li>Make sure your local repository sees <code>main</code> as the default branch.</li>
 </ol>
-<pre><code># Get all branch information from the origin (github):
+<pre><code class="language-bash"># Get all branch information from the origin (github):
 git fetch --all
 
 # Get onto the new default branch:
@@ -220,7 +220,7 @@ k \frac{\partial T}{\partial z} = k_r \frac{\partial T_r}{\partial z}
 <p>Note, the following internal Yelmo variables are defined for convenience:</p>
 <p>
 <script type="math/tex; mode=display">
-Q_{\rm ice,b} = -k \frac{\partial T}{\partial z}; \quad 
+Q_{\rm ice,b} = -k \frac{\partial T}{\partial z}; \quad
 Q_{\rm rock} = -k_r \frac{\partial T_r}{\partial z}
 </script>
 </p>
@@ -257,42 +257,42 @@ T_r(z=z_{\rm bed}) = T(z=z_{\rm bed})
 </script>
 </p>
 <h2 id="active-bedrock">Active bedrock</h2>
-<p>Yelmo calculates the temperature in the lithosphere along with the ice temperature. This can be achieved by assuming equilibrium conditions in the bedrock, i.e., that the temperature profile in the bedrock is always linear with <code>T_lith_s = T_ice_b</code> and the slope equal to <code>dT/dz = -Q_geo / k_lith</code>. Or, the temperature equation can be solved in the lithosphere together with the temperature in the ice column. </p>
-<p>The parameter block <code>ytherm_lith</code> controls how the lithosphere is calculated with <code>ytherm_lith.method=['equil','active']</code> deciding the two cases above. </p>
+<p>Yelmo calculates the temperature in the lithosphere along with the ice temperature. This can be achieved by assuming equilibrium conditions in the bedrock, i.e., that the temperature profile in the bedrock is always linear with <code>T_lith_s = T_ice_b</code> and the slope equal to <code>dT/dz = -Q_geo / k_lith</code>. Or, the temperature equation can be solved in the lithosphere together with the temperature in the ice column.</p>
+<p>The parameter block <code>ytherm_lith</code> controls how the lithosphere is calculated with <code>ytherm_lith.method=['equil','active']</code> deciding the two cases above.</p>
 <h3 id="density-of-the-upper-lithosphere">Density of the upper lithosphere</h3>
 <h3 id="heat-capacity-of-the-upper-lithosphere">Heat capacity of the upper lithosphere</h3>
-<p>In both SICOPOLIS and GRISLI, a value of <code>cp = 1000.0 [J kg-1 K-1]</code> is used (referenced in Rogozhina et al., 2012; Greve, 2005; Greve, 1997). This value is adopted in Yelmo as well. </p>
-<pre><code>cp = 1000.0    ! [J kg-1 K-1] 
+<p>In both SICOPOLIS and GRISLI, a value of <code>cp = 1000.0 [J kg-1 K-1]</code> is used (referenced in Rogozhina et al., 2012; Greve, 2005; Greve, 1997). This value is adopted in Yelmo as well.</p>
+<pre><code class="language-fortran">cp = 1000.0    ! [J kg-1 K-1] 
 </code></pre>
 <h3 id="heat-conductivity-of-the-upper-lithosphere">Heat conductivity of the upper lithosphere</h3>
 <p>Note, Yelmo expects input parameter values in units of <code>[J a-1 m-1 K-1]</code>, while much literature uses <code>[W m-1 K-1]</code>. Given the number of seconds in a year <code>sec_year = 31536000.0</code>, <code>kt [W m-1 K-1] * sec_year = kt [J a-1 m-1 K-1]</code>.</p>
 <p>Rogozhina et al. (2012) use <code>kt = 2 [W m-1 K-1]</code> for Greenland:</p>
-<pre><code>kt = 6.3e7     ! [J a-1 m-1 K-1]
+<pre><code class="language-fortran">kt = 6.3e7     ! [J a-1 m-1 K-1]
 </code></pre>
 <p>This value is supported by Lösing et al. (2020), who perform a Bayesian inversion for GHF in Antarctica. Assuming exponentially decreasing heat production with depth, lower values of <code>kt</code> are supported (see Fig. 7b). In a study on the global thermal characteristics of the lithosphere, Cammarano and Guerri (2017) adopt an upper crust thermal conductivity of <code>kt = 2.5 [W m-1 K-1]</code>.</p>
-<p>To do: This study is also potentially relevant: 
+<p>To do: This study is also potentially relevant:
 <a href="https://link.springer.com/article/10.1186/s40517-020-0159-y">https://link.springer.com/article/10.1186/s40517-020-0159-y</a>. They show ranges of on the order of <code>kt = 2-3 [W m-1 K-1]</code> for the Canadian shield.</p>
-<p>The above value of <code>kt = 2 [W m-1 K-1] = 6.3e7 [J a-1 m-1 K-1]</code> is adopted as the default thermal conductivity of the upper crust in Yelmo. For historical context, see other estimates below. </p>
-<p>From Greve (1997) and Greve (2005): </p>
-<pre><code>kt = 9.46e7    ! [J a-1 m-1 K-1]
+<p>The above value of <code>kt = 2 [W m-1 K-1] = 6.3e7 [J a-1 m-1 K-1]</code> is adopted as the default thermal conductivity of the upper crust in Yelmo. For historical context, see other estimates below.</p>
+<p>From Greve (1997) and Greve (2005):</p>
+<pre><code class="language-fortran">kt = 9.46e7    ! [J a-1 m-1 K-1]
 </code></pre>
-<p>which is equivalent to <code>kt = 3 [W m-1 K-1]</code>. The source of this value is not known. </p>
-<p>From GRISLI: </p>
-<pre><code>kt = 1.04e8    ! [J a-1 m-1 K-1]
+<p>which is equivalent to <code>kt = 3 [W m-1 K-1]</code>. The source of this value is not known.</p>
+<p>From GRISLI:</p>
+<pre><code class="language-fortran">kt = 1.04e8    ! [J a-1 m-1 K-1]
 </code></pre>
-<p>which is equivalent to <code>kt = 3.3 [W m-1 K-1]</code>. The source of this value is not known.   </p>
+<p>which is equivalent to <code>kt = 3.3 [W m-1 K-1]</code>. The source of this value is not known.</p>
 <h2 id="how-to-read-yelmo_check_kill-output">How to read <code>yelmo_check_kill</code> output</h2>
-<p>The subroutine <code>yelmo_check_kill</code> is used to see if any instability is arising in the model. If so, then a restart file is written at that moment (the earlier in the instability, the better), and the model is stopped with diagnostic output to the log file. </p>
-<p>Note that <code>pc_eps</code> is the parameter that defines our target error tolerance in the time stepping of ice thickness evolution. At each time step, the diagnosed model error <code>pc_eta</code> is compared with <code>pc_eps</code>. If <code>pc_eta &gt;&gt; pc_eps</code>, this is interpreted as instability and the model is stopped. </p>
+<p>The subroutine <code>yelmo_check_kill</code> is used to see if any instability is arising in the model. If so, then a restart file is written at that moment (the earlier in the instability, the better), and the model is stopped with diagnostic output to the log file.</p>
+<p>Note that <code>pc_eps</code> is the parameter that defines our target error tolerance in the time stepping of ice thickness evolution. At each time step, the diagnosed model error <code>pc_eta</code> is compared with <code>pc_eps</code>. If <code>pc_eta &gt;&gt; pc_eps</code>, this is interpreted as instability and the model is stopped.</p>
 <h2 id="margin-front-mass-balance">Margin-front mass balance</h2>
-<p>Following Pollard and DeConto (2012,2016), an ice-margin front melting scheme has been implemented that accounts for the melt rate along the vertical face of ice submerged by seawater. </p>
+<p>Following Pollard and DeConto (2012,2016), an ice-margin front melting scheme has been implemented that accounts for the melt rate along the vertical face of ice submerged by seawater.</p>
 <p>The frontal mass balance ($\dot{f}$, m yr$^{-1}$) is calculated as:</p>
 <p>
 <script type="math/tex; mode=display">
 \dot{f} = \dot{b}_{\rm eff} \frac{A_f}{A_{\rm tot}} \theta_f
 </script>
 </p>
-<p>where $\dot{b}<em>{\rm eff}$ is the effective basal mass balance (the mean of the basal mass balance calculated for the ice-free neighbors), $A</em>{\rm tot}=\Delta x \Delta x$ is the horizontal grid area and $A_f$ is the area of the submerged faces (i.e., the sum of the depth of submerged ice for each face of the grid cell adjacent to an ice-free cell -- potentially four faces in total). $\theta_f=10$ is a scaling coefficient that implies the face mass balance should be ~10 times higher than the basal mass balance (Pollard and DeConto, 2016, appendix). </p>
+<p>where $\dot{b}<em>{\rm eff}$ is the effective basal mass balance (the mean of the basal mass balance calculated for the ice-free neighbors), $A</em>{\rm tot}=\Delta x \Delta x$ is the horizontal grid area and $A_f$ is the area of the submerged faces (i.e., the sum of the depth of submerged ice for each face of the grid cell adjacent to an ice-free cell -- potentially four faces in total). $\theta_f=10$ is a scaling coefficient that implies the face mass balance should be ~10 times higher than the basal mass balance (Pollard and DeConto, 2016, appendix).</p>
 <h2 id="calving-schemes">Calving schemes</h2>
 <p>Here is a summary of calving schemes.</p>
 <h3 id="lipscomb-et-al-2019">Lipscomb et al. (2019)</h3>
@@ -307,14 +307,14 @@ c = k_\tau \tau_{\rm ec}
 \tau_{\rm ec}^2 = \max(\tau_1,0)^2 + \omega_2 \max(\tau_2,0)^2
 </script>
 </p>
-<p>$\tau_1$ and $\tau_2$ are the eigenvalues of the 2D horizontal deviatoric stress tensor and $\omega_2$ is an empirical weighting constant. For partially ice-covered grid cells (with $f_{\rm ice} &lt; 1$), these stresses are taken from the upstream neighbor. </p>
+<p>$\tau_1$ and $\tau_2$ are the eigenvalues of the 2D horizontal deviatoric stress tensor and $\omega_2$ is an empirical weighting constant. For partially ice-covered grid cells (with $f_{\rm ice} &lt; 1$), these stresses are taken from the upstream neighbor.</p>
 <p>The eigenvalues $\tau_1$ and $\tau_2$ are calculated from the depth-averaged (2D) stress tensor $\tau_{\rm ij}$ as follows. Given the stress tensor components $\tau_{\rm xx}$, $\tau_{\rm yy}$ and $\tau_{\rm xy}$, we can solve for the real roots $\lambda$ of the tensor from the quadratic equation:</p>
 <p>
 <script type="math/tex; mode=display">
-a \lambda^2 + b \lambda + c = 0 
+a \lambda^2 + b \lambda + c = 0
 </script>
 </p>
-<p>where </p>
+<p>where</p>
 <p>
 <script type="math/tex; mode=display">
 a = 1.0 \\
@@ -323,7 +323,7 @@ c = \tau_{\rm xx}*\tau_{\rm yy} - \tau_{\rm xy}^2
 </script>
 </p>
 <p>glissade_velo_higher.F90:</p>
-<pre><code>tau_xz(k,i,j) = tau_xz(k,i,j) + efvs_qp * du_dz            ! 2 * efvs * eps_xz
+<pre><code class="language-fortran">tau_xz(k,i,j) = tau_xz(k,i,j) + efvs_qp * du_dz            ! 2 * efvs * eps_xz
 tau_yz(k,i,j) = tau_yz(k,i,j) + efvs_qp * dv_dz            ! 2 * efvs * eps_yz
 tau_xx(k,i,j) = tau_xx(k,i,j) + 2.d0 * efvs_qp * du_dx     ! 2 * efvs * eps_xx
 tau_yy(k,i,j) = tau_yy(k,i,j) + 2.d0 * efvs_qp * dv_dy     ! 2 * efvs * eps_yy
@@ -339,16 +339,16 @@ w = u_b \frac{\partial b}{\partial x} + v_b \frac{\partial b}{\partial y} - \int
 <p>ajr, 2021-06-22</p>
 <p>Through <code>v1.42</code>, ice margins were not fully consistently treated in Yelmo. This has been thoroughly revised. Now the following should be true:</p>
 <ol>
-<li>The variable <code>f_ice</code> contains information of the ice area fraction of a grid cell. If <code>f_ice=0</code>, no ice is present, if <code>f_ice=1</code>, the cell is fully ice covered, and for a fractional value, this cell is designated an ice margin point with partial ice cover. To determine <code>f_ice</code>, we need to calculate the "effective ice thickness" of a grid point. For floating cells at the margin, the effective ice thickness is equivalent to either the ice thickness or the minimum ice thickness of the neighboring cell, whichever is larger. For grounded cells, the effective ice thickness must at least be that of 1/2 of the minimum ice thickness of a neighboring cell. With effective ice thickness known, <code>f_ice = H_ice / H_eff</code>. </li>
-<li>Any grid cell with fractional ice cover <code>0&lt;f_ice&lt;1</code> is designated dynamically inactive on its outer borders (borders with ice-free points). Thus before a new cell can be populated with ice, first the fractional cell must be filled to reach <code>f_ice=1</code>. </li>
-<li>Velocity and the ssa solver now explicitly only treat cells with <code>f_ice=1</code>. The dynamic-inactive borders are also enforced explicitly in the mass_conservation routine for safety. </li>
-<li>The calving rate is diagnosed as a lateral flux assuming a thickness of <code>H_eff</code>, but then is converted to a horizontal mass balance component applied to the whole cell. </li>
-<li>Additionally, it is possible to ensure 'residual calving' is applied to the upstream grid point of a margin cell, if the calving rate is large enough. This is done via the new routine <code>calc_calving_residual</code>. In the case of the <code>simple</code> and <code>flux</code> methods, applying full residual calving rates causes far too much calving. Rather a small amount of residual calving is applied to conservatively diminish the dynamic status of the upstream cell. The latter was implemented following CISM. </li>
+<li>The variable <code>f_ice</code> contains information of the ice area fraction of a grid cell. If <code>f_ice=0</code>, no ice is present, if <code>f_ice=1</code>, the cell is fully ice covered, and for a fractional value, this cell is designated an ice margin point with partial ice cover. To determine <code>f_ice</code>, we need to calculate the "effective ice thickness" of a grid point. For floating cells at the margin, the effective ice thickness is equivalent to either the ice thickness or the minimum ice thickness of the neighboring cell, whichever is larger. For grounded cells, the effective ice thickness must at least be that of 1/2 of the minimum ice thickness of a neighboring cell. With effective ice thickness known, <code>f_ice = H_ice / H_eff</code>.</li>
+<li>Any grid cell with fractional ice cover <code>0&lt;f_ice&lt;1</code> is designated dynamically inactive on its outer borders (borders with ice-free points). Thus before a new cell can be populated with ice, first the fractional cell must be filled to reach <code>f_ice=1</code>.</li>
+<li>Velocity and the ssa solver now explicitly only treat cells with <code>f_ice=1</code>. The dynamic-inactive borders are also enforced explicitly in the mass_conservation routine for safety.</li>
+<li>The calving rate is diagnosed as a lateral flux assuming a thickness of <code>H_eff</code>, but then is converted to a horizontal mass balance component applied to the whole cell.</li>
+<li>Additionally, it is possible to ensure 'residual calving' is applied to the upstream grid point of a margin cell, if the calving rate is large enough. This is done via the new routine <code>calc_calving_residual</code>. In the case of the <code>simple</code> and <code>flux</code> methods, applying full residual calving rates causes far too much calving. Rather a small amount of residual calving is applied to conservatively diminish the dynamic status of the upstream cell. The latter was implemented following CISM.</li>
 </ol>
 <p>Other important changes</p>
 <ol>
 <li>Major bug fix with thermodynamics and vertical velocity. The vertical velocity correction that was being applied to account for the sigma coordinates was incorrect. A correction must be applied to get the vertical velocity itself. Then another correction must be applied when calculating the vertical advection in the thermodynamics routine. Now this is hopefully done correctly. EISMINT EXPA and EXPF appear to work well. This may hopefully prove crucial for Javi's advance/retreat issues in Antarctica.</li>
-<li>Modified staggering of 3D viscosity to be done on horizontal ab-nodes, then averaged to the center. This follows a 'quadrature' approach and appears to be more rigorously close to actually integrating over the area. It's not clear how this might affect stability of ice streams (i.e., Daniel's results). </li>
+<li>Modified staggering of 3D viscosity to be done on horizontal ab-nodes, then averaged to the center. This follows a 'quadrature' approach and appears to be more rigorously close to actually integrating over the area. It's not clear how this might affect stability of ice streams (i.e., Daniel's results).</li>
 <li>Two-step mass balance with updates to <code>f_ice</code> in between, with more explicit tracking of all mass changes. Now a new variable <code>mb_resid</code> holds any threshold changes applied at the end of the mass balance update. I haven't checked in detail, but I hope all mass changes are now accounted for explicitly in the model.</li>
 </ol>
               

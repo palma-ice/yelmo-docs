@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Testing without the ice sheet: - Yelmo-docs</title>
+    <title>Testing without the ice sheet - Yelmo-docs</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Testing without the ice sheet:";
+        var mkdocs_page_name = "Testing without the ice sheet";
         var mkdocs_page_input_path = "running-greenland-ismip6.md";
         var mkdocs_page_url = null;
       </script>
@@ -77,7 +77,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Testing without the ice sheet:</li>
+      <li class="breadcrumb-item active">Testing without the ice sheet</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -86,12 +86,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="testing-without-the-ice-sheet">Testing without the ice sheet:</h1>
+                <h1 id="testing-without-the-ice-sheet">Testing without the ice sheet</h1>
 <p>jobrun ./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Greenland.nml -- -o ${fldr} -p ctrl.run_step="spinup_ismip6" spinup_ismip6.with_ice_sheet=False spinup_ismip6.time_end=10 spinup_ismip6.dt2D_out=10</p>
 <p>jobrun ./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Greenland.nml -- -o ${fldr} -p ctrl.run_step="transient_proj" transient_proj.with_ice_sheet=False</p>
-<h1 id="specify-run-choices-to-run-locally-in-the-background">Specify run choices, to run locally in the background:</h1>
+<h1 id="specify-run-choices-to-run-locally-in-the-background">Specify run choices, to run locally in the background</h1>
 <p>runopt='-r'</p>
-<h1 id="or-to-submit-job-to-a-cluster-eg">or, to submit job to a cluster, eg:</h1>
+<h1 id="or-to-submit-job-to-a-cluster-eg">or, to submit job to a cluster, eg</h1>
 <p>runopt='-s -q priority -w 5'</p>
 <h1 id="define-the-output-folder">Define the output folder</h1>
 <p>fldr=tmp/ismip6/spinup-grl_16km_2</p>
@@ -103,7 +103,7 @@ jobrun ./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Greenland.nml -- -o ${fld
 <p>fldr=tmp/ismip6/spinup-grl_16km_3
 jobrun ./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Greenland.nml -- -o ${fldr} -p ctrl.run_step="spinup_ismip6" ytopo.calv_flt_method="kill" ytopo.calv_grnd_method="zero"</p>
 <h1 id="spinup-is-not-great-but-functions-try-a-transient-simulation-now">Spinup is not great, but functions. Try a transient simulation now</h1>
-<p>file_restart=/p/tmp/robinson/ismip6/spinup-grl_16km_3/0/yelmo_restart.nc </p>
+<p>file_restart=/p/tmp/robinson/ismip6/spinup-grl_16km_3/0/yelmo_restart.nc</p>
 <p>fldr=tmp/ismip6/ismip-grl_16km_3-1
 jobrun ./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Greenland.nml -- -o ${fldr} -p yelmo.restart=${file_restart} ctrl.run_step="transient_proj" transient_proj.scenario="ctrl","rcp26","rcp85" ismip6.gcm="miroc5" ytopo.calv_flt_method="kill" ytopo.calv_grnd_method="zero" ytill.method=-1</p>
               

@@ -46,8 +46,6 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">Getting started</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#super-quick-start">Super-quick start</a>
-    </li>
     <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory structure</a>
@@ -128,64 +126,13 @@
               
                 <h1 id="getting-started">Getting started</h1>
 <p>Here you can find the basic information and steps needed to get <strong>Yelmo</strong> running.</p>
-<h2 id="super-quick-start">Super-quick start</h2>
-<p>A summary of commands to get started is given below (valid for running on PIK cluster HPC2024 "Foote"). For more detailed information see subsequent sections.</p>
-<pre><code class="language-bash"># Clone repository
-git clone git@github.com:palma-ice/yelmo.git
-
-# Enter directory and run configuration script
-cd yelmo
-python3 config.py config/pik_hpc2024_ifx 
-
-### Download and configure additional libraries ###
-
-# lis
-
-# Only relevant to PIK-HPC2024: error when compiling with most recent intel OneAPI 2024.0
-module load intel/oneAPI/2023.2.0
-
-# Clone the lis repository (tagged versions not available)
-git clone git@github.com:anishida/lis.git libs/lis-2.1.5
-
-# with omp enabled
-cd libs/lis-2.1.5
-./configure --prefix=$PWD/../lis-omp --enable-omp --enable-f90 CC=icc FC=ifort 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
-make
-make install
-cd ../../
-
-# no omp too
-cd libs/lis-2.1.5
-make clean
-./configure --prefix=$PWD/../lis --enable-f90 CC=icx FC=ifx 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
-make
-make install
-cd ../../
-
-# Only relevant to PIK-HPC2024: to revert previous change
-module load intel/oneAPI/2024.0.0
-
-##
-
-# Compile the benchmarks program
-make clean 
-make benchmarks 
-
-# Run a test simulation of the EISMINT1-moving experiment
-./runme -r -e benchmarks -o output/eismint1-moving -n par-gmd/yelmo_EISMINT_moving.nml
-
-# Compile the initmip program and run the default simulation of Antarctica
-make initmip 
-./runme -r -e initmip -o output/ant-pd -n par-gmd/yelmo_Antarctica.nml
-</code></pre>
 <h2 id="dependencies">Dependencies</h2>
-<p>See: <a href="https://palma-ice.github.io/yelmo-docs/dependencies/">Dependencies</a> for installation tips.</p>
 <ul>
-<li>NetCDF library (preferably version 4.0 or higher)</li>
-<li>LIS: <a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
-<li>[Optional] Python 3.x, which is only needed for automatic configuration of the Makefile and the use of the script <code>runme</code> for job preparation and submission.</li>
-<li>[Optional] <a href="https://github.com/cxesmc/runner">'runner' Python library (cxesmc fork)</a>. Used for changing parameters at the command line using <code>runme</code>, and for running ensembles.</li>
+<li>Yelmo dependencies: LIS</li>
+<li>YelmoX dependencies: FFTW (for FastIsostasy), FastIsostasy, REMBO1</li>
+<li>Job submission: Python3.x, runner</li>
 </ul>
+<p>See: <a href="../dependencies/">Dependencies</a> for more details.</p>
 <h2 id="directory-structure">Directory structure</h2>
 <pre><code class="language-fortran">    config/
         Configuration files for compilation on different systems.

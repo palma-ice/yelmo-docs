@@ -54,8 +54,6 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#installing-lis">Installing LIS</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#installing-runner">Installing runner</a>
-    </li>
     </ul>
                 </li>
               </ul>
@@ -99,7 +97,7 @@
 <ul>
 <li><a href="https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html">NetCDF</a></li>
 <li><a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
-<li>[Optional] <a href="https://github.com/cxesmc/runner">'runner' Python library (cxesmc fork)</a></li>
+<li><a href="https://github.com/cxesmc/runner">'runner' Python library (cxesmc fork)</a></li>
 </ul>
 <p>YelmoX is additionally dependent on the following library:</p>
 <ul>
@@ -118,30 +116,31 @@ installation instructions are available from the Unidata website:</p>
 <ol>
 <li>
 <p>Download the LIS source:
-<a href="https://www.ssisc.org/lis/">https://www.ssisc.org/lis/</a></p>
+    <a href="https://www.ssisc.org/lis/">https://www.ssisc.org/lis/</a></p>
 </li>
 <li>
 <p>Configure the package (where is the desired installation location),
 and install it in the location of your choice (below defined as <code>$LISROOT</code>). Also, make sure to enable the Fortran90 interface:</p>
-</li>
-</ol>
-<pre><code class="language-bash">cd lis-2.0.18
+<p><code>bash
+cd lis-2.0.18
 ./configure --prefix=$LISROOT --enable-f90
 make
 make install
-make install check
-</code></pre>
+make install check</code></p>
 <p>Note: make sure to set the environment variables <code>CC</code> and <code>FC</code>, in order to set
 a specific compiler, for example for gcc/gfortran use the following configure command:</p>
-<pre><code class="language-bash">CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90
-</code></pre>
-<ol>
-<li>Add LIS path to the <code>LD_LIBRARY_PATH</code> in <code>.bash_profile</code>, <code>.bashrc</code> or <code>.bash_aliases</code>:</li>
-</ol>
-<pre><code class="language-bash"># lis library paths
-LD_LIBRARY_PATH=$LISROOT/lib:$LD_LIBRARY_PATH
+<p><code>bash
+CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90</code></p>
+</li>
+<li>
+<p>Add LIS path to the <code>LD_LIBRARY_PATH</code> in <code>.bash_profile</code>, <code>.bashrc</code> or <code>.bash_aliases</code>:</p>
+<p>```bash</p>
+<h1 id="lis-library-paths">lis library paths</h1>
+<p>LD_LIBRARY_PATH=$LISROOT/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
-</code></pre>
+```</p>
+</li>
+</ol>
 <p>That's it. LIS should now be available to use with Yelmo.</p>
 <h2 id="installing-runner">Installing runner</h2>
 <ol>

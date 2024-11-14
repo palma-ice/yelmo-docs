@@ -87,19 +87,19 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="remapping">Remapping</h1>
-<p>Yelmo runs on a Cartesian (x/y) grid. Often input data comes in many formats, global lat/lon grids, projections and sets of points. It is important to have robust remapping tools. </p>
+<p>Yelmo runs on a Cartesian (x/y) grid. Often input data comes in many formats, global lat/lon grids, projections and sets of points. It is important to have robust remapping tools.</p>
 <p>Typically for a given domain, we define a Polar Stereographic projection to be able to convert lat/lon data points onto a Cartesian plane. For Antarctica, for example, the standard projection has the following parameters:</p>
-<pre><code class="language-bash">    int polar_stereographic ;
-        polar_stereographic:grid_mapping_name = &quot;polar_stereographic&quot; ;
-        polar_stereographic:straight_vertical_longitude_from_pole = 0. ;
-        polar_stereographic:latitude_of_projection_origin = -71. ;
-        polar_stereographic:angle_of_oblique_tangent = 19. ;
-        polar_stereographic:scale_factor_at_projection_origin = 1. ;
-        polar_stereographic:false_easting = 0. ;
-        polar_stereographic:false_northing = 0. ;
+<pre><code class="language-bash">int polar_stereographic ;
+    polar_stereographic:grid_mapping_name = &quot;polar_stereographic&quot; ;
+    polar_stereographic:straight_vertical_longitude_from_pole = 0. ;
+    polar_stereographic:latitude_of_projection_origin = -71. ;
+    polar_stereographic:angle_of_oblique_tangent = 19. ;
+    polar_stereographic:scale_factor_at_projection_origin = 1. ;
+    polar_stereographic:false_easting = 0. ;
+    polar_stereographic:false_northing = 0. ;
 </code></pre>
 <h2 id="naming-files">Naming files</h2>
-<p>For grids used by Yelmo, we generally use an abbreviation for the domain name followed by the resolution. So for Antarctica, we could have the grids <code>ANT-32KM</code> or <code>ANT-16KM</code> for a 32km or 16km grid, respectively. Data that have been projected onto these grids are saved with the grid name as a prefix followed by a general name that specifies the type of data, e.g., <code>CLIM</code> or <code>TOPO</code>, finally followed by more descriptive information about the specific dataset <code>IPSL-14Ma</code> or <code>IPSL-PD-CTRL</code>. For example, the latest topopgraphy dataset we use is called the RTopo2.0.1 dataset, so this is processed into a file called <code>ANT-32KM_TOPO-RTOPO-2.0.1.nc</code>. </p>
+<p>For grids used by Yelmo, we generally use an abbreviation for the domain name followed by the resolution. So for Antarctica, we could have the grids <code>ANT-32KM</code> or <code>ANT-16KM</code> for a 32km or 16km grid, respectively. Data that have been projected onto these grids are saved with the grid name as a prefix followed by a general name that specifies the type of data, e.g., <code>CLIM</code> or <code>TOPO</code>, finally followed by more descriptive information about the specific dataset <code>IPSL-14Ma</code> or <code>IPSL-PD-CTRL</code>. For example, the latest topopgraphy dataset we use is called the RTopo2.0.1 dataset, so this is processed into a file called <code>ANT-32KM_TOPO-RTOPO-2.0.1.nc</code>.</p>
 <h2 id="fields-yelmo-needs">Fields Yelmo needs</h2>
 <p>To drive Yelmo with boundary conditions derived from a climate model, it needs the following fields to be defined on the Polar Stereographic grid:</p>
 <ul>
@@ -118,7 +118,7 @@
 </ul>
 <p>Likely these would be processed into two or more separate files, e.g., one for climate <code>CLIM</code> variables and another for ocean <code>OCN</code> variables.</p>
 <h2 id="preprocessing-data-using-cdo">Preprocessing data using <code>cdo</code></h2>
-<p>As a first step, the Climate Data Operators <code>cdo</code> package is great for most preprocessing steps. It can handle averaging data over time and space, merging data files, extracting individual variables etc. See the extensive documentation and examples online. </p>
+<p>As a first step, the Climate Data Operators <code>cdo</code> package is great for most preprocessing steps. It can handle averaging data over time and space, merging data files, extracting individual variables etc. See the extensive documentation and examples online.</p>
 <p>For example, it is possible to use the command <code>cdo selvar</code> to extract specific variables from a file:</p>
 <pre><code class="language-bash">cdo selvar,t2m,precip diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp1.nc
 </code></pre>
@@ -167,7 +167,7 @@ inverse_flattening =         298.25722356
 <p>With this file defined, it's easy to perform projections using the <code>cdo remap*</code> commands. To perform a bicubic interpolation, call:</p>
 <pre><code class="language-bash">cdo remapbic,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-bic.nc
 </code></pre>
-<p>Here, <code>remapbic</code> specifies bicubic interpolation and <code>grid_ANT-32KM.txt</code> defines the target grid as above. Then the source dataset is specified and the desired output file <code>ANT-32KM_test.nc</code>. </p>
+<p>Here, <code>remapbic</code> specifies bicubic interpolation and <code>grid_ANT-32KM.txt</code> defines the target grid as above. Then the source dataset is specified and the desired output file <code>ANT-32KM_test.nc</code>.</p>
 <p>To perform conservative interpolation, replace <code>remapbic</code> with <code>remapcon</code>:</p>
 <pre><code class="language-bash">cdo remapcon,grid_ANT-32KM.txt diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ANT-32KM_test-con.nc
 </code></pre>
@@ -182,7 +182,7 @@ cdo smooth,radius=128km ANT-32KM_test-con.nc ANT-32KM_test-con-smooth.nc
 <p>It can be tedious to process data from a climate model into the right format to drive Yelmo. Tools like <code>cdo</code> help to reduce this burden. Other tools like NetCDF Operator <code>NCO</code> and today numerous Python-based libraries and tools can also be used.</p>
 <p>It is best to define a script or program with all the processing steps clearly defined. That way, when new data becomes available from the same model, it is easy to process it systematically (and reproducibly) in the same way without any trouble.</p>
 <h2 id="remapping-restart-file">Remapping restart file</h2>
-<p>Sometimes we may want to restart a simulation at a new resolution - i.e., perform a spinup simulation at relatively low resolution and then continue the simulation at higher resolution. </p>
+<p>Sometimes we may want to restart a simulation at a new resolution - i.e., perform a spinup simulation at relatively low resolution and then continue the simulation at higher resolution.</p>
 <ol>
 <li>Use <code>cdo</code> to remap the restart file based on the grid definition files.</li>
 </ol>
@@ -211,7 +211,7 @@ cdo gencon,grid_${grid_name_tgt}.txt -setgrid,grid_${grid_name_src}.txt ${nc_src
 <p>Now let's try to run a simulation at 16km, loading the restart file from 32km</p>
 <pre><code class="language-bash">./runme -r -e initmip -n par/yelmo_initmip.nml -o output/restarts/sim2-16km -p ctrl.time_end=100 ctrl.time_equil=0 ctrl.clim_nm=&quot;clim_pd_grl&quot; yelmo.domain=&quot;Greenland&quot; yelmo.grid_name=&quot;GRL-16KM&quot; yelmo.restart=&quot;../sim0-32km/yelmo_restart.nc&quot;
 </code></pre>
-<p>The simulation is successful! (as of branch <code>alex-dev-2</code>, revision <code>1d9783fb</code>). </p>
+<p>The simulation is successful! (as of branch <code>alex-dev-2</code>, revision <code>1d9783fb</code>).</p>
               
             </div>
           </div><footer>

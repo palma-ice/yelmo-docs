@@ -87,7 +87,7 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="snapshot-climate-snapclim">Snapshot climate (snapclim)</h1>
-<p>The snapclim module is designed to determine climatic forcing, i.e., monthly temperature and precipitation, for a given point in time. This can be acheived by applying a temperature anomaly, or by interpolating snapshots of climate states available for different times. </p>
+<p>The snapclim module is designed to determine climatic forcing, i.e., monthly temperature and precipitation, for a given point in time. This can be acheived by applying a temperature anomaly, or by interpolating snapshots of climate states available for different times.</p>
 <h2 id="the-hybrid-method">The "hybrid" method</h2>
 <p>This is my preferred method and is set up to be rather flexible, and I think is a good place to start for these simulations. It is comprised of an annual mean temperature anomaly time series from 300 kyr ago to today obtained from several spliced paleo reconstructions plus a monthly seasonal cycle over the 300 kyr obtained from a climber2 paleo run. So with the monthly values and the annual mean, you can get monthly temp anomalies over 300 kyr. There are more details in the attached manuscript that was never yet submitted...</p>
 <p>To activate this method, in the parameter file, set the following parameters in the group "snapclim":</p>
