@@ -2,68 +2,13 @@
 
 Here you can find the basic information and steps needed to get **Yelmo** running.
 
-## Super-quick start
-
-A summary of commands to get started is given below (valid for running on PIK cluster HPC2024 "Foote"). For more detailed information see subsequent sections.
-
-```bash
-# Clone repository
-git clone git@github.com:palma-ice/yelmo.git
-
-# Enter directory and run configuration script
-cd yelmo
-python3 config.py config/pik_hpc2024_ifx 
-
-### Download and configure additional libraries ###
-
-# lis
-
-# Only relevant to PIK-HPC2024: error when compiling with most recent intel OneAPI 2024.0
-module load intel/oneAPI/2023.2.0
-
-# Clone the lis repository (tagged versions not available)
-git clone git@github.com:anishida/lis.git libs/lis-2.1.5
-
-# with omp enabled
-cd libs/lis-2.1.5
-./configure --prefix=$PWD/../lis-omp --enable-omp --enable-f90 CC=icc FC=ifort 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
-make
-make install
-cd ../../
-
-# no omp too
-cd libs/lis-2.1.5
-make clean
-./configure --prefix=$PWD/../lis --enable-f90 CC=icx FC=ifx 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
-make
-make install
-cd ../../
-
-# Only relevant to PIK-HPC2024: to revert previous change
-module load intel/oneAPI/2024.0.0
-
-##
-
-# Compile the benchmarks program
-make clean 
-make benchmarks 
-
-# Run a test simulation of the EISMINT1-moving experiment
-./runme -r -e benchmarks -o output/eismint1-moving -n par-gmd/yelmo_EISMINT_moving.nml
-
-# Compile the initmip program and run the default simulation of Antarctica
-make initmip 
-./runme -r -e initmip -o output/ant-pd -n par-gmd/yelmo_Antarctica.nml
-```
-
 ## Dependencies
 
-See: [Dependencies](https://palma-ice.github.io/yelmo-docs/dependencies/) for installation tips.
+- Yelmo dependencies: LIS
+- YelmoX dependencies: FFTW (for FastIsostasy), FastIsostasy, REMBO1
+- Job submission: Python3.x, runner
 
-- NetCDF library (preferably version 4.0 or higher)
-- LIS: [Library of Iterative Solvers for Linear Systems](http://www.ssisc.org/lis/)
-- [Optional] Python 3.x, which is only needed for automatic configuration of the Makefile and the use of the script `runme` for job preparation and submission.
-- [Optional] ['runner' Python library (cxesmc fork)](https://github.com/cxesmc/runner). Used for changing parameters at the command line using `runme`, and for running ensembles.
+See: [Dependencies](dependencies.md) for more details.
 
 ## Directory structure
 

@@ -55,7 +55,7 @@ fldr=output/hyst/spinup02
 jobrun ./runme -r -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step="spinup_ismip6" opt_L21.cf_min=1e-3 ytopo.kt=0.10e-2,0.20e-2,0.30e-2,0.40e-2 tf_corr_ant.ronne=0.0,0.25 tf_corr_ant.ross=0.0,0.2 tf_corr_ant.pine=-0.5,0.0
 ```
 
-To make the spinup run for a longer time, like 50 kyr, set `ctrl.time_end=50e3`. 
+To make the spinup run for a longer time, like 50 kyr, set `ctrl.time_end=50e3`.
 
 If you already have a spinup simulation available, you can skip that step.
 Alternatively, you can specify one that is ready on `snowball`:
@@ -64,9 +64,9 @@ Alternatively, you can specify one that is ready on `snowball`:
 yelmo.restart=/home/robinson/abumip-2021/yelmox/output/ismip6/spinup11/1/yelmo_restart.nc
 ```
 
-## Step 2: transient simulations 
+## Step 2: transient simulations
 
-To run transient simulations the `run_step` should be specified as `ctrl.run_step="hysteresis_proj"`. Typically model parameters should be defined to be equivalent to those used by the restart simulation. The time control parameters of the simulation are defined in the parameter section `&hysteresis_proj`. Parameters associated with the hysteresis module can be changed in the `&hyster` section. 
+To run transient simulations the `run_step` should be specified as `ctrl.run_step="hysteresis_proj"`. Typically model parameters should be defined to be equivalent to those used by the restart simulation. The time control parameters of the simulation are defined in the parameter section `&hysteresis_proj`. Parameters associated with the hysteresis module can be changed in the `&hyster` section.
 
 To be consistent with the restart file above, the following reference parameter values should be set in the parameter file (or at the command line, if used as part of the ensemble):
 

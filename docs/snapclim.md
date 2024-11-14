@@ -1,6 +1,6 @@
 # Snapshot climate (snapclim)
 
-The snapclim module is designed to determine climatic forcing, i.e., monthly temperature and precipitation, for a given point in time. This can be acheived by applying a temperature anomaly, or by interpolating snapshots of climate states available for different times. 
+The snapclim module is designed to determine climatic forcing, i.e., monthly temperature and precipitation, for a given point in time. This can be acheived by applying a temperature anomaly, or by interpolating snapshots of climate states available for different times.
 
 ## The "hybrid" method
 

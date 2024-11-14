@@ -7,22 +7,22 @@ are minimized.
 
 Program: `tests/yelmo_opt.f90`
 To compile: `make opt`
-To run: 
+To run:
 
-```
+```bash
 ./runme -rs -e opt -o output/test -n par/yelmo_Antarctica_opt.nml
 ```
 
 The program consists of the following steps:
 
-### 1. Spin-up a steady-state ice sheet with constant forcing and fixed topography.
+## 1. Spin-up a steady-state ice sheet with constant forcing and fixed topography
 
 For this step, the restart parameter should be set to `yelmo.restart='none'`, to
 ensure that the spin-up is performed with the current parameters. Currently,
 the program is hard-coded to spin-up the ice sheet for 20 kyr using SIA only,
 followed by another 10 kyr using the solver of choice, as seen in the following lines of code:
 
-```
+```bash
 call yelmo_update_equil_external(yelmo1,hyd1,cf_ref,time_init,time_tot=20e3,topo_fixed=.TRUE.,dt=5.0,ssa_vel_max=0.0)
 call yelmo_update_equil_external(yelmo1,hyd1,cf_ref,time_init,time_tot=10e3, topo_fixed=.TRUE.,dt=1.0,ssa_vel_max=5000.0)
 ```
@@ -32,7 +32,7 @@ observed fields (`H_ice`,`z_bed`). After the spin-up finishes, a restart file is
 written in the output directory with the name `yelmo_restart.nc`. The simulation
 will terminate at this point.
 
-### 2. Optimization
+## 2. Optimization
 
 The restart file from Step 1 should be saved somewhere convenient for the model
 (like in the `input` folder). Then the restart parameter should be set to that
@@ -75,7 +75,7 @@ These parameters are designed to change over time with the simulation. `tau` is
 set to `rel_tau1` from the start of the simulation until `rel_time1`. Between `rel_time1`
 and `rel_time2`, `tau` is linearly scaled from the value of `rel_tau1` to `rel_tau2`.
 Or, if `rel_q > 1`, then the scaling is non-linear with an exponent of `rel_q` (this helps
-maintain small values of `tau` longer which seems to help keep errors low). 
+maintain small values of `tau` longer which seems to help keep errors low).
 Once `rel_time2` is reached, relaxation in the model is disabled, and the ice shelves
 are allowed to freely evolve. Analogously, `H_scale` is modified the same way:
 it is constant at the value of `scale_H1` until `scale_time1`,
