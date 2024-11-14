@@ -46,9 +46,6 @@ cd ..
 # From YelmoX directory, configure it for compiling too
 python config.py config/snowball_gfortran
 make clean 
-
-# Finally, also copy the runylmox config file to the main directory
-cp config/runylmox.js ./
 ```
 
 Note that the example assumes we are using the machine called `snowball` and

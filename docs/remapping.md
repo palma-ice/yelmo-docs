@@ -4,7 +4,7 @@ Yelmo runs on a Cartesian (x/y) grid. Often input data comes in many formats, gl
 
 Typically for a given domain, we define a Polar Stereographic projection to be able to convert lat/lon data points onto a Cartesian plane. For Antarctica, for example, the standard projection has the following parameters:
 
-```
+```bash
 	int polar_stereographic ;
 		polar_stereographic:grid_mapping_name = "polar_stereographic" ;
 		polar_stereographic:straight_vertical_longitude_from_pole = 0. ;
@@ -58,7 +58,7 @@ cdo selvar,precip diane_C14Ma_1_5PAL_SE_4750_4849_1M_histmth.nc ipsl_tmp2.nc
 cdo merge ipsl_tmp1.nc ipsl_tmp2.nc ipsl_tmp3.nc
 ```
 
-There are many other useful commands, particularly for getting monthly means `cdo monmean ...` and other statistics. 
+There are many other useful commands, particularly for getting monthly means `cdo monmean ...` and other statistics.
 
 Resources:
 
@@ -75,7 +75,7 @@ CDO Reference card:
 
 To remap a data file from lat/lon coordinates to our projection, `cdo` needs a grid description file that describes the target Polar Stereographic projection grid. For example, for a 32km resolution domain, we would use the following file named `grid_ANT-32KM.txt`:
 
-```
+```bash
 gridtype = projection
 gridsize =      36481
 xsize    =        191
@@ -123,13 +123,13 @@ cdo smooth,radius=128km ANT-32KM_test-con.nc ANT-32KM_test-con-smooth.nc
 
 ```
 
-The smoothing radius should be chosen such that it is the smallest value possible that removes blocky artifacts from the field. 
+The smoothing radius should be chosen such that it is the smallest value possible that removes blocky artifacts from the field.
 
 ## Summary
 
-It can be tedious to process data from a climate model into the right format to drive Yelmo. Tools like `cdo` help to reduce this burden. Other tools like NetCDF Operator `NCO` and today numerous Python-based libraries and tools can also be used. 
+It can be tedious to process data from a climate model into the right format to drive Yelmo. Tools like `cdo` help to reduce this burden. Other tools like NetCDF Operator `NCO` and today numerous Python-based libraries and tools can also be used.
 
-It is best to define a script or program with all the processing steps clearly defined. That way, when new data becomes available from the same model, it is easy to process it systematically (and reproducibly) in the same way without any trouble. 
+It is best to define a script or program with all the processing steps clearly defined. That way, when new data becomes available from the same model, it is easy to process it systematically (and reproducibly) in the same way without any trouble.
 
 
 ## Remapping restart file
@@ -138,7 +138,7 @@ Sometimes we may want to restart a simulation at a new resolution - i.e., perfor
 
 1. Use `cdo` to remap the restart file based on the grid definition files.
 
-```
+```bash
 # Define env variables as shortcuts to locations of grid files
 grid_src=/Users/robinson/models/EURICE/gridding/maps/grid_GRL-32KM.txt
 grid_tgt=/Users/robinson/models/EURICE/gridding/maps/grid_GRL-16KM.txt
@@ -149,19 +149,19 @@ cdo remapcon,${grid_tgt} -setgrid,${grid_src} yelmo_restart.nc yelmo_restart_16k
 
 Let's do a test. First, run a short 32km Greenland simulation and generate a restart file:
 
-```
-./runylmo -r -e initmip -n par/yelmo_initmip.nml -o output/restarts/sim0-32km -p ctrl.time_end=100 ctrl.time_equil=0 ctrl.clim_nm="clim_pd_grl" yelmo.domain="Greenland" yelmo.grid_name="GRL-32KM"
+```bash
+./runme -r -e initmip -n par/yelmo_initmip.nml -o output/restarts/sim0-32km -p ctrl.time_end=100 ctrl.time_equil=0 ctrl.clim_nm="clim_pd_grl" yelmo.domain="Greenland" yelmo.grid_name="GRL-32KM"
 ```
 
 That simulation should have produced a nice restart file. Let's test a normal 32km simulation that continues from this restart file.
 
-```
-./runylmo -r -e initmip -n par/yelmo_initmip.nml -o output/restarts/sim1-32km -p ctrl.time_end=100 ctrl.time_equil=0 ctrl.clim_nm="clim_pd_grl" yelmo.domain="Greenland" yelmo.grid_name="GRL-32KM" yelmo.restart="../sim0-32km/yelmo_restart.nc"
+```bash
+./runme -r -e initmip -n par/yelmo_initmip.nml -o output/restarts/sim1-32km -p ctrl.time_end=100 ctrl.time_equil=0 ctrl.clim_nm="clim_pd_grl" yelmo.domain="Greenland" yelmo.grid_name="GRL-32KM" yelmo.restart="../sim0-32km/yelmo_restart.nc"
 ```
 
 Ok, now generate scrip map file to interpolate from 32km down to 16km.
 
-```
+```bash
 domain=Greenland
 grid_name_src=GRL-32KM
 grid_name_tgt=GRL-4KM
@@ -173,8 +173,8 @@ cdo gencon,grid_${grid_name_tgt}.txt -setgrid,grid_${grid_name_src}.txt ${nc_src
 
 Now let's try to run a simulation at 16km, loading the restart file from 32km
 
-```
-./runylmo -r -e initmip -n par/yelmo_initmip.nml -o output/restarts/sim2-16km -p ctrl.time_end=100 ctrl.time_equil=0 ctrl.clim_nm="clim_pd_grl" yelmo.domain="Greenland" yelmo.grid_name="GRL-16KM" yelmo.restart="../sim0-32km/yelmo_restart.nc"
+```bash
+./runme -r -e initmip -n par/yelmo_initmip.nml -o output/restarts/sim2-16km -p ctrl.time_end=100 ctrl.time_equil=0 ctrl.clim_nm="clim_pd_grl" yelmo.domain="Greenland" yelmo.grid_name="GRL-16KM" yelmo.restart="../sim0-32km/yelmo_restart.nc"
 ```
 
 The simulation is successful! (as of branch `alex-dev-2`, revision `1d9783fb`). 
