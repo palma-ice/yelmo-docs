@@ -131,7 +131,8 @@ c_b = {\rm tan}(c_{\rm b,ref}) * N_{\rm eff}
 <p>Another possibility is to tune <code>cb_ref</code> as a function of other model or boundary variables. The most common approach is to tune it as as function of the bedrock elevation relative to present-day sea level (e.g., Winkelmann et al., 2011). In Yelmo, this is controlled by the parameter choices in the <code>ytill</code> section, and in particular the parameter <code>ytill.scale=['none','lin','exp']</code>. When <code>ytill.scale='none'</code>, no scaling function is applied and then <code>cb_ref=ytill.cf_ref</code> everywhere. When <code>ytill.scale='lin'</code>, a linear scaling is applied so that <code>cb_ref</code> goes from <code>ytill.cf_min</code> to <code>ytill.cb_ref</code> for bedrock elevations between <code>ytill.z0</code> and <code>ytill.z1</code> (saturating otherwise). Finally, if <code>ytill.scale='exp'</code>, an exponential decay function is applied, such that <code>cb_ref=ytill.cf_ref</code> for <code>z_bed &gt;= ytill.z1</code>, and decays following a curve that reaches ~30% of its value at <code>z_bed=ytill.z0</code>. Finally, all values are limited to a minimum value of <code>ytill.cf_min</code>. </p>
 <h2 id="effective-pressure">Effective pressure</h2>
 <p>Effective pressure (<code>N_eff</code>, $N_{\rm eff}$) in Yelmo is currently only used in the basal friction formulation as shown above. It provides a mechanism to alter the basal friction as a function of the state of the ice sheet, which is separate from $c_{\rm b,ref}$ (<code>cb_ref</code>), which represents the properties of the bed beneath the ice sheet. The calculation of <code>N_eff</code> can be done with several methods:</p>
-<p><code>yneff.method = [-1,0,1,2,3]
+<p><code>bash
+yneff.method = [-1,0,1,2,3]
 -1: Set N_eff external to Yelmo, do not modify it internally.
  0: Impose a constant value, N_eff = yneff.const
  1: Impose the overburden pressure, N_eff = rho_ice*g*H_ice

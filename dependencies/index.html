@@ -99,7 +99,7 @@
 <ul>
 <li><a href="https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html">NetCDF</a></li>
 <li><a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
-<li>[Optional] <a href="https://github.com/alex-robinson/runner">'runner' Python library (alex-robinson fork)</a></li>
+<li>[Optional] <a href="https://github.com/cxesmc/runner">'runner' Python library (cxesmc fork)</a></li>
 </ul>
 <p>YelmoX is additionally dependent on the following library:</p>
 <ul>
@@ -125,7 +125,7 @@ installation instructions are available from the Unidata website:</p>
 and install it in the location of your choice (below defined as <code>$LISROOT</code>). Also, make sure to enable the Fortran90 interface:</p>
 </li>
 </ol>
-<pre><code>cd lis-2.0.18
+<pre><code class="language-bash">cd lis-2.0.18
 ./configure --prefix=$LISROOT --enable-f90
 make
 make install
@@ -133,12 +133,12 @@ make install check
 </code></pre>
 <p>Note: make sure to set the environment variables <code>CC</code> and <code>FC</code>, in order to set
 a specific compiler, for example for gcc/gfortran use the following configure command:</p>
-<pre><code>CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90
+<pre><code class="language-bash">CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90
 </code></pre>
 <ol>
 <li>Add LIS path to the <code>LD_LIBRARY_PATH</code> in <code>.bash_profile</code>, <code>.bashrc</code> or <code>.bash_aliases</code>:</li>
 </ol>
-<pre><code># lis library paths
+<pre><code class="language-bash"># lis library paths
 LD_LIBRARY_PATH=$LISROOT/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 </code></pre>
@@ -147,11 +147,12 @@ export LD_LIBRARY_PATH
 <ol>
 <li>Install <code>runner</code> to your system's Python installation via <code>pip</code>, along with dependency <code>tabulate</code>.</li>
 </ol>
-<pre><code>pip install https://github.com/alex-robinson/runner/archive/refs/heads/master.zip
-pip install tabulate
+<pre><code class="language-bash">pip install https://github.com/cxesmc/runner/archive/refs/heads/master.zip
 </code></pre>
-<p>That's it! Now check that system command <code>job</code> is available by running <code>job -h</code>. </p>
-<p>Note that install method <code>python setup.py install</code> should be avoided if possible to maintain Python system integrity.</p>
+<p>That's it! Now check that system command <code>job</code> is available by running <code>job -h</code>. If the command is not found, it means that the Python bin directory is not available in your PATH. To add it, typically something like this is needed in your .profile or .bashrc file:</p>
+<pre><code class="language-bash">PATH=${PATH}:${HOME}/.local/bin
+export PATH
+</code></pre>
               
             </div>
           </div><footer>

@@ -145,6 +145,20 @@ module load intel/oneAPI/2024.0.0
 
 ##
 
+# fftw
+cd libs/
+wget https://www.fftw.org/fftw-3.3.10.tar.gz
+tar -xvf fftw-3.3.10.tar.gz
+rm fftw-3.3.10.tar.gz
+cd fftw-3.3.10
+./configure --prefix=$PWD --enable-openmp CC=icx F77=ifx 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
+make
+make install
+cd ..
+ln -s fftw-3.3.10 fftw
+cd ../../
+
+
 # yelmo
 git clone git@github.com:palma-ice/yelmo.git
 cd yelmo
@@ -184,11 +198,11 @@ git clone git@github.com:JanJereczek/isostasy_data.git
 # Link to `ice_data` repository wherever you have it saved on your system
 ln -s /p/projects/megarun/ice_data 
 
-# Copy the runylmox config file to the main directory
-cp config/runylmox.js ./
+# Copy the runme config file to the main directory
+cp config/runme.js ./
 
 # Run a test simulation of Antarctica for 1000 yrs
-./runylmox -r -e yelmox -n par/yelmo_Antarctica.nml -o output/ant-test -p ctrl.time_end=1e3
+./runme -r -e yelmox -n par/yelmo_Antarctica.nml -o output/ant-test -p ctrl.time_end=1e3
 </code></pre>
 <h2 id="standard-yelmox-simulations">Standard YelmoX simulations</h2>
 <p>To run YelmoX, by default we use the program <code>yelmox.f90</code>. This program currently makes use of <code>snapclim</code> for the climatic forcing and <code>smbpal</code> for the snowpack and surface mass balance calculations.</p>
@@ -204,7 +218,6 @@ git checkout tfm2021
 
 # From main directory of yelmox, also reconfigure to adopt all changes:
 python3 config.py config/snowball_gfortran 
-cp config/runylmox.js ./
 
 # Link to ice_data path as needed:
 ln -s /media/Data/ice_data ice_data
@@ -218,37 +231,37 @@ make yelmox_ismip6
 <pre><code class="language-bash"># Specify run choices, to run locally in the background:
 runopt='-r'
 # or, to submit job to a cluster, eg:
-runopt='-s -q priority -w 10'
+runopt='-rs -q priority -w 10'
 
 # Define the output folder
 fldr=tmp/ismip6/spinup_32km_68
 
 # Run the Yelmo ensemble
 
-jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3,1.5e-3,2.0e-3,2.5e-3 ymat.enh_shear=1,3
+jobrun ./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3,1.5e-3,2.0e-3,2.5e-3 ymat.enh_shear=1,3
 </code></pre>
 <p>An alternative spinup procedure</p>
 <pre><code class="language-bash"># First run for 30kyr with topo relax on to spinup thermodynamics...
 
-runopt='-s -q priority -w 10'
+runopt='-rs -q priority -w 10'
 fldr=tmp/ismip6/spinup_32km_69
-jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 spinup_ismip6.equil_method=&quot;relax&quot; spinup_ismip6.time_end=30e3 spinup_ismip6.time_equil=30e3 ytopo.kt=1.0e-3,1.5e-3,2.0e-3,2.5e-3 ymat.enh_shear=1
+jobrun ./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 spinup_ismip6.equil_method=&quot;relax&quot; spinup_ismip6.time_end=30e3 spinup_ismip6.time_equil=30e3 ytopo.kt=1.0e-3,1.5e-3,2.0e-3,2.5e-3 ymat.enh_shear=1
 
 
 # Testing opt spinup but with 'robin' initial temp profile
-runopt='-s -q priority -w 10'
+runopt='-rs -q priority -w 10'
 fldr=tmp/ismip6/spinup_32km_70
-jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 ymat.enh_shear=1 opt_L21.cf_max=1.0
+jobrun ./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 ymat.enh_shear=1 opt_L21.cf_max=1.0
 
 # robin-cold but only by -2deg instead of -10deg
-runopt='-s -q priority -w 10'
+runopt='-rs -q priority -w 10'
 fldr=tmp/ismip6/spinup_32km_71
-jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 ymat.enh_shear=1 opt_L21.cf_max=0.2 opt_L21.cf_init=0.2
+jobrun ./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 ymat.enh_shear=1 opt_L21.cf_max=0.2 opt_L21.cf_init=0.2
 
 
-runopt='-s -q short -w 10'
+runopt='-rs -q short -w 10'
 fldr=tmp/ismip6/spinup_32km_72
-jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 opt_L21.cf_max=10,20,40,45 ydyn.beta_u0=100,300
+jobrun ./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 opt_L21.cf_max=10,20,40,45 ydyn.beta_u0=100,300
 </code></pre>
 <h2 id="ismip6-simulations">ISMIP6 simulations</h2>
 <p>Make sure you already have a spinup simulation available, and that the parameters of the spinup will match those supplied here. The next step is to run different experiments of interest that restart from the spinup experiment.</p>
@@ -257,20 +270,20 @@ jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o $
 
 # Run a 16km spinup run with relaxation
 
-runopt='-s -q priority -w 1'
+runopt='-rs -q priority -w 1'
 fldr=tmp/ismip6/spinup_16km_72_diag
 
-jobrun ./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 spinup_ismip6.equil_method=&quot;relax&quot; yelmo.grid_name=&quot;ANT-16KM&quot; spinup_ismip6.time_end=20 spinup_ismip6.dt2D_out=1
+jobrun ./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -- -o ${fldr} -p ctrl.run_step=&quot;spinup_ismip6&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ytopo.kt=1.0e-3 spinup_ismip6.equil_method=&quot;relax&quot; yelmo.grid_name=&quot;ANT-16KM&quot; spinup_ismip6.time_end=20 spinup_ismip6.dt2D_out=1
 
 
 # Run with 16km restarting from 32km file
 # (currently crashes probably because tf_corr cannot be interpolated)
 
-runopt='-s -q priority -w 1'
+runopt='-rs -q priority -w 1'
 fldr=tmp/ismip6/ismip_32km_68_diag
 file_restart=/p/tmp/robinson/ismip6/spinup_32km_68/0/yelmo_restart.nc 
 
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/ctrl -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ${paropt} yelmo.grid_name=&quot;ANT-16KM&quot; transient_proj.time_end=1920 transient_proj.dt2D_out=1 ytill.is_angle=False
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/ctrl -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ${paropt} yelmo.grid_name=&quot;ANT-16KM&quot; transient_proj.time_end=1920 transient_proj.dt2D_out=1 ytill.is_angle=False
 
 ###
 </code></pre>
@@ -281,7 +294,7 @@ fldr=tmp/ismip6/ismip_32km_71
 # Specify run choices, to run locally in the background:
 runopt='-r'
 # or, to submit job to a cluster, eg:
-runopt='-s -q priority -w 10'
+runopt='-rs -q priority -w 10'
 
 # Set parameter choices to match those of spinup simulation
 paropt=&quot;ytopo.kt=1.0e-3&quot;
@@ -292,7 +305,7 @@ paropt=&quot;ytopo.kt=1.0e-3&quot;
 file_restart=/p/tmp/robinson/ismip6/spinup_32km_71/0/yelmo_restart.nc 
 
 # ctrl-0
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/ctrl-0 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 transient_proj.time_end=11900 transient_proj.dt1D_out=10 transient_proj.dt2D_out=200 ${paropt}
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/ctrl-0 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 transient_proj.time_end=11900 transient_proj.dt1D_out=10 transient_proj.dt2D_out=200 ${paropt}
 
 ## Next, call the Yelmo commands for the individual cases...
 
@@ -301,19 +314,19 @@ file_restart=/p/tmp/robinson/ismip6/spinup_32km_71/0/yelmo_restart.nc
 file_restart=/p/tmp/robinson/ismip6/ismip_32km_68/ctrl-0/yelmo_restart.nc 
 
 # ctrl
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/ctrl -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ${paropt}
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/ctrl -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ${paropt}
 
 # exp05
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/exp05 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ${paropt}
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/exp05 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 ${paropt}
 
 # exp09
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/exp09 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_95&quot; marine_shelf.gamma_quad_nl=21000 ${paropt}
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/exp09 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_95&quot; marine_shelf.gamma_quad_nl=21000 ${paropt}
 
 # exp10
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/exp10 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_5&quot; marine_shelf.gamma_quad_nl=9620 ${paropt}
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/exp10 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_5&quot; marine_shelf.gamma_quad_nl=9620 ${paropt}
 
 # exp13
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/exp13 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_pigl&quot; marine_shelf.gamma_quad_nl=159000 ${paropt}
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/exp13 -p ctrl.run_step=&quot;transient_proj&quot; yelmo.restart=${file_restart} transient_proj.scenario=&quot;rcp85&quot; tf_cor.name=&quot;dT_nl_pigl&quot; marine_shelf.gamma_quad_nl=159000 ${paropt}
 
 </code></pre>
 <h2 id="abumip">ABUMIP</h2>
@@ -329,7 +342,7 @@ fldr=tmp/ismip6/abumip_32km_68
 # Specify run choices, to run locally in the background:
 runopt='-r'
 # or, to submit job to a cluster, eg:
-runopt='-s -q priority -w 5'
+runopt='-rs -q priority -w 5'
 
 debugopt=&quot;abumip_proj.time_end=20 abumip_proj.dt2D_out=1&quot;
 
@@ -339,19 +352,19 @@ paropt=&quot;ytopo.kt=1.0e-3&quot;
 # Call the Yelmo commands...
 
 # ABUC - control experiment
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuc -p abumip.scenario=&quot;abuc&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt} 
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuc -p abumip.scenario=&quot;abuc&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt} 
 
 # ABUK - Ocean-kill experiment
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuk -p abumip.scenario=&quot;abuk&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt}
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuk -p abumip.scenario=&quot;abuk&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt}
 
 # ABUM - High shelf melt (400 m/yr)
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abum -p abumip.scenario=&quot;abum&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt} 
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abum -p abumip.scenario=&quot;abum&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt} 
 
 # ABUK - Ocean-kill experiment (MARINE BOUNDARY CONDITIONS)
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuk-marine -p abumip.scenario=&quot;abuk&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt} ydyn.ssa_lat_bc=&quot;marine&quot;
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abuk-marine -p abumip.scenario=&quot;abuk&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt} ydyn.ssa_lat_bc=&quot;marine&quot;
 
 # ABUM - High shelf melt (400 m/yr) (MARINE BOUNDARY CONDITIONS)
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abum-marine -p abumip.scenario=&quot;abum&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt} ydyn.ssa_lat_bc=&quot;marine&quot;
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/abum-marine -p abumip.scenario=&quot;abum&quot; ctrl.run_step=&quot;abumip_proj&quot; yelmo.restart=${file_restart} abumip_proj.scenario=&quot;ctrl&quot; tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 isostasy.method=0 ${paropt} ydyn.ssa_lat_bc=&quot;marine&quot;
 
 </code></pre>
 <h2 id="simulations-with-hyster">Simulations with <code>hyster</code></h2>
@@ -364,17 +377,17 @@ fldr=tmp/ismip6/ramp_32km_68
 # Specify run choices, to run locally in the background:
 runopt='-r'
 # or, to submit job to a cluster, eg:
-runopt='-s -q priority -w 5'
+runopt='-rs -q priority -w 5'
 
 # Set parameter choices to match those of spinup simulation
 
 paropt=&quot;ytopo.kt=1.0e-3&quot;
 
 # Now run simulation
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/r1 -p ctrl.run_step=&quot;hysteresis_proj&quot; yelmo.restart=${file_restart} tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 hysteresis_proj.time_end=30e3 hyster.method='ramp-time' hyster.df_sign=-1 hyster.dt_init=0 hyster.dt_ramp=10e3 hyster.f_min=-10 hyster.f_max=5 ${paropt}
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/r1 -p ctrl.run_step=&quot;hysteresis_proj&quot; yelmo.restart=${file_restart} tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 hysteresis_proj.time_end=30e3 hyster.method='ramp-time' hyster.df_sign=-1 hyster.dt_init=0 hyster.dt_ramp=10e3 hyster.f_min=-10 hyster.f_max=5 ${paropt}
 
 # Try a periodic simulation
-./runylmox ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/r2 -p ctrl.run_step=&quot;hysteresis_proj&quot; yelmo.restart=${file_restart} tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 hysteresis_proj.time_end=100e3 hyster.method='sin' hyster.df_sign=1 hyster.dt_init=0 hyster.dt_ramp=20e3 hyster.f_min=-10 hyster.f_max=5 ${paropt}
+./runme ${runopt} -e ismip6 -n par/yelmo_ismip6_Antarctica.nml -o ${fldr}/r2 -p ctrl.run_step=&quot;hysteresis_proj&quot; yelmo.restart=${file_restart} tf_cor.name=&quot;dT_nl&quot; marine_shelf.gamma_quad_nl=14500 hysteresis_proj.time_end=100e3 hyster.method='sin' hyster.df_sign=1 hyster.dt_init=0 hyster.dt_ramp=20e3 hyster.f_min=-10 hyster.f_max=5 ${paropt}
 
 
 </code></pre>

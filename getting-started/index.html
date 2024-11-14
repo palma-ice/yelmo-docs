@@ -58,7 +58,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#2-create-the-system-specific-makefile">2. Create the system-specific Makefile</a>
         <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#alternative-configuration-quickstart-with-docker-and-vs-code">Alternative configuration - quickstart with Docker and VS Code</a>
+    <li class="toctree-l4"><a class="reference internal" href="#alternative-configuration-quickstart-with-docker-and-vs-code-not-maintained">Alternative configuration - quickstart with Docker and VS Code (not maintained)</a>
     </li>
         </ul>
     </li>
@@ -157,7 +157,7 @@ cd ../../
 # no omp too
 cd libs/lis-2.1.5
 make clean
-./configure --prefix=$PWD/../lis --enable-f90 CC=icc FC=ifort 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
+./configure --prefix=$PWD/../lis --enable-f90 CC=icx FC=ifx 'FFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback' 'CFLAGS=-Ofast -march=core-avx2 -mtune=core-avx2 -traceback'
 make
 make install
 cd ../../
@@ -172,19 +172,19 @@ make clean
 make benchmarks 
 
 # Run a test simulation of the EISMINT1-moving experiment
-./runylmo -r -e benchmarks -o output/eismint1-moving -n par-gmd/yelmo_EISMINT_moving.nml
+./runme -r -e benchmarks -o output/eismint1-moving -n par-gmd/yelmo_EISMINT_moving.nml
 
 # Compile the initmip program and run the default simulation of Antarctica
 make initmip 
-./runylmo -r -e initmip -o output/ant-pd -n par-gmd/yelmo_Antarctica.nml
+./runme -r -e initmip -o output/ant-pd -n par-gmd/yelmo_Antarctica.nml
 </code></pre>
 <h2 id="dependencies">Dependencies</h2>
 <p>See: <a href="https://palma-ice.github.io/yelmo-docs/dependencies/">Dependencies</a> for installation tips.</p>
 <ul>
 <li>NetCDF library (preferably version 4.0 or higher)</li>
 <li>LIS: <a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
-<li>[Optional] Python 3.x, which is only needed for automatic configuration of the Makefile and the use of the script <code>runylmo</code> for job preparation and submission.</li>
-<li>[Optional] 'runner' Python library: <a href="https://github.com/alex-robinson/runner">https://github.com/alex-robinson/runner</a>. Used for changing parameters at the command line using <code>runylmo</code>, and for running ensembles.</li>
+<li>[Optional] Python 3.x, which is only needed for automatic configuration of the Makefile and the use of the script <code>runme</code> for job preparation and submission.</li>
+<li>[Optional] <a href="https://github.com/cxesmc/runner">'runner' Python library (cxesmc fork)</a>. Used for changing parameters at the command line using <code>runme</code>, and for running ensembles.</li>
 </ul>
 <h2 id="directory-structure">Directory structure</h2>
 <pre><code class="language-fortran">    config/
@@ -231,7 +231,7 @@ cp pik_ifort myhost_mycompiler
 python3 config.py config/myhost_mycompiler
 </code></pre>
 <p>The result should be a Makefile in <code>$YELMOROOT</code> that is ready for use.</p>
-<h4 id="alternative-configuration-quickstart-with-docker-and-vs-code">Alternative configuration - quickstart with Docker and VS Code</h4>
+<h4 id="alternative-configuration-quickstart-with-docker-and-vs-code-not-maintained">Alternative configuration - quickstart with Docker and VS Code (not maintained)</h4>
 <p>Instead of a manual install, one way to get up and running quickly with Yelmo is with VS Code and Docker. It works on any plattform and uses a Linux based container. You don't need to know Docker or VS Code to get started. Just install the following:</p>
 <ol>
 <li><a href="https://docs.docker.com/engine/install/">Docker</a></li>
@@ -265,7 +265,7 @@ make initmip       # compiles the program `libyelmo/bin/yelmo_initmip.x`
 <p>The Makefile additionally allows you to specify debugging compiler flags with the option <code>debug=1</code>, in case you need to debug the code (e.g., <code>make benchmarks debug=1</code>). Using this option, the code will run much slower, so this option is not recommended unless necessary.</p>
 <h3 id="4-run-the-model">4. Run the model</h3>
 <p>Once an executable has been created, you can run the model. This can be
-achieved via the included Python job submission script <code>runylmo</code>. The following steps
+achieved via the included Python job submission script <code>runme</code>. The following steps
 are carried out via the script:</p>
 <ol>
 <li>The output directory is created.</li>
@@ -275,7 +275,7 @@ are carried out via the script:</p>
 <li>The executable is run from the output directory, either as a background process or it is submitted to the queue via <code>sbatch</code> (the SLURM workload manager).</li>
 </ol>
 <p>To run a benchmark simulation, for example, use the following command:</p>
-<pre><code class="language-bash">./runylmo -r -e benchmarks -o output/test -n par/yelmo_EISMINT.nml
+<pre><code class="language-bash">./runme -r -e benchmarks -o output/test -n par/yelmo_EISMINT.nml
 </code></pre>
 <p>where the option <code>-r</code> implies that the model should be run as a background process. If this is omitted, then the output directory will be populated, but no executable will be run, while <code>-s</code> instead will submit the simulation to cluster queue system instead of running in the background. The option <code>-e</code> lets you specify the executable. For some standard cases, shortcuts have been created:</p>
 <pre><code class="language-bash">benchmarks = libyelmo/bin/yelmo_benchmarks.x
@@ -284,9 +284,9 @@ initmip    = libyelmo/bin/yelmo_initmip.x
 </code></pre>
 <p>The last two mandatory arguments <code>-o OUTDIR</code> and <code>-n PAR_PATH</code> are the output/run directory and the parameter file to be used for this simulation, respectively. In the case of the above simulation, the output directory is defined as <code>output/test</code>, where all model parameters (loaded from the file <code>par/yelmo_EISMINT.nml</code>) and model output can be found.</p>
 <p>It is also possible to modify parameters inline via the option <code>-p KEY=VAL [KEY=VAL ...]</code>. The parameter should be specified with its namelist group and its name. E.g., to change the resolution of the EISMINT benchmark experiment to 10km, use:</p>
-<pre><code class="language-bash">./runylmo -r -e benchmarks -o output/test -n par/yelmo_EISMINT.nml -p ctrl.dx=10
+<pre><code class="language-bash">./runme -r -e benchmarks -o output/test -n par/yelmo_EISMINT.nml -p ctrl.dx=10
 </code></pre>
-<p>See <code>runylmo -h</code> for more details on the run script.</p>
+<p>See <code>runme -h</code> for more details on the run script.</p>
 <h2 id="test-cases">Test cases</h2>
 <p>The published model description includes several test simulations for validation
 of the model's performance. The following section describes how to perform these
@@ -297,30 +297,30 @@ it is assumed that the user has already configured the model for their system
 <p>To perform the moving margin experiment, compile the benchmarks
 executable and call it with the EISMINT parameter file:</p>
 <pre><code class="language-bash">make benchmarks
-./runylmo -r -e benchmarks -o output/eismint-moving -n par-gmd/yelmo_EISMINT_moving.nml
+./runme -r -e benchmarks -o output/eismint-moving -n par-gmd/yelmo_EISMINT_moving.nml
 </code></pre>
 <h3 id="2-eismint2-expa">2. EISMINT2 EXPA</h3>
 <p>To perform Experiment A from the EISMINT2 benchmarks, compile the benchmarks
 executable and call it with the EXPA parameter file:</p>
 <pre><code class="language-bash">make benchmarks
-./runylmo -r -e benchmarks -o output/eismint-expa -n par-gmd/yelmo_EISMINT_expa.nml
+./runme -r -e benchmarks -o output/eismint-expa -n par-gmd/yelmo_EISMINT_expa.nml
 </code></pre>
 <h3 id="3-eismint2-expf">3. EISMINT2 EXPF</h3>
 <p>To perform Experiment F from the EISMINT2 benchmarks, compile the benchmarks
 executable and call it with the EXPF parameter file:</p>
 <pre><code class="language-bash">make benchmarks
-./runylmo -r -e benchmarks -o output/eismint-expf -n par-gmd/yelmo_EISMINT_expf.nml
+./runme -r -e benchmarks -o output/eismint-expf -n par-gmd/yelmo_EISMINT_expf.nml
 </code></pre>
 <h3 id="4-mismip-rf">4. MISMIP RF</h3>
 <p>To perform the MISMIP rate factor experiment, compile the mismip executable
 and call it with the MISMIP parameter file the three parameter permutations of interest (default, subgrid and subgrid+gl-scaling):</p>
 <pre><code class="language-bash">make mismip
-./runylmo -r -e mismip -o output/mismip-rf-0 -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=0 ydyn.beta_gl_scale=0
-./runylmo -r -e mismip -o output/mismip-rf-1 -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=3 ydyn.beta_gl_scale=0
-./runylmo -r -e mismip -o output/mismip-rf-2 -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=3 ydyn.beta_gl_scale=2
+./runme -r -e mismip -o output/mismip-rf-0 -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=0 ydyn.beta_gl_scale=0
+./runme -r -e mismip -o output/mismip-rf-1 -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=3 ydyn.beta_gl_scale=0
+./runme -r -e mismip -o output/mismip-rf-2 -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=3 ydyn.beta_gl_scale=2
 </code></pre>
 <p>To additionally change the resolution of the simulations change the parameter <code>mismip.dx</code>, e.g. for the default simulation with 10km resolution , call:</p>
-<pre><code class="language-bash">./runylmo -r -e mismip -o output/mismip-rf-0-10km -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=0 ydyn.beta_gl_scale=0 mismip.dx=10
+<pre><code class="language-bash">./runme -r -e mismip -o output/mismip-rf-0-10km -n par-gmd/yelmo_MISMIP3D.nml -p ydyn.beta_gl_stag=0 ydyn.beta_gl_scale=0 mismip.dx=10
 </code></pre>
 <h3 id="5-age-profile-experiments">5. Age profile experiments</h3>
 <p>To perform the age profile experiments, compile the Fortran program <code>tests/test_icetemp.f90</code>
@@ -337,8 +337,8 @@ program file, as well as the output filename.</p>
 to compile the <code>initmip</code> executable and run with the present-day (pd) and
 glacial (lgm) parameter values:</p>
 <pre><code class="language-bash">make initmip
-./runylmo -r -e initmip -o output/ant-pd -n par-gmd/yelmo_Antarctica.nml -p ctrl.clim_nm=&quot;clim_pd&quot;
-./runylmo -r -e initmip -o output/ant-lgm -n par-gmd/yelmo_Antarctica.nml -p ctrl.clim_nm=&quot;clim_lgm&quot;
+./runme -r -e initmip -o output/ant-pd -n par-gmd/yelmo_Antarctica.nml -p ctrl.clim_nm=&quot;clim_pd&quot;
+./runme -r -e initmip -o output/ant-lgm -n par-gmd/yelmo_Antarctica.nml -p ctrl.clim_nm=&quot;clim_lgm&quot;
 </code></pre>
               
             </div>

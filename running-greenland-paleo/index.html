@@ -87,24 +87,24 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="running-with-yelmox-greenland-paleo-simulations">Running with YelmoX: Greenland paleo simulations</h1>
-<p>This document describes how to get a transient paleo simulation running. It will assume that you already have cloned <code>yelmo</code> and <code>yelmox</code> and have checked out the right version and/or branch, and that you have access to the boundary data needed (e.g., in an <code>ice_data</code> folder). </p>
-<p>This setup will use the standard <code>yelmox.f90</code> program. </p>
+<p>This document describes how to get a transient paleo simulation running. It will assume that you already have cloned <code>yelmo</code> and <code>yelmox</code> and have checked out the right version and/or branch, and that you have access to the boundary data needed (e.g., in an <code>ice_data</code> folder).</p>
+<p>This setup will use the standard <code>yelmox.f90</code> program.</p>
 <p>To run a present-day spinup simulation that will also optimize the basal friction coefficient <code>cb_ref</code> using the default parameter values, use the following command:</p>
-<pre><code># First run spinup simulation
+<pre><code class="language-bash"># First run spinup simulation
 # (steady-state present day boundary conditions)
-./runylmox -r -e yelmox -n par/yelmo_Greenland.nml -o output/spinup-grl-1
+./runme -r -e yelmox -n par/yelmo_Greenland.nml -o output/spinup-grl-1
 </code></pre>
 <p>Once a spinup is available, you can run a transient simulation.</p>
-<pre><code># Define output folder and restart file path
+<pre><code class="language-bash"># Define output folder and restart file path
 fldr=output/paleo-grl-1
 restart=output/spinup-grl-1/yelmo_restart.nc 
 
 # Call run command
-./runylmox -r -e yelmox -n par/yelmo_Greenland.nml -o ${fldr} -p ctrl.time_init=-158e3 ctrl.time_end=2000 ctrl.transient_clim=True ctrl.equil_method=&quot;none&quot; yelmo.restart=${restart} 
+./runme -r -e yelmox -n par/yelmo_Greenland.nml -o ${fldr} -p ctrl.time_init=-158e3 ctrl.time_end=2000 ctrl.transient_clim=True ctrl.equil_method=&quot;none&quot; yelmo.restart=${restart} 
 </code></pre>
-<p>Note that transient simulations have the time defined in [years CE]. In other words, <code>time=2000</code> corresponds to the time 2000 CE. There is another variable available in the code <code>time_bp</code> which is used to represent time before present, where the present day is year 0, assumed to occur at the year <code>time=1950</code>. </p>
-<p>To run without a restart file, then it is possible to run the above command but leave out the option <code>yelmo.restart=${restart}</code>. </p>
-<p>That's it! </p>
+<p>Note that transient simulations have the time defined in [years CE]. In other words, <code>time=2000</code> corresponds to the time 2000 CE. There is another variable available in the code <code>time_bp</code> which is used to represent time before present, where the present day is year 0, assumed to occur at the year <code>time=1950</code>.</p>
+<p>To run without a restart file, then it is possible to run the above command but leave out the option <code>yelmo.restart=${restart}</code>.</p>
+<p>That's it!</p>
               
             </div>
           </div><footer>
