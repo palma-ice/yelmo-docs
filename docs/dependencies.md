@@ -24,38 +24,12 @@ installation instructions are available from the Unidata website:
 
 [https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html](https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html)
 
-## Installing LIS
+## Install LIS and FFTW
 
-1. Download the LIS source:
-    [https://www.ssisc.org/lis/](https://www.ssisc.org/lis/)
+These packages could be installed individually and linked into the `libs` directory of Yelmox and Yelmo. However, to ensure the right versions are used, etc., we have now made a separate repository for managing the installation of LIS and FFTW from the versions available in that repository.
 
-2. Configure the package (where is the desired installation location),
-and install it in the location of your choice (below defined as `$LISROOT`). Also, make sure to enable the Fortran90 interface:
-
-    ```bash
-    cd lis-2.0.18
-    ./configure --prefix=$LISROOT --enable-f90
-    make
-    make install
-    make install check
-    ```
-
-    Note: make sure to set the environment variables `CC` and `FC`, in order to set
-    a specific compiler, for example for gcc/gfortran use the following configure command:
-
-    ```bash
-    CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90
-    ```
-
-3. Add LIS path to the `LD_LIBRARY_PATH` in `.bash_profile`, `.bashrc` or `.bash_aliases`:
-
-    ```bash
-    # lis library paths
-    LD_LIBRARY_PATH=$LISROOT/lib:$LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH
-    ```
-
-That's it. LIS should now be available to use with Yelmo.
+Please download the code from this repository and see the README for installation instructions:
+[https://github.com/cxesmc/climber-x-exlib](https://github.com/cxesmc/climber-x-exlib)
 
 ## Installing runner
 

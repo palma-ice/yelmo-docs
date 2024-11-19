@@ -77,20 +77,27 @@ python3 config.py config/myhost_mycompiler
 
 The result should be a Makefile in `$YELMOROOT` that is ready for use.
 
-#### Alternative configuration - quickstart with Docker and VS Code (not maintained)
+### 3. Prepare system-specific .runme_config file
 
-Instead of a manual install, one way to get up and running quickly with Yelmo is with VS Code and Docker. It works on any plattform and uses a Linux based container. You don't need to know Docker or VS Code to get started. Just install the following:
+To use the `runme` script for submitting jobs, first you need to configure a few options to match the system you are using (so the script knows which queues are available, etc.).
 
-1. [Docker](https://docs.docker.com/engine/install/)
-2. [VS Code](https://code.visualstudio.com)
-3. [install the remote development extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
+To do so, first copy the template config file to your directory:
 
-Then make sure that Docker is running and start VS Code.
-Open the folder with the Yelmo code. Say Yes, when VS Code asks you if you want to open it in the container.
+```bash
+cp .runme/runme_config .runme_config
+```
 
-Now you can directly go to step 3 below, just make sure that you use the terminal in VS Code.
+Next, edit the file. If you are running on an HPC with a job submission system via SLURM, then specify the right HPC. So far the available HPCs are defined in the file `.runme/queues_info.json`. If you have a new HPC, you should add the information here and inform the `runme` developers to add it to the main repository. You should also specify the account associated with your jobs on the HPC (which usually indicates the resources available to you on the system).
 
-### 3. Compile the code
+Finally, if you have not already, make sure to install the Python `runner` module via:
+
+```bash
+pip install https://github.com/cxesmc/runner/archive/refs/heads/master.zip
+```
+
+See [Dependencies](dependencies.md) for more details if you have trouble.
+
+### 4. Compile the code
 
 Now you are ready to compile Yelmo as a static library:
 
@@ -124,7 +131,7 @@ make initmip       # compiles the program `libyelmo/bin/yelmo_initmip.x`
 
 The Makefile additionally allows you to specify debugging compiler flags with the option `debug=1`, in case you need to debug the code (e.g., `make benchmarks debug=1`). Using this option, the code will run much slower, so this option is not recommended unless necessary.
 
-### 4. Run the model
+### 5. Run the model
 
 Once an executable has been created, you can run the model. This can be
 achieved via the included Python job submission script `runme`. The following steps

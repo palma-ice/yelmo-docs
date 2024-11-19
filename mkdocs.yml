@@ -5,7 +5,7 @@ nav:
     - Dependencies: dependencies.md
     - Parameters: parameters.md
     - Examples: example-programs.md
-    - YelmoX: running-with-yelmox.md
+    - Running with YelmoX: running-with-yelmox.md
 #theme: mkdocs
 theme:
     name: readthedocs

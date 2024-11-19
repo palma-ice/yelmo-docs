@@ -74,7 +74,7 @@ ncview ice_data/Greenland/GRL-16KM/GRL-16KM_TOPO-M17-v5.nc
 
 ```bash
 # Run a test simulation of Greenland for 100 yrs
-./runylmox -r -e rembo -n par/yelmo_Greenland_rembo.nml -o output/test1 -p ctrl.time_end=1e2
+./runme -r -e rembo -n par/yelmo_Greenland_rembo.nml -o output/test1 -p ctrl.time_end=1e2
 ```
 
 That's it, YelmoX-REMBO is working.
