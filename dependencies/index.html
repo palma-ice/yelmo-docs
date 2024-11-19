@@ -52,7 +52,9 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#installing-netcdf-preferably-version-40-or-higher">Installing NetCDF (preferably version 4.0 or higher)</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#installing-lis">Installing LIS</a>
+    <li class="toctree-l2"><a class="reference internal" href="#install-lis-and-fftw">Install LIS and FFTW</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installing-runner">Installing runner</a>
     </li>
     </ul>
                 </li>
@@ -66,7 +68,7 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../running-with-yelmox/">YelmoX</a>
+                <li class="toctree-l1"><a class="reference internal" href="../running-with-yelmox/">Running with YelmoX</a>
                 </li>
               </ul>
       </div>
@@ -112,36 +114,10 @@ Installing the NetCDF viewing program <code>ncview</code> is also recommended.</
 <code>netcdf-c</code> and subsequently <code>netcdf-fortran</code> libraries. The source code and
 installation instructions are available from the Unidata website:</p>
 <p><a href="https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html">https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html</a></p>
-<h2 id="installing-lis">Installing LIS</h2>
-<ol>
-<li>
-<p>Download the LIS source:
-    <a href="https://www.ssisc.org/lis/">https://www.ssisc.org/lis/</a></p>
-</li>
-<li>
-<p>Configure the package (where is the desired installation location),
-and install it in the location of your choice (below defined as <code>$LISROOT</code>). Also, make sure to enable the Fortran90 interface:</p>
-<p><code>bash
-cd lis-2.0.18
-./configure --prefix=$LISROOT --enable-f90
-make
-make install
-make install check</code></p>
-<p>Note: make sure to set the environment variables <code>CC</code> and <code>FC</code>, in order to set
-a specific compiler, for example for gcc/gfortran use the following configure command:</p>
-<p><code>bash
-CC=gcc FC=gfortran ./configure --prefix=$LISROOT --enable-f90</code></p>
-</li>
-<li>
-<p>Add LIS path to the <code>LD_LIBRARY_PATH</code> in <code>.bash_profile</code>, <code>.bashrc</code> or <code>.bash_aliases</code>:</p>
-<p>```bash</p>
-<h1 id="lis-library-paths">lis library paths</h1>
-<p>LD_LIBRARY_PATH=$LISROOT/lib:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH
-```</p>
-</li>
-</ol>
-<p>That's it. LIS should now be available to use with Yelmo.</p>
+<h2 id="install-lis-and-fftw">Install LIS and FFTW</h2>
+<p>These packages could be installed individually and linked into the <code>libs</code> directory of Yelmox and Yelmo. However, to ensure the right versions are used, etc., we have now made a separate repository for managing the installation of LIS and FFTW from the versions available in that repository.</p>
+<p>Please download the code from this repository and see the README for installation instructions:
+<a href="https://github.com/cxesmc/climber-x-exlib">https://github.com/cxesmc/climber-x-exlib</a></p>
 <h2 id="installing-runner">Installing runner</h2>
 <ol>
 <li>Install <code>runner</code> to your system's Python installation via <code>pip</code>, along with dependency <code>tabulate</code>.</li>
