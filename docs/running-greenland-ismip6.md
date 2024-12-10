@@ -11,7 +11,7 @@ runopt='-r'
 
 # or, to submit job to a cluster, eg
 
-runopt='-s -q priority -w 5'
+runopt='-rs -q priority -w 05:00:00'
 
 # Define the output folder
 

@@ -97,6 +97,16 @@ pip install https://github.com/cxesmc/runner/archive/refs/heads/master.zip
 
 See [Dependencies](dependencies.md) for more details if you have trouble.
 
+### 3. Link to external libraries
+
+The external libraries held in the `climber-x-exlib` repository need to be linked here for use with Yelmo:
+
+```bash
+ln -s $EXLIBSRC/exlib ./libs/
+```
+
+Note that `$EXLIBSRC` should be the root directory where `climber-x-exlib` was downloaded, and it should be an absolute path.
+
 ### 4. Compile the code
 
 Now you are ready to compile Yelmo as a static library:
