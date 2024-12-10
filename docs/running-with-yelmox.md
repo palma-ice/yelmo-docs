@@ -19,10 +19,6 @@ git clone git@github.com:palma-ice/yelmox.git
 cd yelmox
 python3 config.py config/pik_hpc2024_ifx 
 
-### Download and configure external libraries using climber-x-exlib ###
-
-
-
 # yelmo
 git clone git@github.com:palma-ice/yelmo.git
 cd yelmo
@@ -40,9 +36,9 @@ cd ..
 # coordinates
 git clone git@github.com:cxesmc/coordinates.git
 cd coordinates
+COORDSRC=$PWD
 python3 config.py config/pik_hpc2024_ifx 
-cd ../../..  # Return to climber-x parent directory
-
+cd ..
 
 # REMBOv1
 git clone git@github.com:alex-robinson/rembo1.git
