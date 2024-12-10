@@ -4,6 +4,7 @@ nav:
     - Getting started: getting-started.md
     - Dependencies: dependencies.md
     - Parameters: parameters.md
+    - Variables: yelmo-variables.md
     - Examples: example-programs.md
     - HPC notes: hpc-notes.md
     - Running with YelmoX: running-with-yelmox.md
