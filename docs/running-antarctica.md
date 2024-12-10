@@ -1,4 +1,4 @@
-## Standard YelmoX simulations
+# Standard YelmoX simulations
 
 To run YelmoX, by default we use the program `yelmox.f90`. This program currently makes use of `snapclim` for the climatic forcing and `smbpal` for the snowpack and surface mass balance calculations.
 
