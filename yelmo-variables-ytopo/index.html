@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>ytopo - Yelmo-docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "ytopo";
+        var mkdocs_page_input_path = "yelmo-variables-ytopo.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Yelmo-docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../dependencies/">Dependencies</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../parameters/">Parameters</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../example-programs/">Examples</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../hpc-notes/">HPC notes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../running-with-yelmox/">Running with YelmoX</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Yelmo-docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">ytopo</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ytopo">ytopo</h1>
+<table>
+<thead>
+<tr>
+<th>variable</th>
+<th>dimensions</th>
+<th>units</th>
+<th>long_name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H_ice</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Ice thickness</td>
+</tr>
+<tr>
+<td>dHidt</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Ice thickness rate of change</td>
+</tr>
+<tr>
+<td>dHidt_dyn</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Ice thickness change due to dynamics</td>
+</tr>
+<tr>
+<td>mb_net</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Actual mass balance applied</td>
+</tr>
+<tr>
+<td>mb_relax</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Change in mass balance due to relaxation</td>
+</tr>
+<tr>
+<td>mb_resid</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Residual mass balance</td>
+</tr>
+<tr>
+<td>mb_err</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Residual error in mass balance accounting</td>
+</tr>
+<tr>
+<td>smb</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Surface mass balance</td>
+</tr>
+<tr>
+<td>bmb</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Combined basal mass balance</td>
+</tr>
+<tr>
+<td>fmb</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Combined frontal mass balance</td>
+</tr>
+<tr>
+<td>dmb</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Subgrid discharge mass balance</td>
+</tr>
+<tr>
+<td>cmb</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Calving mass balance</td>
+</tr>
+<tr>
+<td>bmb_ref</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Reference basal mass balance</td>
+</tr>
+<tr>
+<td>fmb_ref</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Reference frontal mass balance</td>
+</tr>
+<tr>
+<td>dmb_ref</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Reference subgrid discharge mass balance</td>
+</tr>
+<tr>
+<td>cmb_flt</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Floating calving rate</td>
+</tr>
+<tr>
+<td>cmb_grnd</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Grounded calving rate</td>
+</tr>
+<tr>
+<td>z_srf</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Surface elevation</td>
+</tr>
+<tr>
+<td>dzsdt</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Surface elevation rate of change</td>
+</tr>
+<tr>
+<td>mask_adv</td>
+<td>xc, yc</td>
+<td></td>
+<td>Advection mask</td>
+</tr>
+<tr>
+<td>eps_eff</td>
+<td>xc, yc</td>
+<td>1/yr</td>
+<td>Effective strain rate</td>
+</tr>
+<tr>
+<td>tau_eff</td>
+<td>xc, yc</td>
+<td>Pa</td>
+<td>Effective stress</td>
+</tr>
+<tr>
+<td>z_base</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Ice-base elevation</td>
+</tr>
+<tr>
+<td>dzsdx</td>
+<td>xc, yc</td>
+<td>m/m</td>
+<td>Surface elevation slope, acx nodes</td>
+</tr>
+<tr>
+<td>dzsdy</td>
+<td>xc, yc</td>
+<td>m/m</td>
+<td>Surface elevation slope, acy nodes</td>
+</tr>
+<tr>
+<td>dHidx</td>
+<td>xc, yc</td>
+<td>m/m</td>
+<td>Ice thickness gradient, acx nodes</td>
+</tr>
+<tr>
+<td>dHidy</td>
+<td>xc, yc</td>
+<td>m/m</td>
+<td>Ice thickness gradient, acy nodes</td>
+</tr>
+<tr>
+<td>dzbdx</td>
+<td>xc, yc</td>
+<td>m/m</td>
+<td>Bedrock slope, acx nodes</td>
+</tr>
+<tr>
+<td>dzbdy</td>
+<td>xc, yc</td>
+<td>m/m</td>
+<td>Bedrock slope, acy nodes</td>
+</tr>
+<tr>
+<td>H_eff</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Effective ice thickness (margin-corrected)</td>
+</tr>
+<tr>
+<td>H_grnd</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Grounded ice thickness</td>
+</tr>
+<tr>
+<td>H_calv</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Calving parameter field, ice thickness limit</td>
+</tr>
+<tr>
+<td>kt</td>
+<td>xc, yc</td>
+<td></td>
+<td>Calving parameter field, vm-l19</td>
+</tr>
+<tr>
+<td>z_bed_filt</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Filtered bedrock elevation</td>
+</tr>
+<tr>
+<td>f_grnd</td>
+<td>xc, yc</td>
+<td></td>
+<td>Grounded fraction</td>
+</tr>
+<tr>
+<td>f_grnd_acx</td>
+<td>xc, yc</td>
+<td></td>
+<td>Grounded fraction (acx nodes)</td>
+</tr>
+<tr>
+<td>f_grnd_acy</td>
+<td>xc, yc</td>
+<td></td>
+<td>Grounded fraction (acy nodes)</td>
+</tr>
+<tr>
+<td>f_grnd_ab</td>
+<td>xc, yc</td>
+<td></td>
+<td>Grounded fraction (ab nodes)</td>
+</tr>
+<tr>
+<td>f_ice</td>
+<td>xc, yc</td>
+<td></td>
+<td>Ice-covered fraction</td>
+</tr>
+<tr>
+<td>f_grnd_bmb</td>
+<td>xc, yc</td>
+<td></td>
+<td>Grounded fraction for basal mass balance</td>
+</tr>
+<tr>
+<td>f_grnd_pin</td>
+<td>xc, yc</td>
+<td></td>
+<td>Grounded fraction from subgrid pinning points</td>
+</tr>
+<tr>
+<td>dist_margin</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Distance to nearest margin point</td>
+</tr>
+<tr>
+<td>dist_grline</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Distance to nearest grounding-line point</td>
+</tr>
+<tr>
+<td>mask_bed</td>
+<td>xc, yc</td>
+<td></td>
+<td>Multi-valued bed mask</td>
+</tr>
+<tr>
+<td>mask_grz</td>
+<td>xc, yc</td>
+<td></td>
+<td>Multi-valued grounding-line zone mask</td>
+</tr>
+<tr>
+<td>mask_frnt</td>
+<td>xc, yc</td>
+<td></td>
+<td>Multi-valued ice front mask</td>
+</tr>
+<tr>
+<td>dHidt_dyn_n</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Ice thickness change due to advection (previous)</td>
+</tr>
+<tr>
+<td>H_ice_n</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Ice thickness from previous timestep</td>
+</tr>
+<tr>
+<td>z_srf_n</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Surface elevation from previous timestep</td>
+</tr>
+<tr>
+<td>H_ice_dyn</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Dynamic ice thickness</td>
+</tr>
+<tr>
+<td>f_ice_dyn</td>
+<td>xc, yc</td>
+<td></td>
+<td>Dynamic ice-covered fraction</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
