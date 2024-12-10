@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>How to use Jupyter Notebook over ssh - Yelmo-docs</title>
+    <title>HPC notes - Yelmo-docs</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "How to use Jupyter Notebook over ssh";
-        var mkdocs_page_input_path = "jupyter-over-ssh.md";
+        var mkdocs_page_name = "HPC notes";
+        var mkdocs_page_input_path = "hpc-notes.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -59,8 +59,16 @@
                 <li class="toctree-l1"><a class="reference internal" href="../example-programs/">Examples</a>
                 </li>
               </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../hpc-notes/">HPC notes</a>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">HPC notes</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#running-at-pik-on-hpc2024-foote">Running at PIK on HPC2024 (foote)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#running-at-awi-on-albedo">Running at AWI on albedo</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#running-at-dkrz-on-levante">Running at DKRZ on levante</a>
+    </li>
+    </ul>
                 </li>
               </ul>
               <ul>
@@ -81,7 +89,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">How to use Jupyter Notebook over ssh</li>
+      <li class="breadcrumb-item active">HPC notes</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -90,27 +98,64 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="how-to-use-jupyter-notebook-over-ssh">How to use Jupyter Notebook over ssh</h1>
-<h3 id="step-1">Step 1</h3>
-<p>On the remote machine, open a Jupyter Notebook instance by running:</p>
-<pre><code class="language-bash">jupyter notebook --no-browser --port 1235
+                <h1 id="hpc-notes">HPC Notes</h1>
+<h2 id="running-at-pik-on-hpc2024-foote">Running at PIK on HPC2024 (foote)</h2>
+<p>The following modules have to be loaded in order to compile and run the model.
+For convenience you can also add those commands to your <code>.profile</code> file in your home directory.</p>
+<pre><code class="language-bash">    module purge
+    module use /p/system/modulefiles/compiler \
+               /p/system/modulefiles/gpu \
+               /p/system/modulefiles/libraries \
+               /p/system/modulefiles/parallel \
+               /p/system/modulefiles/tools
+
+    module load intel/oneAPI/2024.0.0
+    module load netcdf-c/4.9.2
+    module load netcdf-fortran-intel/4.6.1
+    module load udunits/2.2.28
+    module load ncview/2.1.10
+    module load cdo/2.4.2
 </code></pre>
-<p>Here port <code>1235</code> is chosen, but another port could be used too.
-In the remote terminal, this message should appear:</p>
-<pre><code class="language-bash">http://localhost:1235/?token=LARGERANDOMNUMBER
+<p>When installing <code>climber-x-exlib</code> (see further below) use the <code>pik</code> script:</p>
+<pre><code class="language-bash">./install_pik.sh ifx
 </code></pre>
-<h3 id="step-2">Step 2</h3>
-<p>Open another terminal on the local machine and run:</p>
-<pre><code class="language-bash">ssh -L 1235:localhost:1235 user@snowball.fis.ucm.es
+<h2 id="running-at-awi-on-albedo">Running at AWI on albedo</h2>
+<p>Load the following modules in your <code>.bashrc</code> or <code>.bash_profile</code> file in your home directory.</p>
+<pre><code class="language-bash">    module load intel-oneapi-compilers/2024.0.0
+    module load netcdf-c/4.8.1-openmpi4.1.3-oneapi2022.1.0
+    module load netcdf-fortran/4.5.4-oneapi2022.1.0
+    module load udunits/2.2.28
+    module load ncview/2.1.8
+    module load cdo/2.2.0
+    module load python/3.10.4
 </code></pre>
-<p>IMPORTANT: use the same port as chosen in step (1).</p>
-<h3 id="step-3">Step 3</h3>
-<p>Go back to the remote terminal and copy the link shown into a browser
-on the local machine. The Jupyter Notebook running on the remote machine should now
-be open in a local browser. Enjoy!</p>
+<p>When installing <code>climber-x-exlib</code> (see further below) use the <code>dkrz</code> script:</p>
+<pre><code class="language-bash">./install_dkrz.sh ifx
+</code></pre>
+<h2 id="running-at-dkrz-on-levante">Running at DKRZ on levante</h2>
+<p>Load the following modules in your <code>.bashrc</code> file in your home directory.</p>
+<pre><code class="language-bash"># Tools
+module load cdo/2.4.0-gcc-11.2.0
+module load esmvaltool/2.5.0
+module load ncview/2.1.8-gcc-11.2.0
+module load git/2.43.3-gcc-11.2.0
+module load python3/2023.01-gcc-11.2.0
+
+# Compilers and libs
+module load intel-oneapi-compilers/2023.2.1-gcc-11.2.0
+module load netcdf-c/4.8.1-openmpi-4.1.2-intel-2021.5.0
+module load netcdf-fortran/4.5.3-openmpi-4.1.2-intel-2021.5.0
+</code></pre>
+<p>When installing <code>climber-x-exlib</code> (see further below) use the <code>dkrz</code> script:</p>
+<pre><code class="language-bash">./install_dkrz.sh ifx
+</code></pre>
               
             </div>
           </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../example-programs/" class="btn btn-neutral float-left" title="Examples"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../running-with-yelmox/" class="btn btn-neutral float-right" title="Running with YelmoX">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
 
   <hr/>
 
@@ -132,6 +177,10 @@ be open in a local browser. Enjoy!</p>
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
+      <span><a href="../example-programs/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../running-with-yelmox/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

@@ -58,6 +58,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#3-prepare-system-specific-runme_config-file">3. Prepare system-specific .runme_config file</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-link-to-external-libraries">3. Link to external libraries</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#4-compile-the-code">4. Compile the code</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#5-run-the-model">5. Run the model</a>
@@ -93,6 +95,10 @@
               </ul>
               <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../example-programs/">Examples</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../hpc-notes/">HPC notes</a>
                 </li>
               </ul>
               <ul>
@@ -186,6 +192,11 @@ python3 config.py config/myhost_mycompiler
 <pre><code class="language-bash">pip install https://github.com/cxesmc/runner/archive/refs/heads/master.zip
 </code></pre>
 <p>See <a href="../dependencies/">Dependencies</a> for more details if you have trouble.</p>
+<h3 id="3-link-to-external-libraries">3. Link to external libraries</h3>
+<p>The external libraries held in the <code>climber-x-exlib</code> repository need to be linked here for use with Yelmo:</p>
+<pre><code class="language-bash">ln -s $EXLIBSRC/exlib ./libs/
+</code></pre>
+<p>Note that <code>$EXLIBSRC</code> should be the root directory where <code>climber-x-exlib</code> was downloaded, and it should be an absolute path.</p>
 <h3 id="4-compile-the-code">4. Compile the code</h3>
 <p>Now you are ready to compile Yelmo as a static library:</p>
 <pre><code class="language-bash">make clean    # This step is very important to avoid errors!!
