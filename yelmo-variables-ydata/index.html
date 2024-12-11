@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Variables - Yelmo-docs</title>
+    <title>ydata - Yelmo-docs</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Variables";
-        var mkdocs_page_input_path = "yelmo-variables.md";
+        var mkdocs_page_name = "ydata";
+        var mkdocs_page_input_path = "yelmo-variables-ydata.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -55,10 +55,8 @@
                 <li class="toctree-l1"><a class="reference internal" href="../parameters/">Parameters</a>
                 </li>
               </ul>
-              <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Variables</a>
-    <ul class="current">
-    </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../yelmo-variables/">Variables</a>
                 </li>
               </ul>
               <ul>
@@ -87,7 +85,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Variables</li>
+      <li class="breadcrumb-item active">ydata</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -96,24 +94,118 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="yelmo-variable-tables">Yelmo variable tables</h1>
-<p>Here are tables containing all variables available within Yelmo with dimensions and units.
-These tables are used directly in the code for output writing routines, to select which variables to write.</p>
-<ul>
-<li><a href="../yelmo-variables-ytopo/">Yelmo topography</a></li>
-<li><a href="../yelmo-variables-ydyn/">Yelmo dynamics</a></li>
-<li><a href="../yelmo-variables-ymat/">Yelmo material</a></li>
-<li><a href="../yelmo-variables-ytherm/">Yelmo thermodynamics</a></li>
-<li><a href="../yelmo-variables-ybound/">Yelmo boundaries</a></li>
-<li><a href="../yelmo-variables-ydata/">Yelmo data</a></li>
-</ul>
+                <h1 id="ydata">ydata</h1>
+<table>
+<thead>
+<tr>
+<th>variable</th>
+<th>dimensions</th>
+<th>units</th>
+<th>long_name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H_ice</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Data ice thickness</td>
+</tr>
+<tr>
+<td>z_srf</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Data surface elevation</td>
+</tr>
+<tr>
+<td>z_bed</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Data bedrock elevation</td>
+</tr>
+<tr>
+<td>H_grnd</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Data overburden ice thickness</td>
+</tr>
+<tr>
+<td>mask_bed</td>
+<td>xc, yc</td>
+<td>-</td>
+<td>Data mask</td>
+</tr>
+<tr>
+<td>ux_s</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Data surface velocity in the x-direction</td>
+</tr>
+<tr>
+<td>uy_s</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Data surface velocity in the y-direction</td>
+</tr>
+<tr>
+<td>uxy_s</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Data surface velocity magnitude</td>
+</tr>
+<tr>
+<td>T_srf</td>
+<td>xc, yc</td>
+<td>K</td>
+<td>Data surface temperature</td>
+</tr>
+<tr>
+<td>smb</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Data surface mass balance</td>
+</tr>
+<tr>
+<td>depth_iso</td>
+<td>xc, yc, zeta</td>
+<td>m</td>
+<td>Data depth of specific isochrones</td>
+</tr>
+<tr>
+<td>err_H_ice</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Data error in ice thickness</td>
+</tr>
+<tr>
+<td>err_z_srf</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Data error in surface elevation</td>
+</tr>
+<tr>
+<td>err_z_bed</td>
+<td>xc, yc</td>
+<td>m</td>
+<td>Data error in bedrock elevation</td>
+</tr>
+<tr>
+<td>err_uxy_s</td>
+<td>xc, yc</td>
+<td>m/yr</td>
+<td>Data error in surface velocity magnitude</td>
+</tr>
+<tr>
+<td>err_depth_iso</td>
+<td>xc, yc, zeta</td>
+<td>m</td>
+<td>Data error in isochrone depth</td>
+</tr>
+</tbody>
+</table>
               
             </div>
           </div><footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../parameters/" class="btn btn-neutral float-left" title="Parameters"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../example-programs/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
-    </div>
 
   <hr/>
 
@@ -135,10 +227,6 @@ These tables are used directly in the code for output writing routines, to selec
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../parameters/" style="color: #fcfcfc">&laquo; Previous</a></span>
-    
-    
-      <span><a href="../example-programs/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
