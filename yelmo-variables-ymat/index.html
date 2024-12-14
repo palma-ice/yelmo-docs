@@ -98,6 +98,7 @@
 <table>
 <thead>
 <tr>
+<th>id</th>
 <th>variable</th>
 <th>dimensions</th>
 <th>units</th>
@@ -106,70 +107,291 @@
 </thead>
 <tbody>
 <tr>
+<td>1</td>
 <td>enh</td>
 <td>xc, yc, zeta</td>
 <td>-</td>
 <td>Enhancement factor</td>
 </tr>
 <tr>
+<td>2</td>
 <td>enh_bnd</td>
 <td>xc, yc, zeta</td>
 <td>-</td>
 <td>Imposed enhancement factor</td>
 </tr>
 <tr>
+<td>3</td>
 <td>enh_bar</td>
 <td>xc, yc</td>
 <td>-</td>
 <td>Depth-averaged enhancement</td>
 </tr>
 <tr>
+<td>4</td>
 <td>ATT</td>
 <td>xc, yc, zeta</td>
 <td>-</td>
 <td>Rate factor</td>
 </tr>
 <tr>
+<td>5</td>
 <td>ATT_bar</td>
 <td>xc, yc</td>
 <td>-</td>
 <td>Depth-averaged rate factor</td>
 </tr>
 <tr>
+<td>6</td>
 <td>visc</td>
 <td>xc, yc, zeta</td>
-<td>Pa·yr</td>
+<td>Pa yr</td>
 <td>Ice viscosity</td>
 </tr>
 <tr>
+<td>7</td>
 <td>visc_bar</td>
 <td>xc, yc</td>
-<td>Pa·yr</td>
+<td>Pa yr</td>
 <td>Depth-averaged ice viscosity</td>
 </tr>
 <tr>
+<td>8</td>
 <td>visc_int</td>
 <td>xc, yc</td>
 <td>Pa yr m</td>
 <td>Ice viscosity interpolated at interfaces</td>
 </tr>
 <tr>
+<td>9</td>
 <td>f_shear_bar</td>
 <td>xc, yc</td>
 <td>-</td>
 <td>Depth-averaged shear fraction</td>
 </tr>
 <tr>
+<td>10</td>
 <td>dep_time</td>
 <td>xc, yc, zeta</td>
-<td>years</td>
+<td>yr</td>
 <td>Ice deposition time (for online age tracing)</td>
 </tr>
 <tr>
+<td>11</td>
 <td>depth_iso</td>
 <td>xc, yc, zeta</td>
 <td>m</td>
 <td>Depth of specific isochronal layers</td>
+</tr>
+<tr>
+<td>12</td>
+<td>strn2D_dxx</td>
+<td>xc, yc</td>
+<td>1/yr</td>
+<td>2D strain rate tensor component dxx</td>
+</tr>
+<tr>
+<td>13</td>
+<td>strn2D_dyy</td>
+<td>xc, yc</td>
+<td>1/yr</td>
+<td>2D strain rate tensor component dyy</td>
+</tr>
+<tr>
+<td>14</td>
+<td>strn2D_dxy</td>
+<td>xc, yc</td>
+<td>1/yr</td>
+<td>2D strain rate tensor component dxy</td>
+</tr>
+<tr>
+<td>15</td>
+<td>strn2D_dxz</td>
+<td>xc, yc</td>
+<td>1/yr</td>
+<td>2D strain rate tensor component dxz</td>
+</tr>
+<tr>
+<td>16</td>
+<td>strn2D_dyz</td>
+<td>xc, yc</td>
+<td>1/yr</td>
+<td>2D strain rate tensor component dyz</td>
+</tr>
+<tr>
+<td>17</td>
+<td>strn2D_de</td>
+<td>xc, yc</td>
+<td>1/yr</td>
+<td>2D effective strain rate</td>
+</tr>
+<tr>
+<td>18</td>
+<td>strn2D_div</td>
+<td>xc, yc</td>
+<td>1/yr</td>
+<td>2D horizontal divergence</td>
+</tr>
+<tr>
+<td>19</td>
+<td>strn2D_f_shear</td>
+<td>xc, yc</td>
+<td></td>
+<td>2D strain rate shear fraction</td>
+</tr>
+<tr>
+<td>20</td>
+<td>strn_dxx</td>
+<td>xc, yc, zeta</td>
+<td>1/yr</td>
+<td>Strain rate tensor component dxx</td>
+</tr>
+<tr>
+<td>21</td>
+<td>strn_dyy</td>
+<td>xc, yc, zeta</td>
+<td>1/yr</td>
+<td>Strain rate tensor component dyy</td>
+</tr>
+<tr>
+<td>22</td>
+<td>strn_dxy</td>
+<td>xc, yc, zeta</td>
+<td>1/yr</td>
+<td>Strain rate tensor component dxy</td>
+</tr>
+<tr>
+<td>23</td>
+<td>strn_dxz</td>
+<td>xc, yc, zeta</td>
+<td>1/yr</td>
+<td>Strain rate tensor component dxz</td>
+</tr>
+<tr>
+<td>24</td>
+<td>strn_dyz</td>
+<td>xc, yc, zeta</td>
+<td>1/yr</td>
+<td>Strain rate tensor component dyz</td>
+</tr>
+<tr>
+<td>25</td>
+<td>strn_de</td>
+<td>xc, yc, zeta</td>
+<td>1/yr</td>
+<td>Effective strain rate</td>
+</tr>
+<tr>
+<td>26</td>
+<td>strn_div</td>
+<td>xc, yc, zeta</td>
+<td>1/yr</td>
+<td>Horizontal divergence</td>
+</tr>
+<tr>
+<td>27</td>
+<td>strn_f_shear</td>
+<td>xc, yc, zeta</td>
+<td></td>
+<td>Strain rate shear fraction</td>
+</tr>
+<tr>
+<td>28</td>
+<td>strs2D_txx</td>
+<td>xc, yc</td>
+<td>Pa</td>
+<td>2D stress tensor component txx</td>
+</tr>
+<tr>
+<td>29</td>
+<td>strs2D_tyy</td>
+<td>xc, yc</td>
+<td>Pa</td>
+<td>2D stress tensor component tyy</td>
+</tr>
+<tr>
+<td>30</td>
+<td>strs2D_txy</td>
+<td>xc, yc</td>
+<td>Pa</td>
+<td>2D stress tensor component txy</td>
+</tr>
+<tr>
+<td>31</td>
+<td>strs2D_txz</td>
+<td>xc, yc</td>
+<td>Pa</td>
+<td>2D stress tensor component txz</td>
+</tr>
+<tr>
+<td>32</td>
+<td>strs2D_tyz</td>
+<td>xc, yc</td>
+<td>Pa</td>
+<td>2D stress tensor component tyz</td>
+</tr>
+<tr>
+<td>33</td>
+<td>strs2D_te</td>
+<td>xc, yc</td>
+<td>Pa</td>
+<td>2D effective stress</td>
+</tr>
+<tr>
+<td>34</td>
+<td>strs2D_tau_eig_1</td>
+<td>xc, yc</td>
+<td>Pa</td>
+<td>2D stress first principal eigenvalue</td>
+</tr>
+<tr>
+<td>35</td>
+<td>strs2D_tau_eig_2</td>
+<td>xc, yc</td>
+<td>Pa</td>
+<td>2D stress second principal eigenvalue</td>
+</tr>
+<tr>
+<td>36</td>
+<td>strs_txx</td>
+<td>xc, yc, zeta</td>
+<td>Pa</td>
+<td>Stress tensor component txx</td>
+</tr>
+<tr>
+<td>37</td>
+<td>strs_tyy</td>
+<td>xc, yc, zeta</td>
+<td>Pa</td>
+<td>Stress tensor component tyy</td>
+</tr>
+<tr>
+<td>38</td>
+<td>strs_txy</td>
+<td>xc, yc, zeta</td>
+<td>Pa</td>
+<td>Stress tensor component txy</td>
+</tr>
+<tr>
+<td>39</td>
+<td>strs_txz</td>
+<td>xc, yc, zeta</td>
+<td>Pa</td>
+<td>Stress tensor component txz</td>
+</tr>
+<tr>
+<td>40</td>
+<td>strs_tyz</td>
+<td>xc, yc, zeta</td>
+<td>Pa</td>
+<td>Stress tensor component tyz</td>
+</tr>
+<tr>
+<td>41</td>
+<td>strs_te</td>
+<td>xc, yc, zeta</td>
+<td>Pa</td>
+<td>Effective stress</td>
 </tr>
 </tbody>
 </table>
