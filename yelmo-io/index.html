@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Input/output - Yelmo-docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Input/output";
+        var mkdocs_page_input_path = "yelmo-io.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Yelmo-docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../dependencies/">Dependencies</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../parameters/">Parameters</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../yelmo-variables/">Variables</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Input/output</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#writing-output">Writing output</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#yelmo_write_init">yelmo_write_init</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#yelmo_write_var">yelmo_write_var</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#yelmo_write_step">yelmo_write_step</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#yelmo_write_restart">yelmo_write_restart</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reading-input">Reading input</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../example-programs/">Examples</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../hpc-notes/">HPC notes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../running-with-yelmox/">Running with YelmoX</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Yelmo-docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Input/output</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="yelmo-io">Yelmo IO</h1>
+<h2 id="writing-output">Writing output</h2>
+<p>Multiple generalized routines are available for writing the variables of a Yelmo instance (yelmo_class)
+to a NetCDF file. The main public facing routines are the following:</p>
+<pre><code class="language-fortran">yelmo_write_init
+yelmo_write_var
+yelmo_write_step
+yelmo_restart_write
+</code></pre>
+<p>These routines will be described briefly below.</p>
+<h3 id="yelmo_write_init">yelmo_write_init</h3>
+<pre><code class="language-fortran">subroutine yelmo_write_init(ylmo,filename,time_init,units,irange,jrange)
+</code></pre>
+<p>This routine can be used to initialize any file that will make use of one or more dimension axes of Yelmo variables. The dimension variables that will be written to the file are the following:</p>
+<pre><code class="language-fortran">xc, yc, month, zeta, zeta_ac, zeta_rock, age_iso, pd_age_iso, pc_steps, time [unlimited]
+</code></pre>
+<p>Some of the dimension variables above are typically only needed for restart files (<code>age_iso, pd_age_iso, pc_steps</code>), but are written as well to maintain generality. </p>
+<p>Importantly, <code>yelmo_write_init</code> can be used to initialize a regional output file by specifying the indices of the bounding box for the region of interest via the arguments <code>irange=[i1,,2], jrange=[j1,j2]</code>.</p>
+<h3 id="yelmo_write_var">yelmo_write_var</h3>
+<pre><code class="language-fortran">subroutine yelmo_write_var(filename,varname,ylmo,n,ncid,irange,jrange)
+</code></pre>
+<p>This routine will write a variable to a given <code>filename</code> of an already existing NetCDF file, most likely but not necessarily initialized using <code>yelmo_write_init</code>. This routine will accept any variable <code>varname</code> that is listed in the <a href="../yelmo-variables/">Yelmo variable tables</a>, which will be written with the attributes specified in the table.</p>
+<p>This routine can also be used to write regional output using the arguments <code>irange, jrange</code>.</p>
+<h3 id="yelmo_write_step">yelmo_write_step</h3>
+<pre><code class="language-fortran">subroutine yelmo_write_step(ylmo,filename,time,nms,compare_pd,irange,jrange)
+</code></pre>
+<p>This routine will write several variables to a file for a given timestep. The variable names can be provided as a vector of strings via the <code>nms</code> argument (e.g., <code>nms=["H_ice","z_srf"]</code>). The routine will write relevant model performance information and then individually call <code>yelmo_write_var</code> for each variable listed. Optionally it is possible to write comparison fields with present-day data (<code>compare_pd=.TRUE.</code>), assuming it has been loaded into the <code>ylmo%dta</code> fields.</p>
+<p>This routine can also be used to write regional output using the arguements <code>irange, jrange</code>.</p>
+<h3 id="yelmo_write_restart">yelmo_write_restart</h3>
+<pre><code class="language-fortran">subroutine yelmo_restart_write(ylmo,filename,time,init,irange,jrange)
+</code></pre>
+<p>This routine will save a snapshot of the Yelmo instance. Essentially the routine will loop over every field found in the <a href="../yelmo-variables/">Yelmo variable tables</a> and write them to a NetCDF file. Optionally <code>init=.FALSE.</code> will allow writing of multiple timesteps to the same file (largely useful for diagnostic purposes, since the files can get very large).</p>
+<p>This routine can also be used to write regional output using the arguements <code>irange, jrange</code>.</p>
+<h2 id="reading-input">Reading input</h2>
+<p>By specifying the parameter <code>yelmo.restart</code> to a restart file path, Yelmo will read the NetCDF file with a saved snapshot. The routines <code>yelmo_restart_read_topo_bnd</code> and <code>yelmo_restart_read</code> are generally used internally during <code>yelmo_init</code> and <code>yelmo_init_state</code>, respectively. So these routines will not typically be needed by a user externally.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../yelmo-variables/" class="btn btn-neutral float-left" title="Variables"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../example-programs/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../yelmo-variables/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../example-programs/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
