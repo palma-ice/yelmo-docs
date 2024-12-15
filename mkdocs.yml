@@ -5,6 +5,7 @@ nav:
     - Dependencies: dependencies.md
     - Parameters: parameters.md
     - Variables: yelmo-variables.md
+    - Input/output: yelmo-io.md
     - Examples: example-programs.md
     - HPC notes: hpc-notes.md
     - Running with YelmoX: running-with-yelmox.md
