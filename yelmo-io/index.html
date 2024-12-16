@@ -131,7 +131,7 @@ yelmo_restart_write
 <pre><code class="language-fortran">xc, yc, month, zeta, zeta_ac, zeta_rock, age_iso, pd_age_iso, pc_steps, time [unlimited]
 </code></pre>
 <p>Some of the dimension variables above are typically only needed for restart files (<code>age_iso, pd_age_iso, pc_steps</code>), but are written as well to maintain generality. </p>
-<p>Importantly, <code>yelmo_write_init</code> can be used to initialize a regional output file by specifying the indices of the bounding box for the region of interest via the arguments <code>irange=[i1,,2], jrange=[j1,j2]</code>.</p>
+<p>Importantly, <code>yelmo_write_init</code> can be used to initialize a regional output file by specifying the indices of the bounding box for the region of interest via the arguments <code>irange=[i1,i2], jrange=[j1,j2]</code>.</p>
 <h3 id="yelmo_write_var">yelmo_write_var</h3>
 <pre><code class="language-fortran">subroutine yelmo_write_var(filename,varname,ylmo,n,ncid,irange,jrange)
 </code></pre>
@@ -142,6 +142,32 @@ yelmo_restart_write
 </code></pre>
 <p>This routine will write several variables to a file for a given timestep. The variable names can be provided as a vector of strings via the <code>nms</code> argument (e.g., <code>nms=["H_ice","z_srf"]</code>). The routine will write relevant model performance information and then individually call <code>yelmo_write_var</code> for each variable listed. Optionally it is possible to write comparison fields with present-day data (<code>compare_pd=.TRUE.</code>), assuming it has been loaded into the <code>ylmo%dta</code> fields.</p>
 <p>This routine can also be used to write regional output using the arguements <code>irange, jrange</code>.</p>
+<p>Note that this routine can be challenging to use in Fortran, when custom variable names (<code>nms</code> argument) is used. This is because of the Fortran limitation on defining string arrays as inline arguments - namely, all strings in the array are required to have the same length. </p>
+<p>Passing this argument would give an error:</p>
+<pre><code class="language-fortran">nms=[&quot;H_ice&quot;,&quot;z_srf&quot;,&quot;mask_bed&quot;]
+</code></pre>
+<p>while this would be ok:</p>
+<pre><code class="language-fortran">nms=[&quot;H_ice   &quot;,&quot;z_srf   &quot;,&quot;mask_bed&quot;]
+</code></pre>
+<p>For three variables this is not so cumbersome, but can be when many variables are listed.</p>
+<p>If no argument is used, then a subset of useful variables is written:</p>
+<pre><code class="language-fortran">            names(1)  = &quot;H_ice&quot;
+            names(2)  = &quot;z_srf&quot;
+            names(3)  = &quot;z_bed&quot;
+            names(4)  = &quot;mask_bed&quot;
+            names(5)  = &quot;uxy_b&quot;
+            names(6)  = &quot;uxy_s&quot;
+            names(7)  = &quot;uxy_bar&quot;
+            names(8)  = &quot;beta&quot;
+            names(9)  = &quot;visc_bar&quot;
+            names(10) = &quot;T_prime_b&quot;
+            names(11) = &quot;H_w&quot;
+            names(12) = &quot;mb_net&quot;
+            names(13) = &quot;smb&quot;
+            names(14) = &quot;bmb&quot;
+            names(15) = &quot;cmb&quot;
+            names(16) = &quot;z_sl&quot;
+</code></pre>
 <h3 id="yelmo_write_restart">yelmo_write_restart</h3>
 <pre><code class="language-fortran">subroutine yelmo_restart_write(ylmo,filename,time,init,irange,jrange)
 </code></pre>
