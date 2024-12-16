@@ -28,7 +28,7 @@ xc, yc, month, zeta, zeta_ac, zeta_rock, age_iso, pd_age_iso, pc_steps, time [un
 
 Some of the dimension variables above are typically only needed for restart files (`age_iso, pd_age_iso, pc_steps`), but are written as well to maintain generality. 
 
-Importantly, `yelmo_write_init` can be used to initialize a regional output file by specifying the indices of the bounding box for the region of interest via the arguments `irange=[i1,,2], jrange=[j1,j2]`.
+Importantly, `yelmo_write_init` can be used to initialize a regional output file by specifying the indices of the bounding box for the region of interest via the arguments `irange=[i1,i2], jrange=[j1,j2]`.
 
 ### yelmo_write_var
 
@@ -49,6 +49,43 @@ subroutine yelmo_write_step(ylmo,filename,time,nms,compare_pd,irange,jrange)
 This routine will write several variables to a file for a given timestep. The variable names can be provided as a vector of strings via the `nms` argument (e.g., `nms=["H_ice","z_srf"]`). The routine will write relevant model performance information and then individually call `yelmo_write_var` for each variable listed. Optionally it is possible to write comparison fields with present-day data (`compare_pd=.TRUE.`), assuming it has been loaded into the `ylmo%dta` fields.
 
 This routine can also be used to write regional output using the arguements `irange, jrange`.
+
+Note that this routine can be challenging to use in Fortran, when custom variable names (`nms` argument) is used. This is because of the Fortran limitation on defining string arrays as inline arguments - namely, all strings in the array are required to have the same length. 
+
+Passing this argument would give an error:
+
+```fortran
+nms=["H_ice","z_srf","mask_bed"]
+```
+
+while this would be ok:
+
+```fortran
+nms=["H_ice   ","z_srf   ","mask_bed"]
+```
+
+For three variables this is not so cumbersome, but can be when many variables are listed.
+
+If no argument is used, then a subset of useful variables is written:
+
+```fortran
+            names(1)  = "H_ice"
+            names(2)  = "z_srf"
+            names(3)  = "z_bed"
+            names(4)  = "mask_bed"
+            names(5)  = "uxy_b"
+            names(6)  = "uxy_s"
+            names(7)  = "uxy_bar"
+            names(8)  = "beta"
+            names(9)  = "visc_bar"
+            names(10) = "T_prime_b"
+            names(11) = "H_w"
+            names(12) = "mb_net"
+            names(13) = "smb"
+            names(14) = "bmb"
+            names(15) = "cmb"
+            names(16) = "z_sl"
+```
 
 ### yelmo_write_restart
 
