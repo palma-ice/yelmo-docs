@@ -26,7 +26,7 @@ This routine can be used to initialize any file that will make use of one or mor
 xc, yc, month, zeta, zeta_ac, zeta_rock, age_iso, pd_age_iso, pc_steps, time [unlimited]
 ```
 
-Some of the dimension variables above are typically only needed for restart files (`age_iso, pd_age_iso, pc_steps`), but are written as well to maintain generality. 
+Some of the dimension variables above are typically only needed for restart files (`age_iso, pd_age_iso, pc_steps`), but are written as well to maintain generality.
 
 Importantly, `yelmo_write_init` can be used to initialize a regional output file by specifying the indices of the bounding box for the region of interest via the arguments `irange=[i1,i2], jrange=[j1,j2]`.
 
@@ -50,7 +50,7 @@ This routine will write several variables to a file for a given timestep. The va
 
 This routine can also be used to write regional output using the arguements `irange, jrange`.
 
-Note that this routine can be challenging to use in Fortran, when custom variable names (`nms` argument) is used. This is because of the Fortran limitation on defining string arrays as inline arguments - namely, all strings in the array are required to have the same length. 
+Note that this routine can be challenging to use in Fortran, when custom variable names (`nms` argument) is used. This is because of the Fortran limitation on defining string arrays as inline arguments - namely, all strings in the array are required to have the same length.
 
 Passing this argument would give an error:
 
