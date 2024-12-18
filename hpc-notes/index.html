@@ -127,6 +127,9 @@ For convenience you can also add those commands to your <code>.profile</code> fi
 <p>When installing <code>climber-x-exlib</code> (see further below) use the <code>pik</code> script:</p>
 <pre><code class="language-bash">./install_pik.sh ifx
 </code></pre>
+<p>To link to data sources, use the following path:</p>
+<pre><code class="language-bash">datapath=/p/projects/megarun
+</code></pre>
 <h2 id="running-at-awi-on-albedo">Running at AWI on albedo</h2>
 <p>Load the following modules in your <code>.bashrc</code> or <code>.bash_profile</code> file in your home directory.</p>
 <pre><code class="language-bash">    module load intel-oneapi-compilers/2024.0.0
@@ -137,8 +140,11 @@ For convenience you can also add those commands to your <code>.profile</code> fi
     module load cdo/2.2.0
     module load python/3.10.4
 </code></pre>
-<p>When installing <code>climber-x-exlib</code> (see further below) use the <code>dkrz</code> script:</p>
-<pre><code class="language-bash">./install_dkrz.sh ifx
+<p>When installing <code>climber-x-exlib</code> (see further below) use the <code>awi</code> script (which is a link to the <code>dkrz</code> script):</p>
+<pre><code class="language-bash">./install_awi.sh ifx
+</code></pre>
+<p>To link to data sources, use the following path:</p>
+<pre><code class="language-bash">datapath=/albedo/work/projects/p_forclima
 </code></pre>
 <h2 id="running-at-dkrz-on-levante">Running at DKRZ on levante</h2>
 <p>Load the following modules in your <code>.bashrc</code> file in your home directory.</p>
@@ -156,6 +162,9 @@ module load netcdf-fortran/4.5.3-openmpi-4.1.2-intel-2021.5.0
 </code></pre>
 <p>When installing <code>climber-x-exlib</code> (see further below) use the <code>dkrz</code> script:</p>
 <pre><code class="language-bash">./install_dkrz.sh ifx
+</code></pre>
+<p>To link to data sources, use the following path:</p>
+<pre><code class="language-bash">datapath=/work/ba1442
 </code></pre>
               
             </div>

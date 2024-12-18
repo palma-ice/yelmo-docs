@@ -108,7 +108,8 @@
 <p><img alt="YelmoX interface" src="../img/yelmox_overview.png" /></p>
 <p>Here you can find the basic information and steps needed to get <strong>YelmoX</strong> running.</p>
 <h2 id="super-quick-start">Super-quick start</h2>
-<p>A summary of commands to get started is given below. For more detailed information see subsequent sections.</p>
+<p>A summary of commands to get started is given below. Make sure all <a href="../dependencies/">Dependencies</a> are installed and that you follow the <a href="../hpc-notes/">HPC notes</a>!</p>
+<p>Also note, below it is assumed that you are setting up on the <code>pik_hpc2024</code> system. If not, make sure to specify the config file for your own system, as well as the locations of <code>ice_data</code> and <code>isostasy_data</code> (see <a href="../hpc-notes/">HPC notes</a>).</p>
 <pre><code class="language-bash">
 # yelmox
 git clone git@github.com:palma-ice/yelmox.git
@@ -149,8 +150,9 @@ make clean
 make yelmox 
 
 # Link to `ice_data` and `isostasy_data` repositories wherever you have them saved on your system
-ln -s /p/projects/megarun/ice_data
-ln -s /p/projects/megarun/isostasy_data
+datapath=/p/projects/megarun
+ln -s $datapath/ice_data
+ln -s $datapath/isostasy_data
 
 # Copy the runme config file to the main directory and modify for your system
 cp .runme/runme_config .runme_config
