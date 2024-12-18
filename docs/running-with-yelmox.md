@@ -10,7 +10,9 @@ Here you can find the basic information and steps needed to get **YelmoX** runni
 
 ## Super-quick start
 
-A summary of commands to get started is given below. For more detailed information see subsequent sections.
+A summary of commands to get started is given below. Make sure all [Dependencies](dependencies.md) are installed and that you follow the [HPC notes](hpc-notes.md)!
+
+Also note, below it is assumed that you are setting up on the `pik_hpc2024` system. If not, make sure to specify the config file for your own system, as well as the locations of `ice_data` and `isostasy_data` (see [HPC notes](hpc-notes.md)).
 
 ```bash
 
@@ -53,8 +55,9 @@ make clean
 make yelmox 
 
 # Link to `ice_data` and `isostasy_data` repositories wherever you have them saved on your system
-ln -s /p/projects/megarun/ice_data
-ln -s /p/projects/megarun/isostasy_data
+datapath=/p/projects/megarun
+ln -s $datapath/ice_data
+ln -s $datapath/isostasy_data
 
 # Copy the runme config file to the main directory and modify for your system
 cp .runme/runme_config .runme_config

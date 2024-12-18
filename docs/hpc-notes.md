@@ -27,6 +27,12 @@ When installing `climber-x-exlib` (see further below) use the `pik` script:
 ./install_pik.sh ifx
 ```
 
+To link to data sources, use the following path:
+
+```bash
+datapath=/p/projects/megarun
+```
+
 ## Running at AWI on albedo
 
 Load the following modules in your `.bashrc` or `.bash_profile` file in your home directory.
@@ -41,10 +47,16 @@ Load the following modules in your `.bashrc` or `.bash_profile` file in your hom
     module load python/3.10.4
 ```
 
-When installing `climber-x-exlib` (see further below) use the `dkrz` script:
+When installing `climber-x-exlib` (see further below) use the `awi` script (which is a link to the `dkrz` script):
 
 ```bash
-./install_dkrz.sh ifx
+./install_awi.sh ifx
+```
+
+To link to data sources, use the following path:
+
+```bash
+datapath=/albedo/work/projects/p_forclima
 ```
 
 ## Running at DKRZ on levante
@@ -69,4 +81,10 @@ When installing `climber-x-exlib` (see further below) use the `dkrz` script:
 
 ```bash
 ./install_dkrz.sh ifx
+```
+
+To link to data sources, use the following path:
+
+```bash
+datapath=/work/ba1442
 ```
