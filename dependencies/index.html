@@ -111,7 +111,7 @@
 <ul>
 <li><a href="https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html">NetCDF</a></li>
 <li><a href="http://www.ssisc.org/lis/">Library of Iterative Solvers for Linear Systems</a></li>
-<li><a href="https://github.com/cxesmc/runner">'runner' Python library (cxesmc fork)</a></li>
+<li><a href="https://github.com/fesmc/runner">'runner' Python library (fesmc version)</a></li>
 </ul>
 <p>YelmoX is additionally dependent on the following library:</p>
 <ul>
@@ -129,12 +129,12 @@ installation instructions are available from the Unidata website:</p>
 <h2 id="install-lis-and-fftw">Install LIS and FFTW</h2>
 <p>These packages could be installed individually and linked into the <code>libs</code> directory of Yelmox and Yelmo. However, to ensure the right versions are used, etc., we have now made a separate repository for managing the installation of LIS and FFTW from the versions available in that repository. This repository is managed as part of the Fast Earth System Model Community (FESMC).</p>
 <p>Please download the code from this repository and see the README for installation instructions:
-<a href="https://github.com/fesmc-utils">https://github.com/fesmc-utils</a></p>
+<a href="https://github.com/fesm-utils">https://github.com/fesm-utils</a></p>
 <h2 id="installing-runner">Installing runner</h2>
 <ol>
 <li>Install <code>runner</code> to your system's Python installation via <code>pip</code>, along with dependency <code>tabulate</code>.</li>
 </ol>
-<pre><code class="language-bash">pip install https://github.com/cxesmc/runner/archive/refs/heads/master.zip
+<pre><code class="language-bash">pip install https://github.com/fesmc/runner/archive/refs/heads/master.zip
 </code></pre>
 <p>That's it! Now check that system command <code>job</code> is available by running <code>job -h</code>. If the command is not found, it means that the Python bin directory is not available in your PATH. To add it, typically something like this is needed in your .profile or .bashrc file:</p>
 <pre><code class="language-bash">PATH=${PATH}:${HOME}/.local/bin
