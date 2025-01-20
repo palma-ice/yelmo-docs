@@ -77,7 +77,7 @@ module load netcdf-c/4.8.1-openmpi-4.1.2-intel-2021.5.0
 module load netcdf-fortran/4.5.3-openmpi-4.1.2-intel-2021.5.0
 ```
 
-When installing `climber-x-exlib` (see further below) use the `dkrz` script:
+When installing `fesm-utils` (see [Dependencies](dependencies.md)) use the `dkrz` script:
 
 ```bash
 ./install_dkrz.sh ifx

@@ -25,14 +25,14 @@ python3 config.py config/pik_hpc2024_ifx
 git clone git@github.com:palma-ice/yelmo.git
 cd yelmo
 python3 config.py config/pik_hpc2024_ifx
-ln -s $EXLIBSRC/exlib ./libs/
+ln -s $FESMUSRC ./libs/
 cd ..
 
 # FastIsostasy
 git clone git@github.com:palma-ice/FastIsostasy.git
 cd FastIsostasy
 python3 config.py config/pik_hpc2024_ifx
-ln -s $EXLIBSRC/exlib ./
+ln -s $FESMUSRC ./
 cd ..
 
 # coordinates
@@ -46,7 +46,7 @@ cd ..
 git clone git@github.com:alex-robinson/rembo1.git
 cd rembo1
 python3 config.py config/pik_hpc2024_ifx
-ln -s $EXLIBSRC/exlib ./libs/
+ln -s $FESMUSRC ./libs/
 ln -s $COORDSRC ./
 cd ..
 

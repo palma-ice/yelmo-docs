@@ -26,10 +26,10 @@ installation instructions are available from the Unidata website:
 
 ## Install LIS and FFTW
 
-These packages could be installed individually and linked into the `libs` directory of Yelmox and Yelmo. However, to ensure the right versions are used, etc., we have now made a separate repository for managing the installation of LIS and FFTW from the versions available in that repository. This repository is jointly managed with the developers of CLIMBER-X.
+These packages could be installed individually and linked into the `libs` directory of Yelmox and Yelmo. However, to ensure the right versions are used, etc., we have now made a separate repository for managing the installation of LIS and FFTW from the versions available in that repository. This repository is managed as part of the Fast Earth System Model Community (FESMC).
 
 Please download the code from this repository and see the README for installation instructions:
-[https://github.com/cxesmc/climber-x-exlib](https://github.com/cxesmc/climber-x-exlib)
+[https://github.com/fesmc-utils](https://github.com/fesmc-utils)
 
 ## Installing runner
 
