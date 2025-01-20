@@ -21,7 +21,7 @@ For convenience you can also add those commands to your `.profile` file in your 
     module load cdo/2.4.2
 ```
 
-When installing `climber-x-exlib` (see further below) use the `pik` script:
+When installing `fesm-utils` (see [Dependencies](dependencies.md)) use the `pik` script:
 
 ```bash
 ./install_pik.sh ifx
@@ -47,7 +47,7 @@ Load the following modules in your `.bashrc` or `.bash_profile` file in your hom
     module load python/3.10.4
 ```
 
-When installing `climber-x-exlib` (see further below) use the `awi` script (which is a link to the `dkrz` script):
+When installing `fesm-utils` (see [Dependencies](dependencies.md)) use the `awi` script (which is a link to the `dkrz` script):
 
 ```bash
 ./install_awi.sh ifx
