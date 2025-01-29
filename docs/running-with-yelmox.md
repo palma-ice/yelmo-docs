@@ -47,7 +47,7 @@ git clone git@github.com:alex-robinson/rembo1.git
 cd rembo1
 python3 config.py config/pik_hpc2024_ifx
 ln -s $FESMUSRC ./libs/
-ln -s $COORDSRC ./
+ln -s $COORDSRC ./libs/
 cd ..
 
 # Now, compile the default program
