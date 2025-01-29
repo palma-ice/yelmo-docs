@@ -25,7 +25,7 @@ python3 config.py config/pik_hpc2024_ifx
 git clone git@github.com:palma-ice/yelmo.git
 cd yelmo
 python3 config.py config/pik_hpc2024_ifx
-ln -s $FESMUSRC ./libs/
+ln -s $FESMUSRC ./
 cd ..
 
 # FastIsostasy
@@ -46,7 +46,7 @@ cd ..
 git clone git@github.com:alex-robinson/rembo1.git
 cd rembo1
 python3 config.py config/pik_hpc2024_ifx
-ln -s $FESMUSRC ./libs/
+ln -s $FESMUSRC ./
 ln -s $COORDSRC ./libs/
 cd ..
 

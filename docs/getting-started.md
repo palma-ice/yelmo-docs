@@ -102,7 +102,7 @@ See [Dependencies](dependencies.md) for more details if you have trouble.
 The external libraries held in the `fesm-utils` repository need to be linked here for use with Yelmo:
 
 ```bash
-ln -s $FESMUSRC ./libs/
+ln -s $FESMUSRC ./
 ```
 
 Note that `$FESMUSRC` should be the root directory where `fesm-utils` was downloaded, and it should be an absolute path.
