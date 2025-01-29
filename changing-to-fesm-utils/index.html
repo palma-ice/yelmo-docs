@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Running with YelmoX - Yelmo-docs</title>
+    <title>Changing to fesm-utils - Yelmo-docs</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Running with YelmoX";
-        var mkdocs_page_input_path = "running-with-yelmox.md";
+        var mkdocs_page_name = "Changing to fesm-utils";
+        var mkdocs_page_input_path = "changing-to-fesm-utils.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -71,12 +71,8 @@
                 <li class="toctree-l1"><a class="reference internal" href="../hpc-notes/">HPC notes</a>
                 </li>
               </ul>
-              <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Running with YelmoX</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#super-quick-start">Super-quick start</a>
-    </li>
-    </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../running-with-yelmox/">Running with YelmoX</a>
                 </li>
               </ul>
       </div>
@@ -93,7 +89,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Running with YelmoX</li>
+      <li class="breadcrumb-item active">Changing to fesm-utils</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -102,71 +98,53 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="running-with-yelmox">Running with YelmoX</h1>
-<p>YelmoX is a separate repository that is designed to provide supplementary libraries and programs that allow running ice-sheet simulations with realistic boundary (e.g., climate and ocean) forcing and interactions (e.g., isostatic rebound).</p>
-<p><img alt="Ice sheet interactions" src="../img/yelmo_test_color.png" /></p>
-<p><img alt="YelmoX interface" src="../img/yelmox_overview.png" /></p>
-<p>Here you can find the basic information and steps needed to get <strong>YelmoX</strong> running.</p>
-<h2 id="super-quick-start">Super-quick start</h2>
-<p>A summary of commands to get started is given below. Make sure all <a href="../dependencies/">Dependencies</a> are installed and that you follow the <a href="../hpc-notes/">HPC notes</a>!</p>
-<p>Also note, below it is assumed that you are setting up on the <code>pik_hpc2024</code> system. If not, make sure to specify the config file for your own system, as well as the locations of <code>ice_data</code> and <code>isostasy_data</code> (see <a href="../hpc-notes/">HPC notes</a>).</p>
-<pre><code class="language-bash">
+                <h1 id="changing-to-fesm-utils">Changing to fesm-utils</h1>
+<p>Until now, many source files of general helper modules were contained within each repository itself, often with duplication. So <code>yelmo/libs</code> contained ncio.f90 and nml.f90, while so did <code>yelmox/libs</code>, <code>FastIsostasy/src</code>, etc.</p>
+<p>Now all (hopefully) of these general libraries have been moved to an independent repository called <code>fesmc/fesm-utils</code>. This way, one installation can serve for many interrelated model components that are coupled in YelmoX.</p>
+<p>To modify an existing installation to make use of the new framework, please do the following:</p>
+<pre><code class="language-bash"># 1. Update your `fesm-utils` installation and configure/compile new modules (lis and fftw installations remain unchanged)
+
+cd fesm-utils
+git pull
+cd utils
+python config.py config/dkrz_levante_ifx  # replace with config file for your system
+make clean
+make fesmutils-static
+
+# 2. Update all Yelmox repositories, reconfigure and move location of links to fesm-utils
+
 # yelmox
-git clone git@github.com:palma-ice/yelmox.git
 cd yelmox
-python3 config.py config/pik_hpc2024_ifx 
+python config.py config/dkrz_levante_ifx  # replace with config file for your system
+mv libs/fesm-utils ./
+make clean
 
 # yelmo
-git clone git@github.com:palma-ice/yelmo.git
 cd yelmo
-python3 config.py config/pik_hpc2024_ifx
-ln -s $FESMUSRC ./libs/
-cd ..
+python config.py config/dkrz_levante_ifx  # replace with config file for your system
+mv libs/fesm-utils ./
+make clean
 
-# FastIsostasy
-git clone git@github.com:palma-ice/FastIsostasy.git
+# FastIsostasy (note: link to fesm-utils already in main directory)
 cd FastIsostasy
-python3 config.py config/pik_hpc2024_ifx
-ln -s $FESMUSRC ./
-cd ..
+python config.py config/dkrz_levante_ifx  # replace with config file for your system
+make clean
 
-# coordinates
-git clone git@github.com:cxesmc/coordinates.git
-cd coordinates
-COORDSRC=$PWD
-python3 config.py config/pik_hpc2024_ifx 
-cd ..
-
-# REMBOv1
-git clone git@github.com:alex-robinson/rembo1.git
+# rembo1 (if needed)
 cd rembo1
-python3 config.py config/pik_hpc2024_ifx
-ln -s $FESMUSRC ./libs/
-ln -s $COORDSRC ./libs/
-cd ..
+python config.py config/dkrz_levante_ifx  # replace with config file for your system
+mv libs/fesm-utils ./
+make clean
 
-# Now, compile the default program
-make clean 
-make yelmox 
+# 3. Check if it worked
+cd yelmox
+make yelmox
 
-# Link to `ice_data` and `isostasy_data` repositories wherever you have them saved on your system
-datapath=/p/projects/megarun
-ln -s $datapath/ice_data
-ln -s $datapath/isostasy_data
-
-# Copy the runme config file to the main directory and modify for your system
-cp .runme/runme_config .runme_config
-
-# Run a test simulation of Antarctica for 1000 yrs
-./runme -r -e yelmox -n par/yelmo_Antarctica.nml -o output/ant-test -p ctrl.time_end=1e3
 </code></pre>
-<p>That's it!</p>
+<p>That's it! In principle all programs should run exactly the same as before.</p>
               
             </div>
           </div><footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../hpc-notes/" class="btn btn-neutral float-left" title="HPC notes"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-    </div>
 
   <hr/>
 
@@ -187,8 +165,6 @@ cp .runme/runme_config .runme_config
   <div class="rst-versions" role="note" aria-label="Versions">
   <span class="rst-current-version" data-toggle="rst-current-version">
     
-    
-      <span><a href="../hpc-notes/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
   </span>
