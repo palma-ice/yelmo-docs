@@ -19,7 +19,8 @@ Some notes:
 This script is organized in "groups" in order to make the code more clear. Each group is a subroutine that contains the specified lines of the original `yelmox.f90` code. Some exceptions are the groups that involve actions related with the coupling between domains and/or the ocean box model.
 
 Groups description:
-1. Parameters reading
-2. Output definitions
+
+1. Parameters reading.
+2. Output definitions.
 3. Initialization: ice sheet model, external models, boundary conditions, output files.
 4. Loop: spinup procedure, ice sheet, external models, output.

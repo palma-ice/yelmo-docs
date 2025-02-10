@@ -9,13 +9,7 @@ nav:
     - Examples: example-programs.md
     - HPC notes: hpc-notes.md
     - Running with YelmoX: running-with-yelmox.md
-    - YelmoX flavours: 
-        - YelmoX ISMIP6: yelmox_flavour.md # add here all the associated markdown files 
-        - YelmoX REMBO: yelmox_flavour.md # add here all the associated markdown files
-        - YelmoX RTIP: yelmox_flavour.md # add here all the associated markdown files
-        - YelmoX Pyrenees: yelmox_flavour.md # add here all the associated markdown files
-        - YelmoX NAHosMIP: yelmox_flavour.md # add here all the associated markdown files
-        - YelmoX Bipolar: yelmox_bipolar.md # add here all the associated markdown files 
+    - YelmoX flavours: yelmox_flavours.md
 #theme: mkdocs
 theme:
     name: readthedocs
