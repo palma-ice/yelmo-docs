@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Changing to fesm-utils - Yelmo-docs</title>
+    <title>YelmoX ISMIP6 - Yelmo-docs</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Changing to fesm-utils";
-        var mkdocs_page_input_path = "changing-to-fesm-utils.md";
+        var mkdocs_page_name = "YelmoX ISMIP6";
+        var mkdocs_page_input_path = "yelmox_flavour.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -76,16 +76,46 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">YelmoX flavours</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="reference internal" href="../yelmox_flavour/">YelmoX ISMIP6</a>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">YelmoX ISMIP6</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a>
+    </li>
+    </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../yelmox_flavour/">YelmoX ISMIP6</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">YelmoX ISMIP6</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a>
+    </li>
+    </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../yelmox_flavour/">YelmoX ISMIP6</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">YelmoX ISMIP6</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a>
+    </li>
+    </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../yelmox_flavour/">YelmoX ISMIP6</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">YelmoX ISMIP6</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a>
+    </li>
+    </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../yelmox_flavour/">YelmoX ISMIP6</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">YelmoX ISMIP6</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a>
+    </li>
+    </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../yelmox_bipolar/">YelmoX Bipolar</a>
                   </li>
@@ -104,7 +134,8 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Changing to fesm-utils</li>
+          <li class="breadcrumb-item">YelmoX flavours</li>
+      <li class="breadcrumb-item active">YelmoX ISMIP6</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -113,53 +144,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="changing-to-fesm-utils">Changing to fesm-utils</h1>
-<p>Until now, many source files of general helper modules were contained within each repository itself, often with duplication. So <code>yelmo/libs</code> contained ncio.f90 and nml.f90, while so did <code>yelmox/libs</code>, <code>FastIsostasy/src</code>, etc.</p>
-<p>Now all (hopefully) of these general libraries have been moved to an independent repository called <code>fesmc/fesm-utils</code>. This way, one installation can serve for many interrelated model components that are coupled in YelmoX.</p>
-<p>To modify an existing installation to make use of the new framework, please do the following:</p>
-<pre><code class="language-bash"># 1. Update your `fesm-utils` installation and configure/compile new modules (lis and fftw installations remain unchanged)
-
-cd fesm-utils
-git pull
-cd utils
-python config.py config/dkrz_levante_ifx  # replace with config file for your system
-make clean
-make fesmutils-static
-
-# 2. Update all Yelmox repositories, reconfigure and move location of links to fesm-utils
-
-# yelmox
-cd yelmox
-python config.py config/dkrz_levante_ifx  # replace with config file for your system
-mv libs/fesm-utils ./
-make clean
-
-# yelmo
-cd yelmo
-python config.py config/dkrz_levante_ifx  # replace with config file for your system
-mv libs/fesm-utils ./
-make clean
-
-# FastIsostasy (note: link to fesm-utils already in main directory)
-cd FastIsostasy
-python config.py config/dkrz_levante_ifx  # replace with config file for your system
-make clean
-
-# rembo1 (if needed)
-cd rembo1
-python config.py config/dkrz_levante_ifx  # replace with config file for your system
-mv libs/fesm-utils ./
-make clean
-
-# 3. Check if it worked
-cd yelmox
-make yelmox
-
-</code></pre>
-<p>That's it! In principle all programs should run exactly the same as before.</p>
+                <h1 id="yelmox-flavour">YelmoX [flavour]</h1>
+<h2 id="dependencies">Dependencies</h2>
+<h2 id="structure">Structure</h2>
               
             </div>
           </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="./" class="btn btn-neutral float-left" title="YelmoX ISMIP6"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../yelmox_bipolar/" class="btn btn-neutral float-right" title="YelmoX Bipolar">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
 
   <hr/>
 
@@ -181,6 +175,10 @@ make yelmox
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
+      <span><a href="./" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../yelmox_bipolar/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
