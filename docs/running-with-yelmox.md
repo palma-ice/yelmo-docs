@@ -36,7 +36,7 @@ ln -s $FESMUSRC ./
 cd ..
 
 # coordinates
-git clone git@github.com:cxesmc/coordinates.git
+git clone git@github.com:fesmc/coordinates.git
 cd coordinates
 COORDSRC=$PWD
 python3 config.py config/pik_hpc2024_ifx 

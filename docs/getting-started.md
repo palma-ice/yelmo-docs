@@ -92,7 +92,7 @@ Next, edit the file. If you are running on an HPC with a job submission system v
 Finally, if you have not already, make sure to install the Python `runner` module via:
 
 ```bash
-pip install https://github.com/cxesmc/runner/archive/refs/heads/master.zip
+pip install https://github.com/fesmc/runner/archive/refs/heads/master.zip
 ```
 
 See [Dependencies](dependencies.md) for more details if you have trouble.
