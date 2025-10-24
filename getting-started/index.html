@@ -201,7 +201,7 @@ python3 config.py config/myhost_mycompiler
 </code></pre>
 <p>Next, edit the file. If you are running on an HPC with a job submission system via SLURM, then specify the right HPC. So far the available HPCs are defined in the file <code>.runme/queues_info.json</code>. If you have a new HPC, you should add the information here and inform the <code>runme</code> developers to add it to the main repository. You should also specify the account associated with your jobs on the HPC (which usually indicates the resources available to you on the system).</p>
 <p>Finally, if you have not already, make sure to install the Python <code>runner</code> module via:</p>
-<pre><code class="language-bash">pip install https://github.com/cxesmc/runner/archive/refs/heads/master.zip
+<pre><code class="language-bash">pip install https://github.com/fesmc/runner/archive/refs/heads/master.zip
 </code></pre>
 <p>See <a href="../dependencies/">Dependencies</a> for more details if you have trouble.</p>
 <h3 id="3-link-to-external-libraries">3. Link to external libraries</h3>
