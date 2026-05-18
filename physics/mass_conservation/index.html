@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Continuity equation - Yelmo-docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Continuity equation";
+        var mkdocs_page_input_path = "physics/mass_conservation/index.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Yelmo-docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting-started/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../dependencies/">Dependencies</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../parameters/">Parameters</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Physics</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Momentum balance</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../momentum/diva/">DIVA</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../momentum/ssa/">SSA</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../momentum/sia/">SIA</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../momentum/solvers/">Numerical solution</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Mass conservation</a>
+    <ul class="current">
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Continuity equation</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#continuity-equation">Continuity equation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#operator-split-form-used-in-the-code">Operator-split form used in the code</a>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="solvers/">Numerical solution</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../yelmo-variables/">Variables</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../yelmo-io/">Input/output</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../example-programs/">Examples</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../hpc-notes/">HPC notes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../running-with-yelmox/">Running with YelmoX</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../yelmox_flavours/">YelmoX flavours</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Yelmo-docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Physics</li>
+          <li class="breadcrumb-item">Mass conservation</li>
+      <li class="breadcrumb-item active">Continuity equation</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="mass-conservation-continuity-equation">Mass conservation — continuity equation</h1>
+<p>Mass conservation evolves the ice thickness <script type="math/tex">H</script> in time given the
+depth-averaged horizontal velocity <script type="math/tex">\bar{\mathbf u} = (\bar u, \bar v)</script>
+from the <a href="../momentum/diva/">momentum balance</a> and a set of
+<strong>mass-balance inputs</strong> (surface, basal, frontal, calving). The
+implementation lives in
+<a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/mass_conservation.f90"><code>src/physics/mass_conservation.f90</code></a>,
+with the advection step delegated to
+<a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/solver_advection.f90"><code>src/physics/solver_advection.f90</code></a>
+and the per-timestep driver in
+<a href="https://github.com/palma-ice/yelmo/blob/main/src/yelmo_topography.f90"><code>src/yelmo_topography.f90</code></a>.</p>
+<h2 id="continuity-equation">Continuity equation</h2>
+<p>Following <a href="https://doi.org/10.5194/gmd-13-2805-2020">Robinson et al. (2020)</a>,
+Eq. (2), the ice thickness obeys the vertically integrated
+mass-conservation equation</p>
+<p>
+<script type="math/tex; mode=display">
+\frac{\partial H}{\partial t}
+\;=\; -\,\nabla\!\cdot\!\bigl(H\,\bar{\mathbf u}\bigr)
+\;+\; \dot a
+\;+\; \dot b_g
+\;+\; \dot b_f
+\;-\; \dot c,
+</script>
+</p>
+<p>with</p>
+<ul>
+<li>
+<script type="math/tex">H</script> the ice thickness;</li>
+<li>
+<script type="math/tex">\bar{\mathbf u} = (\bar u, \bar v)</script> the depth-averaged horizontal
+  velocity;</li>
+<li>
+<script type="math/tex">\dot a</script> the surface mass balance (<code>bnd%smb</code> in the code, units
+  <script type="math/tex">\mathrm{m\,a^{-1}}</script> ice equivalent);</li>
+<li>
+<script type="math/tex">\dot b_g</script> the basal mass balance on grounded ice (<code>bnd%bmb_grnd</code>);</li>
+<li>
+<script type="math/tex">\dot b_f</script> the basal mass balance on floating ice
+  (<code>bnd%bmb_shlf</code>);</li>
+<li>
+<script type="math/tex">\dot c</script> the calving rate (positive for mass loss).</li>
+</ul>
+<p>All five forcings on the right-hand side are <strong>inputs</strong> to the
+mass-conservation step: Yelmo does not generate them — they are
+supplied either from a coupled boundary class (<code>bnd</code>), from
+sub-models (basal hydrology, sub-shelf melt), or from a calving law.
+The calving laws themselves are documented separately and are not
+covered here.</p>
+<p>The continuity equation is written in flux-divergence form so that
+mass is conserved by construction up to the boundary fluxes:
+the divergence operator <script type="math/tex">\nabla\!\cdot(H\,\bar{\mathbf u})</script> moves
+mass from cell to cell without creating or destroying it, and all
+source / sink terms appear explicitly on the right-hand side. This
+is the property the numerical schemes are required to preserve at
+the discrete level — see <a href="solvers/">Numerical solution</a>.</p>
+<h2 id="operator-split-form-used-in-the-code">Operator-split form used in the code</h2>
+<p>The Yelmo timestep updates <script type="math/tex">H</script> in an <strong>operator-split</strong> sequence,
+applying the advective divergence first and the mass-balance source
+terms in turn. Schematically, per (sub-)timestep <script type="math/tex">\Delta t</script>:</p>
+<p>
+<script type="math/tex; mode=display">
+H^{n+1}
+\;=\; H^{n}
+\;+\; \Delta t\,\dot H_\mathrm{dyn}
+\;+\; \Delta t\,\bigl(\dot a + \dot b_g + \dot b_f - \dot c\bigr),
+</script>
+</p>
+<p>where <script type="math/tex">\dot H_\mathrm{dyn} = -\nabla\!\cdot(H\,\bar{\mathbf u})</script> is
+computed by the advection solver and the mass-balance contributions
+are added one by one through the helper
+<code>apply_tendency</code>, which also enforces non-negativity of <script type="math/tex">H</script> and
+clips mass-loss rates to <script type="math/tex">\dot m \ge -H/\Delta t</script>. (A few additional
+terms — sub-grid discharge <code>dmb</code>, relaxation <code>mb_relax</code>, and a
+boundary residual <code>mb_resid</code> — are added in the same loop; they are
+diagnostic in most configurations and do not change the continuum
+equation above.) The same advection solver is used for tracers such
+as the ice area fraction <code>f_ice</code> and the level-set field used by
+some calving schemes.</p>
+<p>The key choice is how the advective tendency <script type="math/tex">\dot H_\mathrm{dyn}</script> is
+discretised. Yelmo provides several schemes, selected at runtime by
+the namelist parameter <code>ytopo.solver</code>; the two recommended choices —
+an explicit donor-cell upwind scheme (<code>expl-upwind</code>) and an implicit
+upwind scheme solved with LIS (<code>impl-lis</code>) — are described in
+<a href="solvers/">Numerical solution</a>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../momentum/solvers/" class="btn btn-neutral float-left" title="Numerical solution"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="solvers/" class="btn btn-neutral float-right" title="Numerical solution">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../momentum/solvers/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="solvers/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
