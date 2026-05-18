@@ -145,7 +145,7 @@ $$
 ### Basal stress closure and effective drag
 
 With a basal friction law of the form $\boldsymbol\tau_b = \beta\,\mathbf u_b$
-(see [Parameters](../parameters.md) for the supported choices of
+(see [Parameters](../../parameters.md) for the supported choices of
 $\beta$), the relation
 $\bar u = u_b + \tau_{b,x}\,F_2 = u_b\,(1 + \beta\,F_2)$ inverts to
 express $\boldsymbol\tau_b$ directly in terms of the depth-averaged

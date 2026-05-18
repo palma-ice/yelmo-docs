@@ -56,30 +56,37 @@ The residual assembler ([`solver_ssa_ac.f90`][resid_src]) builds a
 non-symmetric matrix $A_\mathrm{res}$ and right-hand side
 $\mathbf b_\mathrm{res}$ directly from the strong form of the SSA PDE.
 Writing $N \equiv \bar\mu\,H$ for brevity, the interior $\bar u$ row
-reads (for cell $(i,j)$, with $N^{\mathrm{aa}}$ on aa-nodes and
-$N^{\mathrm{ab}}$ on ab-nodes):
+is a 5-point stencil in $\bar u$ plus cross-coupling terms in $\bar v$
+on the neighbouring acy-faces, balanced against the basal drag and the
+driving stress. Schematically (cell $(i,j)$, with $N^{\mathrm{aa}}$ on
+aa-nodes and $N^{\mathrm{ab}}$ on ab-nodes):
 
 $$
-\begin{aligned}
-\frac{4}{\Delta x^{2}}
-\Bigl[\,
-&N^{\mathrm{aa}}_{i+1,j}\,\bar u_{i+1,j}
-- (N^{\mathrm{aa}}_{i+1,j} + N^{\mathrm{aa}}_{i,j})\,\bar u_{i,j}
-+ N^{\mathrm{aa}}_{i,j}\,\bar u_{i-1,j}
-\,\Bigr] \\[4pt]
-+ \frac{1}{\Delta y^{2}}
-\Bigl[\,
-&N^{\mathrm{ab}}_{i,j}\,(\bar u_{i,j+1} - \bar u_{i,j})
-- N^{\mathrm{ab}}_{i,j-1}\,(\bar u_{i,j} - \bar u_{i,j-1})
-\,\Bigr] \\[4pt]
-+ \;&\text{(cross terms in $\bar v$)}\;
-- \;\beta_\mathrm{eff}\,\bar u_{i,j}
-\;=\; \tau_{d,x}(i,j),
-\end{aligned}
+\sum_{(i',j')}\alpha^{x}_{i',j'}\,\bar u_{i',j'}
+\;+\; \sum_{(i',j')}\gamma^{xy}_{i',j'}\,\bar v_{i',j'}
+\;-\; \beta_\mathrm{eff}\,\bar u_{i,j}
+\;=\; \tau_{d,x}(i,j).
 $$
 
-and analogously for the $\bar v$ row. The right-hand side is the driving
-stress itself (no cell-area factor). The system
+The $\bar u$ stencil coefficients carry the membrane stretching and
+shearing,
+
+$$\alpha^{x}_{i-1,j} \;=\; \tfrac{4}{\Delta x^{2}}\,N^{\mathrm{aa}}_{i,j},$$
+
+$$\alpha^{x}_{i+1,j} \;=\; \tfrac{4}{\Delta x^{2}}\,N^{\mathrm{aa}}_{i+1,j},$$
+
+$$\alpha^{x}_{i,j-1} \;=\; \tfrac{1}{\Delta y^{2}}\,N^{\mathrm{ab}}_{i,j-1},$$
+
+$$\alpha^{x}_{i,j+1} \;=\; \tfrac{1}{\Delta y^{2}}\,N^{\mathrm{ab}}_{i,j},$$
+
+with the centre coefficient $\alpha^{x}_{i,j}$ being minus the sum of
+its four neighbours. The $\gamma^{xy}$ coefficients couple the row to
+four neighbouring $\bar v$-faces via the $\partial \bar v/\partial x$
+and $\partial \bar v/\partial y$ cross-terms in the membrane stress.
+The $\bar v$ row has the analogous structure.
+
+The right-hand side is the driving stress itself (no cell-area factor).
+The system
 $A_\mathrm{res}\,\mathbf x = \mathbf b_\mathrm{res}$ is non-symmetric,
 and is solved with a Krylov method such as BiCGStab plus an algebraic
 preconditioner.
