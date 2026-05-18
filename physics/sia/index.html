@@ -132,12 +132,12 @@ drag exerted by vertical shear. Yelmo's SIA solver is implemented in
 and is used to provide the vertical-shear contribution to the velocity
 field in the hybrid SIA + SSA mode and as a diagnostic on its own.</p>
 <p>Crucially, Yelmo formulates SIA in <strong>stress form</strong>: the shear stress and
-the basal stress are computed <em>from the driving stress</em> $\boldsymbol\tau_d$
+the basal stress are computed <em>from the driving stress</em> <script type="math/tex">\boldsymbol\tau_d</script>
 exactly as in DIVA, and the velocity is then obtained by integrating
 Glen's flow law vertically. This is mathematically equivalent to the
-familiar closed-form SIA expression in terms of $\nabla z_s$, but it
-keeps the link to the Stokes balance explicit, uses the same
-$\boldsymbol\tau_d$ field as DIVA/SSA (including the same lateral and
+familiar closed-form SIA expression in terms of <script type="math/tex">\nabla s</script>, but it keeps
+the link to the Stokes balance explicit, uses the same
+<script type="math/tex">\boldsymbol\tau_d</script> field as DIVA/SSA (including the same lateral and
 grounding-line treatments), and makes the SIA → DIVA limit transparent.</p>
 <h2 id="continuum-equations">Continuum equations</h2>
 <p>The horizontal momentum balance, neglecting membrane stresses and
@@ -146,34 +146,34 @@ gradient of horizontal shear stress and the horizontal pressure gradient
 of the gravitational driving:</p>
 <p>
 <script type="math/tex; mode=display">
-\partial_z \tau_{xz} \;=\; \rho_i\, g\, \partial_x z_s,
+\frac{\partial \tau_{xz}}{\partial z} \;=\; \rho_i\, g\, \frac{\partial s}{\partial x},
 \qquad
-\partial_z \tau_{yz} \;=\; \rho_i\, g\, \partial_y z_s.
+\frac{\partial \tau_{yz}}{\partial z} \;=\; \rho_i\, g\, \frac{\partial s}{\partial y}.
 </script>
 </p>
-<p>Integrating from $\zeta$ upward to the stress-free surface and writing
-the result in terms of the same driving stress as DIVA/SSA gives the
+<p>Integrating from <script type="math/tex">z</script> upward to the stress-free surface and writing the
+result in terms of the same driving stress as DIVA/SSA gives the
 linear-with-depth profile</p>
 <p>
 <script type="math/tex; mode=display">
-\tau_{xz}(\zeta) \;=\; -(1-\zeta)\,\tau_{d,x},
+\tau_{xz}(z) \;=\; -\,\frac{s-z}{H}\,\tau_{d,x},
 \qquad
-\tau_{yz}(\zeta) \;=\; -(1-\zeta)\,\tau_{d,y},
+\tau_{yz}(z) \;=\; -\,\frac{s-z}{H}\,\tau_{d,y},
 </script>
 </p>
 <p>with the driving stress</p>
 <p>
 <script type="math/tex; mode=display">
-\tau_{d,x} \;=\; \rho_i\, g\, \bar H^{\,x}\, \partial_x z_s,
+\tau_{d,x} \;=\; \rho_i\, g\, H\, \frac{\partial s}{\partial x},
 \qquad
-\tau_{d,y} \;=\; \rho_i\, g\, \bar H^{\,y}\, \partial_y z_s,
+\tau_{d,y} \;=\; \rho_i\, g\, H\, \frac{\partial s}{\partial y},
 </script>
 </p>
 <p>evaluated on ac-faces by the <em>same</em> <code>calc_driving_stress</code> routine used
 by DIVA and SSA (see <a href="../diva/">DIVA</a>). The basal stress is recovered at
-$\zeta = 0$: $(\tau_{xz},\tau_{yz})|_{\zeta=0} = -\boldsymbol\tau_d$,
-i.e. all of the driving stress is balanced at the bed, as expected when
-membrane stresses are dropped. The shear stress profile is built by
+<script type="math/tex">z = b</script>: <script type="math/tex">(\tau_{xz}, \tau_{yz})\big|_{z=b} = -\boldsymbol\tau_d</script>, i.e. all
+of the driving stress is balanced at the bed, as expected when membrane
+stresses are dropped. The shear stress profile is built by
 <code>calc_shear_stress_3D</code>.</p>
 <h2 id="velocity-from-glens-flow-law">Velocity from Glen's flow law</h2>
 <p>With the shear-stress field in hand, the horizontal shear strain rates
@@ -181,54 +181,48 @@ follow directly from Glen's law,</p>
 <p>
 <script type="math/tex; mode=display">
 \dot\varepsilon_{xz}
-\;=\; A(T'(\zeta))\, \tau_e^{\,n-1}\,\tau_{xz},
+\;=\; A(T'(z))\, \tau_e^{\,n-1}\,\tau_{xz},
 \qquad
 \dot\varepsilon_{yz}
-\;=\; A(T'(\zeta))\, \tau_e^{\,n-1}\,\tau_{yz},
+\;=\; A(T'(z))\, \tau_e^{\,n-1}\,\tau_{yz},
 </script>
 </p>
 <p>where the effective stress under SIA assumptions is
-$\tau_e^{\,2} = \tau_{xz}^{\,2} + \tau_{yz}^{\,2}$.
-Since $\dot\varepsilon_{xz} = \tfrac{1}{2}\partial_z u$ in the SIA limit,
-the horizontal velocity is obtained by integrating from the bed upward:</p>
+<script type="math/tex">\tau_e^{\,2} = \tau_{xz}^{\,2} + \tau_{yz}^{\,2}</script>.
+Since <script type="math/tex">\dot\varepsilon_{xz} = \frac{1}{2}\frac{\partial u}{\partial z}</script>
+in the SIA limit, the horizontal velocity is obtained by integrating
+from the bed upward:</p>
 <p>
 <script type="math/tex; mode=display">
-u(\zeta) \;=\; u_b \,+\, 2\int_0^\zeta A(T'(\zeta'))\,\tau_e^{\,n-1}\,\tau_{xz}\,H\,\mathrm d\zeta',
+u(z) \;=\; u_b \,+\, 2\int_b^z A(T'(z'))\,\tau_e^{\,n-1}\,\tau_{xz}\,\mathrm dz',
 </script>
 </p>
-<p>and analogously for $v$. The integral is evaluated layer-by-layer with
-the trapezoidal rule (routine <code>calc_uxy_sia_3D</code>), so the discrete update
-between vertical levels $\zeta_{k-1}$ and $\zeta_k$ reads</p>
-<p>
-<script type="math/tex; mode=display">
-u(\zeta_k) \;=\; u(\zeta_{k-1})
-\,+\, A\,\Delta\zeta\,H\,\bigl(\tau_{xz,k}^{\,2}+\tau_{yz,k}^{\,2}\bigr)^{(n-1)/2}
-\bigl(\tau_{xz,k} + \tau_{xz,k-1}\bigr),
-</script>
-</p>
-<p>and analogously for $v$. The depth-averaged velocity
-$\bar{\mathbf u}^{(\mathrm{SIA})}$ is obtained by trapezoidal
-integration over $\zeta$.</p>
-<p>In hybrid mode, Yelmo uses $\bar{\mathbf u}^{(\mathrm{SIA})}$ to provide
+<p>and analogously for <script type="math/tex">v</script>. The integral is evaluated layer-by-layer with
+the trapezoidal rule (routine <code>calc_uxy_sia_3D</code>). The depth-averaged
+velocity <script type="math/tex">\bar{\mathbf u}^{(\mathrm{SIA})}</script> is obtained by trapezoidal
+integration over <script type="math/tex">z</script>.</p>
+<p>In hybrid mode, Yelmo uses <script type="math/tex">\bar{\mathbf u}^{(\mathrm{SIA})}</script> to provide
 the shearing contribution that is added to the basal velocity produced
 by the membrane (DIVA/SSA) solve. In a pure-SIA configuration, the
 basal velocity is either zero (frozen bed) or comes from a sliding law
 of choice (not the default in current Yelmo versions).</p>
 <h2 id="relationship-to-the-textbook-sia">Relationship to the textbook SIA</h2>
-<p>Substituting the closed-form $\tau_{xz} = -(1-\zeta)\rho_i g H\partial_x z_s$
-into the integral above and assuming $A$ constant with $\zeta$ recovers
+<p>Substituting the closed-form
+<script type="math/tex">\tau_{xz} = -\rho_i\,g\,(s-z)\,\frac{\partial s}{\partial x}</script>
+into the integral above and assuming <script type="math/tex">A</script> constant with <script type="math/tex">z</script> recovers
 the familiar SIA velocity</p>
 <p>
 <script type="math/tex; mode=display">
-u(\zeta) \;=\; u_b
-\,-\, 2\,(\rho_i g)^n\,A\,H^{n+1}\,|\nabla z_s|^{\,n-1}\,\partial_x z_s
-   \bigl[\,1 - (1-\zeta)^{n+1}\,\bigr]\,/\,(n+1),
+u(z) \;=\; u_b
+\,-\, \frac{2\,(\rho_i g)^n\,A}{n+1}\,
+       H^{n+1}\,|\nabla s|^{\,n-1}\,\frac{\partial s}{\partial x}\,
+       \bigl[\,1 - (1 - (z-b)/H)^{n+1}\,\bigr],
 </script>
 </p>
 <p>but Yelmo does not collapse to that form internally. Keeping the
 stress-form integral is what allows the SIA solver to share
-$\boldsymbol\tau_d$, $A(T'(\zeta))$ and the discretisation conventions
-with the DIVA solver and the rest of the model.</p>
+<script type="math/tex">\boldsymbol\tau_d</script>, <script type="math/tex">A(T'(z))</script> and the discretisation conventions with
+the DIVA solver and the rest of the model.</p>
               
             </div>
           </div><footer>

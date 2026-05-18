@@ -125,38 +125,39 @@
 uses to solve the coupled momentum balance of grounded ice and floating ice
 shelves. The goal is to document what the code actually implements, with the
 same variable names used in the source so that the equations here can be traced
-back to specific routines.</p>
+back to specific routines. The notation follows
+<a href="https://doi.org/10.5194/tc-16-689-2022">Robinson, Goldberg, and Lipscomb (2022)</a>.</p>
 <p>The ice flow in Yelmo is described as a slow, incompressible, gravity-driven
 flow of a power-law (Glen) fluid. The full Stokes problem is never solved.
-Instead Yelmo offers three approximations, in increasing order of fidelity to
-Stokes:</p>
+Instead Yelmo offers three approximations, listed below in order of <em>decreasing</em>
+fidelity to Stokes:</p>
 <table>
 <thead>
 <tr>
 <th>Approximation</th>
-<th>Vertical shear</th>
 <th>Membrane stresses</th>
+<th>Vertical shear</th>
 <th>Use case</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><a href="sia/">SIA</a></td>
+<td><a href="diva/">DIVA</a></td>
+<td>yes</td>
 <td>yes (closure)</td>
-<td>no</td>
-<td>slow grounded interior, used as a <em>complement</em> to DIVA in hybrid mode</td>
+<td>first-class momentum balance, valid from slow interior to streaming flow and shelves</td>
 </tr>
 <tr>
 <td><a href="ssa/">SSA</a></td>
-<td>no (plug flow)</td>
 <td>yes</td>
+<td>no (plug flow)</td>
 <td>floating shelves, fast-streaming grounded ice</td>
 </tr>
 <tr>
-<td><a href="diva/">DIVA</a></td>
+<td><a href="sia/">SIA</a></td>
+<td>no</td>
 <td>yes (closure)</td>
-<td>yes</td>
-<td>first-class momentum balance, valid from slow interior to streaming flow and shelves</td>
+<td>slow grounded interior, used as a <em>complement</em> to DIVA in hybrid mode</td>
 </tr>
 </tbody>
 </table>
@@ -173,24 +174,37 @@ supported: the <strong>residual</strong> assembler inherited from Yelmo v1, and 
 <strong>energy</strong> assembler that minimises a discrete energy functional.</p>
 <h2 id="notation-used-throughout">Notation used throughout</h2>
 <ul>
-<li>$u, v$: horizontal velocity components $[\mathrm{m\,a^{-1}}]$.</li>
-<li>$\bar u, \bar v$: depth-averaged horizontal velocity (the DIVA/SSA unknowns).</li>
-<li>$u_b, v_b$: basal horizontal velocity.</li>
-<li>$H$: ice thickness $[\mathrm{m}]$; $z_s$ and $z_b$: ice surface and base elevations.</li>
-<li>$\zeta \in [0,1]$: normalised vertical coordinate, $\zeta=0$ at the base, $\zeta=1$ at the surface.</li>
-<li>$\rho_i$, $g$: ice density and gravitational acceleration.</li>
-<li>$A(T')$: Glen rate factor, depending on the pressure-corrected temperature $T'$
-  and (where relevant) the water content $\omega$. $n=n_\mathrm{glen}$ is the Glen exponent (typically 3).</li>
-<li>$\dot\varepsilon_{ij}$: components of the horizontal strain-rate tensor.</li>
-<li>$\dot\varepsilon_e$: effective strain rate, the second invariant of $\dot\varepsilon_{ij}$.</li>
-<li>$\eta$: effective viscosity; $N = \int_0^H \eta\,\mathrm{d}z \equiv \bar\eta H$: depth-integrated effective viscosity.</li>
-<li>$\boldsymbol\tau_d$: gravitational driving stress.</li>
-<li>$\boldsymbol\tau_b$: basal shear stress.</li>
-<li>$\beta$: basal friction coefficient, defined by $\boldsymbol\tau_b = \beta\,\mathbf u_b$.</li>
+<li>
+<script type="math/tex">u, v</script>: horizontal velocity components <script type="math/tex">[\mathrm{m\,a^{-1}}]</script>.</li>
+<li>
+<script type="math/tex">\bar u, \bar v</script>: depth-averaged horizontal velocity (the DIVA/SSA unknowns).</li>
+<li>
+<script type="math/tex">u_b, v_b</script>: basal horizontal velocity.</li>
+<li>
+<script type="math/tex">H</script>: ice thickness <script type="math/tex">[\mathrm{m}]</script>; <script type="math/tex">s</script> and <script type="math/tex">b</script>: ice surface and basal elevations.</li>
+<li>
+<script type="math/tex">z</script>: vertical Cartesian coordinate, <script type="math/tex">b \le z \le s</script>.</li>
+<li>
+<script type="math/tex">\rho_i</script>, <script type="math/tex">g</script>: ice density and gravitational acceleration.</li>
+<li>
+<script type="math/tex">A(T')</script>: Glen rate factor, depending on the pressure-corrected temperature <script type="math/tex">T'</script>
+  and (where relevant) the water content <script type="math/tex">\omega</script>. <script type="math/tex">n = n_\mathrm{glen}</script> is the Glen exponent (typically 3).</li>
+<li>
+<script type="math/tex">\dot\varepsilon_{ij}</script>: components of the horizontal strain-rate tensor.</li>
+<li>
+<script type="math/tex">\dot\varepsilon_e</script>: effective strain rate, the second invariant of <script type="math/tex">\dot\varepsilon_{ij}</script>.</li>
+<li>
+<script type="math/tex">\mu</script>: effective viscosity; <script type="math/tex">\bar\mu = \frac{1}{H}\int_b^s \mu \,\mathrm dz</script>: depth-averaged viscosity.</li>
+<li>
+<script type="math/tex">\boldsymbol\tau_d = (\tau_{d,x},\tau_{d,y})</script>: gravitational driving stress.</li>
+<li>
+<script type="math/tex">\boldsymbol\tau_b = (\tau_{b,x},\tau_{b,y})</script>: basal shear stress.</li>
+<li>
+<script type="math/tex">\beta</script>: basal friction coefficient, defined by <script type="math/tex">\boldsymbol\tau_b = \beta\,\mathbf u_b</script>.</li>
 </ul>
 <p>All horizontal fields live on the Arakawa C-grid (called the <strong>ac-grid</strong> in
-Yelmo): scalars at cell centres (<code>aa</code>-nodes), $u$ on the right face of each cell
-(<code>acx</code>-nodes), $v$ on the top face (<code>acy</code>-nodes), and cross-derivative
+Yelmo): scalars at cell centres (<code>aa</code>-nodes), <script type="math/tex">u</script> on the right face of each cell
+(<code>acx</code>-nodes), <script type="math/tex">v</script> on the top face (<code>acy</code>-nodes), and cross-derivative
 quantities at the cell corners (<code>ab</code>-nodes).</p>
               
             </div>

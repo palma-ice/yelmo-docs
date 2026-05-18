@@ -135,12 +135,13 @@
                 <h1 id="numerical-solution-of-diva-ssa">Numerical solution of DIVA / SSA</h1>
 <p>The DIVA and SSA momentum balances share the same 2D depth-integrated
 form: a nonlinear elliptic problem for the depth-averaged horizontal
-velocity $\bar{\mathbf u} = (\bar u, \bar v)$, with coefficients
-$(\eta, \beta_\mathrm{eff})$ that depend on the solution. Yelmo
+velocity <script type="math/tex">\bar{\mathbf u} = (\bar u, \bar v)</script>, with coefficients
+<script type="math/tex">(\mu, \beta_\mathrm{eff})</script> that depend on the solution. Yelmo
 discretises this problem on the Arakawa C-grid (the <strong>ac-grid</strong>) and
-linearises it by Picard iteration, freezing $(\eta, \beta_\mathrm{eff},
-H)$ at the previous iterate, solving a linear system for the new
-$\bar{\mathbf u}$, relaxing, and repeating until convergence.</p>
+linearises it by Picard iteration, freezing
+<script type="math/tex">(\mu, \beta_\mathrm{eff}, H)</script> at the previous iterate, solving a linear
+system for the new <script type="math/tex">\bar{\mathbf u}</script>, relaxing, and repeating until
+convergence.</p>
 <p>Two solvers are provided for the linear step. Both produce the same
 solution at interior cells (the two systems are related by a sign and a
 cell-area factor), but they differ in the structure of the assembled
@@ -150,17 +151,18 @@ which the DIVA solver dispatches on.</p>
 <h2 id="discretisation-conventions">Discretisation conventions</h2>
 <p>Yelmo uses the Arakawa C / staggered AC grid:</p>
 <ul>
-<li><strong>aa-nodes</strong> (cell centres): scalars — $H$, $z_s$, $\bar\eta$, $N$, $\beta$ (before staggering).</li>
-<li><strong>acx-nodes</strong> (right face of each aa-cell): $\bar u$, $\tau_{d,x}$, $\beta_{\mathrm{eff},x}$.</li>
-<li><strong>acy-nodes</strong> (top face): $\bar v$, $\tau_{d,y}$, $\beta_{\mathrm{eff},y}$.</li>
-<li><strong>ab-nodes</strong> (cell corners): cross-coupling viscosity $N^{\mathrm{ab}}$,
-  obtained by averaging $N$ from its four neighbouring aa-cells
+<li><strong>aa-nodes</strong> (cell centres): scalars — <script type="math/tex">H</script>, <script type="math/tex">s</script>, <script type="math/tex">\bar\mu</script>, <script type="math/tex">\bar\mu\,H</script>, <script type="math/tex">\beta</script> (before staggering).</li>
+<li><strong>acx-nodes</strong> (right face of each aa-cell): <script type="math/tex">\bar u</script>, <script type="math/tex">\tau_{d,x}</script>, <script type="math/tex">\beta_{\mathrm{eff},x}</script>.</li>
+<li><strong>acy-nodes</strong> (top face): <script type="math/tex">\bar v</script>, <script type="math/tex">\tau_{d,y}</script>, <script type="math/tex">\beta_{\mathrm{eff},y}</script>.</li>
+<li><strong>ab-nodes</strong> (cell corners): cross-coupling viscosity
+  <script type="math/tex">(\bar\mu H)^{\mathrm{ab}}</script>, obtained by averaging
+  <script type="math/tex">\bar\mu\,H</script> from its four neighbouring aa-cells
   (<code>stagger_visc_aa_ab</code>).</li>
 </ul>
-<p>The two unknowns per cell ($\bar u$ at the right face and $\bar v$ at the
+<p>The two unknowns per cell (<script type="math/tex">\bar u</script> at the right face and <script type="math/tex">\bar v</script> at the
 top face) are interleaved into a single state vector
-$\mathbf x = [\,\bar u_{1},\bar v_{1},\bar u_{2},\bar v_{2},\dots\,]$,
-so the assembled linear system has dimension $2 N_\mathrm{cells}$. The
+<script type="math/tex">\mathbf x = [\,\bar u_{1}, \bar v_{1}, \bar u_{2}, \bar v_{2}, \dots\,]</script>,
+so the assembled linear system has dimension <script type="math/tex">2 N_\mathrm{cells}</script>. The
 matrix is stored in CSR format and solved with
 <a href="http://www.ssisc.org/lis/">LIS</a> (Library of Iterative Solvers for
 Linear Systems); the iterative method and preconditioner are configured
@@ -172,43 +174,45 @@ ac-node as one of:</p>
 <li><code>-1</code>: Dirichlet prescribed velocity (e.g. observed input);</li>
 <li><code>1</code>: solve (interior);</li>
 <li><code>3</code>: lateral / calving-front Neumann row driven by the
-  depth-integrated lateral stress $\tau_{l,\mathrm{int}}$.</li>
+  depth-integrated lateral stress <script type="math/tex">\tau_{l,\mathrm{int}}</script>.</li>
 </ul>
 <p>The two assemblers share the same argument list so they are drop-in
 interchangeable from the Picard loop in <code>calc_velocity_diva</code>.</p>
 <h2 id="solver-a-residual-form-yelmo-v1">Solver A — residual form (Yelmo v1)</h2>
 <p>The residual assembler (<a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/solver_ssa_ac.f90"><code>solver_ssa_ac.f90</code></a>) builds a
-non-symmetric matrix $A_\mathrm{res}$ and right-hand side
-$\mathbf b_\mathrm{res}$ directly from the strong form of the SSA PDE.
-The interior $\bar u$ row reads (for cell $(i,j)$, with $N^{\mathrm{aa}}$
-on aa-nodes and $N^{\mathrm{ab}}$ on ab-nodes):</p>
+non-symmetric matrix <script type="math/tex">A_\mathrm{res}</script> and right-hand side
+<script type="math/tex">\mathbf b_\mathrm{res}</script> directly from the strong form of the SSA PDE.
+Writing <script type="math/tex">N \equiv \bar\mu\,H</script> for brevity, the interior <script type="math/tex">\bar u</script> row
+reads (for cell <script type="math/tex">(i,j)</script>, with <script type="math/tex">N^{\mathrm{aa}}</script> on aa-nodes and
+<script type="math/tex">N^{\mathrm{ab}}</script> on ab-nodes):</p>
 <p>$$
 <script type="math/tex; mode=display">\begin{aligned}
 \frac{4}{\Delta x^{2}}
 \Bigl[\,
-N^{\mathrm{aa}}_{i+1,j}\,\bar u_{i+1,j}
+&N^{\mathrm{aa}}_{i+1,j}\,\bar u_{i+1,j}
 - (N^{\mathrm{aa}}_{i+1,j} + N^{\mathrm{aa}}_{i,j})\,\bar u_{i,j}
 + N^{\mathrm{aa}}_{i,j}\,\bar u_{i-1,j}
 \,\Bigr] \\[4pt]
 + \frac{1}{\Delta y^{2}}
 \Bigl[\,
-N^{\mathrm{ab}}_{i,j}\,(\bar u_{i,j+1} - \bar u_{i,j})
+&N^{\mathrm{ab}}_{i,j}\,(\bar u_{i,j+1} - \bar u_{i,j})
 - N^{\mathrm{ab}}_{i,j-1}\,(\bar u_{i,j} - \bar u_{i,j-1})
 \,\Bigr] \\[4pt]
-+ \;\text{(cross terms in $\bar v$)}\;
++ \;&\text{(cross terms in <script type="math/tex">\bar v</script>)}\;
 - \;\beta_\mathrm{eff}\,\bar u_{i,j}
 \;=\; \tau_{d,x}(i,j),
 \end{aligned}</script>
 $$</p>
-<p>and analogously for the $\bar v$ row. The right-hand side is the driving
-stress itself (no cell-area factor). The system $A_\mathrm{res}\,\mathbf x =
-\mathbf b_\mathrm{res}$ is non-symmetric, and is solved with a
-Krylov method such as BiCGStab plus an algebraic preconditioner.</p>
+<p>and analogously for the <script type="math/tex">\bar v</script> row. The right-hand side is the driving
+stress itself (no cell-area factor). The system
+<script type="math/tex">A_\mathrm{res}\,\mathbf x = \mathbf b_\mathrm{res}</script> is non-symmetric,
+and is solved with a Krylov method such as BiCGStab plus an algebraic
+preconditioner.</p>
 <ul>
 <li>Lateral / calving-front rows substitute the membrane-stress balance
   with the prescribed depth-integrated lateral stress
-  $\tau_{l,\mathrm{int}}$ in a row-specific stencil.</li>
-<li>Dirichlet rows replace the equation by $\bar u_{i,j} = u^*$ with the
+  <script type="math/tex">\tau_{l,\mathrm{int}}</script> in a row-specific stencil.</li>
+<li>Dirichlet rows replace the equation by <script type="math/tex">\bar u_{i,j} = u^*</script> with the
   corresponding column kept in place (non-symmetric).</li>
 <li>Free-slip, no-slip and periodic conditions are applied per side via
   the boundary-code helper <code>get_neighbor_indices_bc_codes</code>.</li>
@@ -218,45 +222,52 @@ default.</p>
 <h2 id="solver-b-energy-form-new">Solver B — energy form (new)</h2>
 <p>The energy assembler (<a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/solver_ssa_ac_energy.f90"><code>solver_ssa_ac_energy.f90</code></a>) builds
 the Hessian of a discrete energy functional and solves
-$K\,\mathbf x = \mathbf b$ for the velocity that minimises that energy.
-With $(\eta, \beta, H)$ frozen during each Picard step the energy is
-quadratic, so $K = \partial^2 W / \partial \mathbf x^{\,2}$ is symmetric
-positive (semi-)definite and the linear step can use a symmetric Krylov
-method — CG with an AMG preconditioner — in place of BiCGStab.</p>
+<script type="math/tex">K\,\mathbf x = \mathbf b</script> for the velocity that minimises that energy.
+With <script type="math/tex">(\mu, \beta, H)</script> frozen during each Picard step the energy is
+quadratic, so <script type="math/tex">K = \frac{\partial^{2} W}{\partial \mathbf x^{\,2}}</script> is
+symmetric positive (semi-)definite and the linear step can use a
+symmetric Krylov method — CG with an AMG preconditioner — in place of
+BiCGStab.</p>
 <h3 id="energy-density">Energy density</h3>
-<p>The continuum energy density underlying the SSA momentum balance is
-the sum of a membrane (deformation) term, a basal-drag term, and a
+<p>The continuum energy density underlying the SSA momentum balance is the
+sum of a membrane (deformation) term, a basal-drag term, and a
 gravitational potential-energy term:</p>
 <p>
 <script type="math/tex; mode=display">
+\begin{aligned}
 W \;=\;
-N\Bigl(2\,\bar u_x^{\,2}
-       + 2\,\bar v_y^{\,2}
-       + 2\,\bar u_x \bar v_y
-       + \tfrac{1}{2}\,(\bar u_y + \bar v_x)^{\,2}\Bigr)
-\;+\; \tfrac{1}{2}\,\beta\,(\bar u^{\,2} + \bar v^{\,2})
-\;+\; \rho_i\, g\, H\,(\bar u\, \partial_x z_s + \bar v\, \partial_y z_s).
+\bar\mu\,H\,&\biggl(
+       2\!\left(\frac{\partial \bar u}{\partial x}\right)^{\!2}
+     + 2\!\left(\frac{\partial \bar v}{\partial y}\right)^{\!2}
+     + 2\,\frac{\partial \bar u}{\partial x}\,\frac{\partial \bar v}{\partial y}
+     + \tfrac{1}{2}\!\left(\frac{\partial \bar u}{\partial y} + \frac{\partial \bar v}{\partial x}\right)^{\!2}
+\,\biggr) \\[4pt]
+&+\; \tfrac{1}{2}\,\beta\,(\bar u^{\,2} + \bar v^{\,2})
+\;+\; \rho_i\,g\,H\,\!\left(\bar u\,\frac{\partial s}{\partial x} + \bar v\,\frac{\partial s}{\partial y}\right).
+\end{aligned}
 </script>
 </p>
-<p>The first line is $2N\,\dot{\bar\varepsilon}<em>{ij}\dot{\bar\varepsilon}</em>{ij}$
+<p>The first line is <script type="math/tex">2\,\bar\mu\,H\,\dot{\bar\varepsilon}_{ij}\,\dot{\bar\varepsilon}_{ij}</script>
 written out for the depth-averaged horizontal strain rates. Stationarity
-of the integral
-$\mathcal W = \int W \,\mathrm dx\,\mathrm dy$ with respect to
-$(\bar u, \bar v)$ reproduces exactly the SSA / DIVA strong form, so any
-critical point of $\mathcal W$ is a solution of the momentum balance.</p>
+of the integral <script type="math/tex">\mathcal W = \int W \,\mathrm dx\,\mathrm dy</script> with
+respect to <script type="math/tex">(\bar u, \bar v)</script> reproduces exactly the SSA / DIVA strong
+form, so any critical point of <script type="math/tex">\mathcal W</script> is a solution of the
+momentum balance.</p>
 <h3 id="discrete-assembly">Discrete assembly</h3>
-<p>Yelmo's discrete energy is the cell-by-cell evaluation of $W$ on the
-C-grid, with the derivatives $\bar u_x, \bar v_y, \bar u_y, \bar v_x$
+<p>Yelmo's discrete energy is the cell-by-cell evaluation of <script type="math/tex">W</script> on the
+C-grid, with the derivatives
+<script type="math/tex">\frac{\partial \bar u}{\partial x}, \frac{\partial \bar v}{\partial y},
+\frac{\partial \bar u}{\partial y}, \frac{\partial \bar v}{\partial x}</script>
 expressed as the natural finite differences between adjacent ac-nodes.
-The Hessian $K$ then has the same stencil graph as the residual matrix
-but is symmetric in $(\bar u, \bar v)$. At inner cells the two
+The Hessian <script type="math/tex">K</script> then has the same stencil graph as the residual matrix
+but is symmetric in <script type="math/tex">(\bar u, \bar v)</script>. At inner cells the two
 formulations are related by an exact algebraic identity (documented in
 the header of the energy assembler):</p>
 <p>
 <script type="math/tex; mode=display">
-K_\mathrm{inner} \;=\; -A_\mathrm{res, inner}\cdot \Delta x\,\Delta y,
+K_\mathrm{inner} \;=\; -\,A_\mathrm{res, inner}\cdot \Delta x\,\Delta y,
 \qquad
-\mathbf b_\mathrm{inner} \;=\; -\boldsymbol\tau_d \cdot \Delta x\,\Delta y.
+\mathbf b_\mathrm{inner} \;=\; -\,\boldsymbol\tau_d \cdot \Delta x\,\Delta y.
 </script>
 </p>
 <p>So the energy formulation is, at interior cells, the residual
@@ -264,18 +275,18 @@ formulation rescaled by the cell area and a sign — the physical
 solution at interior cells is identical to machine precision. Where the
 two solvers differ is at boundaries:</p>
 <ul>
-<li><strong>Lateral / calving-front BC</strong>: the front stress enters the energy
-  as a boundary-work term $\pm\,\tau_{l,\mathrm{int}}\,\Delta y$ on the
+<li><strong>Lateral / calving-front BC</strong>: the front stress enters the energy as
+  a boundary-work term <script type="math/tex">\pm\,\tau_{l,\mathrm{int}}\,\Delta y</script> on the
   RHS, with the sign determined by the outward normal. This is the
   variational form of the Neumann condition and is symmetric by
   construction.</li>
 <li><strong>Dirichlet rows</strong>: prescribed values are imposed by <strong>static
   condensation</strong> — the prescribed column is multiplied by the known
-  velocity and moved to the RHS — instead of by row replacement.
-  This preserves the symmetry of $K$ and so allows CG / AMG to be used
+  velocity and moved to the RHS — instead of by row replacement. This
+  preserves the symmetry of <script type="math/tex">K</script> and so allows CG / AMG to be used
   without spoiling the SPD structure.</li>
 </ul>
-<p>The viscosity staggering aa→ab is the same routine
+<p>The viscosity staggering aa <script type="math/tex">\to</script> ab is the same routine
 (<code>stagger_visc_aa_ab</code>) used by the residual assembler.</p>
 <h3 id="why-bother">Why bother?</h3>
 <p>Two practical advantages flow from the SPD structure:</p>
@@ -284,7 +295,7 @@ two solvers differ is at boundaries:</p>
    robust than BiCGStab + ILU for large, well-conditioned SPD systems,
    and converges monotonically in the energy norm.</li>
 <li><strong>Physical interpretability and discrete consistency</strong>: every term
-   in $K$ and $\mathbf b$ corresponds to a contribution to a discrete
+   in <script type="math/tex">K</script> and <script type="math/tex">\mathbf b</script> corresponds to a contribution to a discrete
    energy. Boundary conditions that are natural for the continuum
    functional (e.g. Neumann front stress) become natural for the
    discrete one. This makes it easier to add new physics — e.g.
