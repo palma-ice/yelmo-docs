@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>YelmoX [YelmoX-REMBO] - Yelmo-docs</title>
+    <title>Overview - Yelmo-docs</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "YelmoX [YelmoX-REMBO]";
-        var mkdocs_page_input_path = "yelmox_rembo.md";
+        var mkdocs_page_name = "Overview";
+        var mkdocs_page_input_path = "physics/index.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -56,16 +56,20 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">Physics</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="reference internal" href="../physics/">Overview</a>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Overview</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#notation-used-throughout">Notation used throughout</a>
+    </li>
+    </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../physics/diva/">DIVA</a>
+                  <li class="toctree-l1"><a class="reference internal" href="diva/">DIVA</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../physics/ssa/">SSA</a>
+                  <li class="toctree-l1"><a class="reference internal" href="ssa/">SSA</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../physics/sia/">SIA</a>
+                  <li class="toctree-l1"><a class="reference internal" href="sia/">SIA</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../physics/solvers/">Numerical solution</a>
+                  <li class="toctree-l1"><a class="reference internal" href="solvers/">Numerical solution</a>
                   </li>
               </ul>
               <ul>
@@ -106,7 +110,8 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">YelmoX [YelmoX-REMBO]</li>
+          <li class="breadcrumb-item">Physics</li>
+      <li class="breadcrumb-item active">Overview</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -115,22 +120,85 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="yelmox-yelmox-rembo">YelmoX [YelmoX-REMBO]</h1>
-<p>This flavour couples <code>yelmo</code> with the regional energy-moisture balance model for Greenland <code>rembo1</code> (Robinson et al., 2010). 
-Therefore, <code>yelmox_rembo</code> works only for the Greenland ice sheet and in a similar way to <code>yelmox</code>, but the surface mass balance is calculated with <code>rembo1</code>.</p>
-<h2 id="dependencies">Dependencies</h2>
-<p><code>yelmox_rembo.f90</code> mainly needs all <code>.f90</code> files of <code>rembo1</code> and also <code>snapclim.f90</code> and <code>hyster.f90</code>. It works with two namelists: <code>rembo_Greenland.nml</code> and <code>yelmo_Greenland_rembo.nml</code>.</p>
-<h2 id="structure">Structure</h2>
-<p>This script is organized in order to read the forcings and calculate the corresponding climate with succesive updates in a loop:</p>
-<ol>
-<li>Parameters reading.</li>
-<li>Output definitions.</li>
-<li>Initialization: ice sheet, external modeles (sea level, isostasy, climate and marine melt models), boundary conditions and output files. </li>
-<li>Loop: choice between snapclim or hyster boundary forcing and update of the objects (isostasy, sealevel, ice sheet, climate and mass balance.</li>
-</ol>
+                <h1 id="physics">Physics</h1>
+<p>This section describes the continuum equations and numerical methods that Yelmo
+uses to solve the coupled momentum balance of grounded ice and floating ice
+shelves. The goal is to document what the code actually implements, with the
+same variable names used in the source so that the equations here can be traced
+back to specific routines.</p>
+<p>The ice flow in Yelmo is described as a slow, incompressible, gravity-driven
+flow of a power-law (Glen) fluid. The full Stokes problem is never solved.
+Instead Yelmo offers three approximations, in increasing order of fidelity to
+Stokes:</p>
+<table>
+<thead>
+<tr>
+<th>Approximation</th>
+<th>Vertical shear</th>
+<th>Membrane stresses</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="sia/">SIA</a></td>
+<td>yes (closure)</td>
+<td>no</td>
+<td>slow grounded interior, used as a <em>complement</em> to DIVA in hybrid mode</td>
+</tr>
+<tr>
+<td><a href="ssa/">SSA</a></td>
+<td>no (plug flow)</td>
+<td>yes</td>
+<td>floating shelves, fast-streaming grounded ice</td>
+</tr>
+<tr>
+<td><a href="diva/">DIVA</a></td>
+<td>yes (closure)</td>
+<td>yes</td>
+<td>first-class momentum balance, valid from slow interior to streaming flow and shelves</td>
+</tr>
+</tbody>
+</table>
+<p>DIVA is the recommended choice in Yelmo and is solved as a single 2D problem
+for the depth-averaged horizontal velocity. SSA is recovered from DIVA in the
+limit of vanishing vertical shear, and SIA is recovered in the limit of
+vanishing membrane stresses and large basal drag. All three formulations share
+the same driving stress, the same Glen viscosity, and (where applicable) the
+same family of friction laws — see <a href="../parameters/">Parameters</a> for the
+parameter choices.</p>
+<p>The fourth page in this section documents how the DIVA / SSA momentum balance
+is <a href="solvers/">discretised and solved</a>, including the two solvers currently
+supported: the <strong>residual</strong> assembler inherited from Yelmo v1, and the
+<strong>energy</strong> assembler that minimises a discrete energy functional.</p>
+<h2 id="notation-used-throughout">Notation used throughout</h2>
+<ul>
+<li>$u, v$: horizontal velocity components $[\mathrm{m\,a^{-1}}]$.</li>
+<li>$\bar u, \bar v$: depth-averaged horizontal velocity (the DIVA/SSA unknowns).</li>
+<li>$u_b, v_b$: basal horizontal velocity.</li>
+<li>$H$: ice thickness $[\mathrm{m}]$; $z_s$ and $z_b$: ice surface and base elevations.</li>
+<li>$\zeta \in [0,1]$: normalised vertical coordinate, $\zeta=0$ at the base, $\zeta=1$ at the surface.</li>
+<li>$\rho_i$, $g$: ice density and gravitational acceleration.</li>
+<li>$A(T')$: Glen rate factor, depending on the pressure-corrected temperature $T'$
+  and (where relevant) the water content $\omega$. $n=n_\mathrm{glen}$ is the Glen exponent (typically 3).</li>
+<li>$\dot\varepsilon_{ij}$: components of the horizontal strain-rate tensor.</li>
+<li>$\dot\varepsilon_e$: effective strain rate, the second invariant of $\dot\varepsilon_{ij}$.</li>
+<li>$\eta$: effective viscosity; $N = \int_0^H \eta\,\mathrm{d}z \equiv \bar\eta H$: depth-integrated effective viscosity.</li>
+<li>$\boldsymbol\tau_d$: gravitational driving stress.</li>
+<li>$\boldsymbol\tau_b$: basal shear stress.</li>
+<li>$\beta$: basal friction coefficient, defined by $\boldsymbol\tau_b = \beta\,\mathbf u_b$.</li>
+</ul>
+<p>All horizontal fields live on the Arakawa C-grid (called the <strong>ac-grid</strong> in
+Yelmo): scalars at cell centres (<code>aa</code>-nodes), $u$ on the right face of each cell
+(<code>acx</code>-nodes), $v$ on the top face (<code>acy</code>-nodes), and cross-derivative
+quantities at the cell corners (<code>ab</code>-nodes).</p>
               
             </div>
           </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../parameters/" class="btn btn-neutral float-left" title="Parameters"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="diva/" class="btn btn-neutral float-right" title="DIVA">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
 
   <hr/>
 
@@ -152,6 +220,10 @@ Therefore, <code>yelmox_rembo</code> works only for the Greenland ice sheet and 
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
+      <span><a href="../parameters/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="diva/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

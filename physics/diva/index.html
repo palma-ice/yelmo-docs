@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>DIVA - Yelmo-docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "DIVA";
+        var mkdocs_page_input_path = "physics/diva.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Yelmo-docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting-started/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../dependencies/">Dependencies</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../parameters/">Parameters</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Physics</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">DIVA</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#continuum-equations">Continuum equations</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#depth-integrated-stress-balance">Depth-integrated stress balance</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#effective-viscosity-from-glens-flow-law">Effective viscosity from Glen's flow law</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vertical-shear-closure">Vertical-shear closure</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#basal-stress-closure-and-effective-drag">Basal stress closure and effective drag</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#picard-iteration">Picard iteration</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#limits">Limits</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ssa/">SSA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../sia/">SIA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../solvers/">Numerical solution</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../yelmo-variables/">Variables</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../yelmo-io/">Input/output</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../example-programs/">Examples</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../hpc-notes/">HPC notes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../running-with-yelmox/">Running with YelmoX</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../yelmox_flavours/">YelmoX flavours</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Yelmo-docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Physics</li>
+      <li class="breadcrumb-item active">DIVA</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="diva-depth-integrated-viscosity-approximation">DIVA — Depth-Integrated Viscosity Approximation</h1>
+<p>DIVA is the first-class momentum balance solved in Yelmo. It is a 2D
+(depth-integrated) problem for the horizontal velocity, augmented with a
+1D vertical closure that recovers the full 3D velocity field. The formulation
+follows <a href="https://doi.org/10.1017/S0022143000004585">Goldberg (2011)</a>,
+<a href="https://doi.org/10.1002/2014JF003239">Arthern et al. (2015)</a> and
+<a href="https://doi.org/10.5194/gmd-12-3199-2019">Lipscomb et al. (2019)</a>.</p>
+<p>DIVA is valid uniformly from slow grounded ice (where vertical shear dominates,
+the SIA limit) to fast streaming ice and floating shelves (where membrane
+stresses dominate, the SSA limit). It does so by retaining the depth-integrated
+membrane stress balance of SSA while reintroducing vertical shear through a
+closure on $\partial_z u$ that is consistent with the Glen flow law.</p>
+<p>The implementation is in <a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/velocity_diva.f90"><code>src/physics/velocity_diva.f90</code></a>.</p>
+<h2 id="continuum-equations">Continuum equations</h2>
+<h3 id="depth-integrated-stress-balance">Depth-integrated stress balance</h3>
+<p>The unknown is the depth-averaged horizontal velocity
+$\bar{\mathbf u} = (\bar u, \bar v)$. The momentum balance is the
+depth integral of the horizontal Stokes equations, with the assumption
+that the longitudinal stresses do not vary in the vertical
+($\partial_z u$ contributes only to the strain-rate invariant, not as an
+independent unknown):</p>
+<p>
+<script type="math/tex; mode=display">
+\partial_x \!\left[\, 2\,N\,(2\,\bar\varepsilon_{xx} + \bar\varepsilon_{yy})\,\right]
++ \partial_y \!\left[\, 2\,N\,\bar\varepsilon_{xy}\,\right]
+- \beta_\mathrm{eff}\,\bar u
+\;=\; \tau_{d,x},
+</script>
+</p>
+<p>
+<script type="math/tex; mode=display">
+\partial_y \!\left[\, 2\,N\,(2\,\bar\varepsilon_{yy} + \bar\varepsilon_{xx})\,\right]
++ \partial_x \!\left[\, 2\,N\,\bar\varepsilon_{xy}\,\right]
+- \beta_\mathrm{eff}\,\bar v
+\;=\; \tau_{d,y},
+</script>
+</p>
+<p>with the depth-integrated effective viscosity</p>
+<p>
+<script type="math/tex; mode=display">
+N \;=\; \int_0^H \eta\,\mathrm dz \;\equiv\; \bar\eta\, H
+</script>
+</p>
+<p>(stored in the code as <code>visc_eff_int</code>). The horizontal strain rates are
+$\bar\varepsilon_{xx} = \partial_x \bar u$,
+$\bar\varepsilon_{yy} = \partial_y \bar v$,
+$\bar\varepsilon_{xy} = \tfrac{1}{2}(\partial_y \bar u + \partial_x \bar v)$.</p>
+<p>The <strong>driving stress</strong> on the right-hand side is the depth-integrated
+gravitational force, computed in the staggered form</p>
+<p>
+<script type="math/tex; mode=display">
+\tau_{d,x} \;=\; \rho_i\, g\, \bar H^{\,x}\, \partial_x z_s,
+\qquad
+\tau_{d,y} \;=\; \rho_i\, g\, \bar H^{\,y}\, \partial_y z_s,
+</script>
+</p>
+<p>evaluated on ac-faces by <a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/velocity_general.f90"><code>calc_driving_stress</code></a> in
+<code>velocity_general.f90</code>. A grounding-line variant
+(<code>calc_driving_stress_gl</code>) replaces $H$ with a flotation-corrected
+thickness so that no spurious driving stress is generated at the
+flotation contact. At calving fronts the lateral boundary
+contributes a depth-integrated water-pressure imbalance
+$\tau_{l,\mathrm{int}}$ that enters as a Neumann condition.</p>
+<h3 id="effective-viscosity-from-glens-flow-law">Effective viscosity from Glen's flow law</h3>
+<p>The effective viscosity follows Glen's law,</p>
+<p>
+<script type="math/tex; mode=display">
+\eta \;=\; \tfrac{1}{2}\, A^{-1/n}\, \dot\varepsilon_e^{\,(1-n)/n},
+</script>
+</p>
+<p>(routine <a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/deformation.f90"><code>calc_viscosity_glen</code></a> in <code>deformation.f90</code>).
+The effective strain rate $\dot\varepsilon_e$ in DIVA uses the
+horizontal strain rates plus a contribution from the (closure-defined)
+vertical shear of the depth-averaged velocity profile, regularised by
+$\varepsilon_0$ to avoid singular viscosity in stagnant ice:</p>
+<p>
+<script type="math/tex; mode=display">
+\dot\varepsilon_e^{\,2}
+\;=\; \dot\varepsilon_{xx}^{\,2}
+   + \dot\varepsilon_{yy}^{\,2}
+   + \dot\varepsilon_{xx}\,\dot\varepsilon_{yy}
+   + \tfrac{1}{4}\,\dot\varepsilon_{xy}^{\,2}
+   + \tfrac{1}{4}\,(\partial_z u)^2
+   + \tfrac{1}{4}\,(\partial_z v)^2
+   + \varepsilon_0^{\,2}.
+</script>
+</p>
+<p>This is Eq. (21) of Lipscomb et al. (2019). The two
+$(\partial_z u)^2,(\partial_z v)^2$ terms are what make DIVA different
+from SSA: they reintroduce the vertical-shear contribution to the
+deformation rate, and hence soften the ice in places where vertical
+shear is large (slow, grounded interior).</p>
+<h3 id="vertical-shear-closure">Vertical-shear closure</h3>
+<p>Because the depth-integrated equation does not solve for the full vertical
+velocity profile, $\partial_z u$ and $\partial_z v$ are obtained from a
+closure that is consistent with the Stokes balance under DIVA's
+assumptions. With the basal shear stress $\boldsymbol\tau_b$ acting at $\zeta=0$
+and vanishing shear stress at the surface,</p>
+<p>
+<script type="math/tex; mode=display">
+\partial_z u(\zeta) \;=\; \frac{\tau_{b,x}}{\eta(\zeta)}\,(1-\zeta),
+\qquad
+\partial_z v(\zeta) \;=\; \frac{\tau_{b,y}}{\eta(\zeta)}\,(1-\zeta).
+</script>
+</p>
+<p>(Lipscomb et al. 2019, Eq. 36; routine <code>calc_vertical_shear_3D</code>.)
+Define the <strong>F-integrals</strong></p>
+<p>
+<script type="math/tex; mode=display">
+F_n \;=\; \int_0^1 \frac{H}{\eta(\zeta)}\,(1-\zeta)^n\,\mathrm d\zeta,
+</script>
+</p>
+<p>(routine <code>calc_F_integral</code>, Arthern et al. 2015 Eq. 7, Lipscomb et al.
+2019 Eq. 30). These are precisely the integrals needed to relate the
+depth-averaged velocity to the basal velocity:</p>
+<p>
+<script type="math/tex; mode=display">
+\bar u \;=\; u_b \,+\, \tau_{b,x}\,F_2,
+\qquad
+\bar v \;=\; v_b \,+\, \tau_{b,y}\,F_2.
+</script>
+</p>
+<h3 id="basal-stress-closure-and-effective-drag">Basal stress closure and effective drag</h3>
+<p>With a basal friction law of the form $\boldsymbol\tau_b = \beta\,\mathbf u_b$
+(see <a href="../../parameters/">Parameters</a> for the supported choices of $\beta$),
+the relation $\bar u = u_b + \tau_{b,x}F_2 = u_b(1 + \beta F_2)$ inverts
+to express $\boldsymbol\tau_b$ directly in terms of the depth-averaged
+velocity:</p>
+<p>
+<script type="math/tex; mode=display">
+\boldsymbol\tau_b \;=\; \beta_\mathrm{eff}\,\bar{\mathbf u},
+\qquad
+\beta_\mathrm{eff} \;=\; \frac{\beta}{1 + \beta\,F_2}.
+</script>
+</p>
+<p>This is Eq. (33) of Lipscomb et al. (2019), implemented by
+<code>calc_beta_eff</code>. In the no-slip limit ($\beta \to \infty$) this reduces
+to $\beta_\mathrm{eff} = 1/F_2$ (Lipscomb et al. 2019 Eq. 35), which is
+the form used when the user requests <code>no_slip = .TRUE.</code>. The effective
+drag $\beta_\mathrm{eff}$ — not the raw $\beta$ — is what appears in the
+depth-integrated momentum equation above.</p>
+<h3 id="picard-iteration">Picard iteration</h3>
+<p>The viscosity $\eta(\bar{\mathbf u})$ and the effective drag
+$\beta_\mathrm{eff}(\bar{\mathbf u})$ both depend on the solution, so the
+momentum equation is nonlinear. Yelmo solves it by Picard iteration:</p>
+<ol>
+<li>Compute $\eta$ from the current $\bar{\mathbf u}$ (and the current
+   3D viscosity $\eta(\zeta)$).</li>
+<li>Relax $\eta$ in log-space against the previous iterate
+   (Sandip et al. 2023): <code>picard_relax_visc</code>.</li>
+<li>Compute $N$, the F-integrals $F_n$, and $\beta_\mathrm{eff}$.</li>
+<li>Assemble and solve the linear system for $\bar{\mathbf u}$ (see
+   <a href="../solvers/">Numerical solution</a>).</li>
+<li>Relax $\bar{\mathbf u}$ against the previous iterate
+   (<code>picard_relax_vel</code>) and test an L2-relative convergence criterion.</li>
+</ol>
+<p>When the iteration converges, the basal stress
+$\boldsymbol\tau_b = \beta_\mathrm{eff}\bar{\mathbf u}$ and basal velocity
+$u_b = \bar u - \tau_{b,x} F_2$ are diagnosed, and the 3D horizontal
+velocity field is reconstructed by integrating the vertical-shear closure
+from the bed upward:</p>
+<p>
+<script type="math/tex; mode=display">
+u(\zeta) \;=\; u_b \,+\, \tau_{b,x}\, \tilde F_1(\zeta),
+\qquad
+\tilde F_1(\zeta) \;=\; \int_0^\zeta \frac{H}{\eta(\zeta')}\,(1-\zeta')\,\mathrm d\zeta'.
+</script>
+</p>
+<p>(Lipscomb et al. 2019 Eq. 29; routine <code>calc_vel_horizontal_3D</code>.)</p>
+<h2 id="limits">Limits</h2>
+<ul>
+<li><strong>SSA limit</strong>: as $\partial_z u, \partial_z v \to 0$, the F-integrals
+  enter only through $\beta_\mathrm{eff}\to\beta$ (no vertical-shear
+  enhancement of $\dot\varepsilon_e$, no basal/depth-averaged offset). The
+  depth-integrated stress balance reduces to the SSA equation — see
+  <a href="../ssa/">SSA</a>.</li>
+<li><strong>SIA limit</strong>: as membrane gradients become negligible relative to
+  vertical-shear gradients, the balance collapses to
+  $\boldsymbol\tau_b \approx \boldsymbol\tau_d$, and the closure on
+  $\partial_z u$ reproduces the SIA velocity profile — see <a href="../sia/">SIA</a>.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../" class="btn btn-neutral float-left" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../ssa/" class="btn btn-neutral float-right" title="SSA">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../ssa/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
