@@ -4,6 +4,12 @@ nav:
     - Getting started: getting-started.md
     - Dependencies: dependencies.md
     - Parameters: parameters.md
+    - Physics:
+        - Overview: physics/index.md
+        - DIVA: physics/diva.md
+        - SSA: physics/ssa.md
+        - SIA: physics/sia.md
+        - Numerical solution: physics/solvers.md
     - Variables: yelmo-variables.md
     - Input/output: yelmo-io.md
     - Examples: example-programs.md
