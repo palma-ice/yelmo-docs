@@ -2,7 +2,7 @@
 
 The SSA is the membrane-stress balance that DIVA reduces to in the limit
 of vanishing vertical shear. It treats the ice column as a vertical plug:
-the horizontal velocity is independent of $\zeta$, so $\bar{\mathbf u}$
+the horizontal velocity is independent of $z$, so $\bar{\mathbf u}$
 *is* the basal velocity, $\bar{\mathbf u} = \mathbf u_b$. The
 implementation is in
 [`src/physics/velocity_ssa.f90`](https://github.com/palma-ice/yelmo/blob/main/src/physics/velocity_ssa.f90).
@@ -19,26 +19,27 @@ equation but with the **raw** friction $\beta$ instead of
 $\beta_\mathrm{eff}$:
 
 $$
-\partial_x \!\left[\, 2\,N\,(2\,\bar\varepsilon_{xx} + \bar\varepsilon_{yy})\,\right]
-+ \partial_y \!\left[\, 2\,N\,\bar\varepsilon_{xy}\,\right]
+\frac{\partial}{\partial x}\!\left[\, 2\,\bar\mu\,H\,(2\,\bar\varepsilon_{xx} + \bar\varepsilon_{yy})\,\right]
++ \frac{\partial}{\partial y}\!\left[\, 2\,\bar\mu\,H\,\bar\varepsilon_{xy}\,\right]
 - \beta\,\bar u
 \;=\; \tau_{d,x},
 $$
 
 $$
-\partial_y \!\left[\, 2\,N\,(2\,\bar\varepsilon_{yy} + \bar\varepsilon_{xx})\,\right]
-+ \partial_x \!\left[\, 2\,N\,\bar\varepsilon_{xy}\,\right]
+\frac{\partial}{\partial y}\!\left[\, 2\,\bar\mu\,H\,(2\,\bar\varepsilon_{yy} + \bar\varepsilon_{xx})\,\right]
++ \frac{\partial}{\partial x}\!\left[\, 2\,\bar\mu\,H\,\bar\varepsilon_{xy}\,\right]
 - \beta\,\bar v
 \;=\; \tau_{d,y},
 $$
 
-with $N = \bar\eta H$, driving stress $\boldsymbol\tau_d$ and friction law
-$\boldsymbol\tau_b = \beta\,\mathbf u_b$ defined exactly as in [DIVA](diva.md).
+with depth-averaged viscosity $\bar\mu$, driving stress $\boldsymbol\tau_d$
+and friction law $\boldsymbol\tau_b = \beta\,\mathbf u_b$ defined exactly
+as in [DIVA](diva.md).
 
 ## What is dropped relative to DIVA
 
-The effective strain rate omits the $\partial_z u$ and $\partial_z v$
-terms:
+The effective strain rate omits the $\frac{\partial u}{\partial z}$ and
+$\frac{\partial v}{\partial z}$ terms:
 
 $$
 \dot\varepsilon_e^{\,2}
@@ -49,7 +50,7 @@ $$
    + \varepsilon_0^{\,2},
 $$
 
-so the Glen viscosity $\eta$ depends only on horizontal strain rates.
+so the Glen viscosity $\mu$ depends only on horizontal strain rates.
 There is no F-integral closure: $F_2 \to 0$, so
 
 $$

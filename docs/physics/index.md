@@ -4,18 +4,19 @@ This section describes the continuum equations and numerical methods that Yelmo
 uses to solve the coupled momentum balance of grounded ice and floating ice
 shelves. The goal is to document what the code actually implements, with the
 same variable names used in the source so that the equations here can be traced
-back to specific routines.
+back to specific routines. The notation follows
+[Robinson, Goldberg, and Lipscomb (2022)](https://doi.org/10.5194/tc-16-689-2022).
 
 The ice flow in Yelmo is described as a slow, incompressible, gravity-driven
 flow of a power-law (Glen) fluid. The full Stokes problem is never solved.
-Instead Yelmo offers three approximations, in increasing order of fidelity to
-Stokes:
+Instead Yelmo offers three approximations, listed below in order of *decreasing*
+fidelity to Stokes:
 
-| Approximation | Vertical shear | Membrane stresses | Use case |
+| Approximation | Membrane stresses | Vertical shear | Use case |
 |---|---|---|---|
-| [SIA](sia.md)  | yes (closure)        | no  | slow grounded interior, used as a *complement* to DIVA in hybrid mode |
-| [SSA](ssa.md)  | no (plug flow)       | yes | floating shelves, fast-streaming grounded ice |
-| [DIVA](diva.md) | yes (closure) | yes | first-class momentum balance, valid from slow interior to streaming flow and shelves |
+| [DIVA](diva.md) | yes | yes (closure) | first-class momentum balance, valid from slow interior to streaming flow and shelves |
+| [SSA](ssa.md)   | yes | no (plug flow) | floating shelves, fast-streaming grounded ice |
+| [SIA](sia.md)   | no  | yes (closure) | slow grounded interior, used as a *complement* to DIVA in hybrid mode |
 
 DIVA is the recommended choice in Yelmo and is solved as a single 2D problem
 for the depth-averaged horizontal velocity. SSA is recovered from DIVA in the
@@ -35,16 +36,16 @@ supported: the **residual** assembler inherited from Yelmo v1, and the
 - $u, v$: horizontal velocity components $[\mathrm{m\,a^{-1}}]$.
 - $\bar u, \bar v$: depth-averaged horizontal velocity (the DIVA/SSA unknowns).
 - $u_b, v_b$: basal horizontal velocity.
-- $H$: ice thickness $[\mathrm{m}]$; $z_s$ and $z_b$: ice surface and base elevations.
-- $\zeta \in [0,1]$: normalised vertical coordinate, $\zeta=0$ at the base, $\zeta=1$ at the surface.
+- $H$: ice thickness $[\mathrm{m}]$; $s$ and $b$: ice surface and basal elevations.
+- $z$: vertical Cartesian coordinate, $b \le z \le s$.
 - $\rho_i$, $g$: ice density and gravitational acceleration.
 - $A(T')$: Glen rate factor, depending on the pressure-corrected temperature $T'$
-  and (where relevant) the water content $\omega$. $n=n_\mathrm{glen}$ is the Glen exponent (typically 3).
+  and (where relevant) the water content $\omega$. $n = n_\mathrm{glen}$ is the Glen exponent (typically 3).
 - $\dot\varepsilon_{ij}$: components of the horizontal strain-rate tensor.
 - $\dot\varepsilon_e$: effective strain rate, the second invariant of $\dot\varepsilon_{ij}$.
-- $\eta$: effective viscosity; $N = \int_0^H \eta\,\mathrm{d}z \equiv \bar\eta H$: depth-integrated effective viscosity.
-- $\boldsymbol\tau_d$: gravitational driving stress.
-- $\boldsymbol\tau_b$: basal shear stress.
+- $\mu$: effective viscosity; $\bar\mu = \frac{1}{H}\int_b^s \mu \,\mathrm dz$: depth-averaged viscosity.
+- $\boldsymbol\tau_d = (\tau_{d,x},\tau_{d,y})$: gravitational driving stress.
+- $\boldsymbol\tau_b = (\tau_{b,x},\tau_{b,y})$: basal shear stress.
 - $\beta$: basal friction coefficient, defined by $\boldsymbol\tau_b = \beta\,\mathbf u_b$.
 
 All horizontal fields live on the Arakawa C-grid (called the **ac-grid** in
