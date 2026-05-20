@@ -15,7 +15,7 @@ The physics and design of **Yelmo** are described in the following article:
 > Robinson, A., Alvarez-Solas, J., Montoya, M., Goelzer, H., Greve, R., and Ritz, C.: Description and validation of the ice-sheet model Yelmo (version 1.0), Geosci. Model Dev., 13, 2805–2823, [https://doi.org/10.5194/gmd-13-2805-2020](https://doi.org/10.5194/gmd-13-2805-2020), 2020.
 
 The Yelmo code repository can be found here:
-[https://github.com/palma-ice/yelmo](https://github.com/palma-ice/yelmo)
+[https://github.com/fesmc/yelmo](https://github.com/fesmc/yelmo)
 
 ## General model structure - classes and usage
 

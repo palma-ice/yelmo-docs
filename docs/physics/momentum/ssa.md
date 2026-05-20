@@ -5,7 +5,7 @@ of vanishing vertical shear. It treats the ice column as a vertical plug:
 the horizontal velocity is independent of $z$, so $\bar{\mathbf u}$
 *is* the basal velocity, $\bar{\mathbf u} = \mathbf u_b$. The
 implementation is in
-[`src/physics/velocity_ssa.f90`](https://github.com/palma-ice/yelmo/blob/main/src/physics/velocity_ssa.f90).
+[`src/physics/velocity_ssa.f90`](https://github.com/fesmc/yelmo/blob/main/src/physics/velocity_ssa.f90).
 
 Yelmo uses the same depth-integrated 2D solver as DIVA — the difference
 is purely in the closure. SSA is the appropriate model for floating ice

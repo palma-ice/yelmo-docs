@@ -208,6 +208,6 @@ $$
   $\frac{\partial u}{\partial z}$ reproduces the SIA velocity profile —
   see [SIA](sia.md).
 
-[diva_src]: https://github.com/palma-ice/yelmo/blob/main/src/physics/velocity_diva.f90
-[diva_taud]: https://github.com/palma-ice/yelmo/blob/main/src/physics/velocity_general.f90
-[diva_visc]: https://github.com/palma-ice/yelmo/blob/main/src/physics/deformation.f90
+[diva_src]: https://github.com/fesmc/yelmo/blob/main/src/physics/velocity_diva.f90
+[diva_taud]: https://github.com/fesmc/yelmo/blob/main/src/physics/velocity_general.f90
+[diva_visc]: https://github.com/fesmc/yelmo/blob/main/src/physics/deformation.f90

@@ -39,12 +39,12 @@ Follow the steps below to (1) obtain the code, (2) configure the Makefile for yo
 
 ### 1. Get the code
 
-Clone the repository from [https://github.com/palma-ice/yelmo](https://github.com/palma-ice/yelmo):
+Clone the repository from [https://github.com/fesmc/yelmo](https://github.com/fesmc/yelmo):
 
 ```bash
 # Clone repository
-git clone https://github.com/palma-ice/yelmo.git $YELMOROOT
-git clone git@github.com:palma-ice/yelmo.git  $YELMOROOT # via ssh
+git clone https://github.com/fesmc/yelmo.git $YELMOROOT
+git clone git@github.com:fesmc/yelmo.git  $YELMOROOT # via ssh
 
 cd $YELMOROOT
 ```

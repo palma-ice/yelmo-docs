@@ -3,7 +3,7 @@
 The SIA is the complementary limit to SSA: membrane stresses are
 neglected and the horizontal stress balance is dominated by the basal
 drag exerted by vertical shear. Yelmo's SIA solver is implemented in
-[`src/physics/velocity_sia.f90`](https://github.com/palma-ice/yelmo/blob/main/src/physics/velocity_sia.f90)
+[`src/physics/velocity_sia.f90`](https://github.com/fesmc/yelmo/blob/main/src/physics/velocity_sia.f90)
 and is used to provide the vertical-shear contribution to the velocity
 field in the hybrid SIA + SSA mode and as a diagnostic on its own.
 

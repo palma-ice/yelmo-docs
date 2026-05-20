@@ -5,11 +5,11 @@ depth-averaged horizontal velocity $\bar{\mathbf u} = (\bar u, \bar v)$
 from the [momentum balance](../momentum/diva.md) and a set of
 **mass-balance inputs** (surface, basal, frontal, calving). The
 implementation lives in
-[`src/physics/mass_conservation.f90`](https://github.com/palma-ice/yelmo/blob/main/src/physics/mass_conservation.f90),
+[`src/physics/mass_conservation.f90`](https://github.com/fesmc/yelmo/blob/main/src/physics/mass_conservation.f90),
 with the advection step delegated to
-[`src/physics/solver_advection.f90`](https://github.com/palma-ice/yelmo/blob/main/src/physics/solver_advection.f90)
+[`src/physics/solver_advection.f90`](https://github.com/fesmc/yelmo/blob/main/src/physics/solver_advection.f90)
 and the per-timestep driver in
-[`src/yelmo_topography.f90`](https://github.com/palma-ice/yelmo/blob/main/src/yelmo_topography.f90).
+[`src/yelmo_topography.f90`](https://github.com/fesmc/yelmo/blob/main/src/yelmo_topography.f90).
 
 ## Continuity equation
 

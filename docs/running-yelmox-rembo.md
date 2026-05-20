@@ -6,14 +6,14 @@
 
 ```bash
 # Clone repository: YelmoX
-git clone https://github.com/palma-ice/yelmox.git
+git clone https://github.com/fesmc/yelmox.git
 
 # Clone yelmo into a sub-directory too
 cd yelmox
-git clone https://github.com/palma-ice/yelmo.git
+git clone https://github.com/fesmc/yelmo.git
 
 # Clone isostasy into a sub-directory too 
-git clone https://github.com/palma-ice/isostasy.git
+git clone https://github.com/palma-ice/FastIsostasy.git
 
 # Clone rembo into a sub-directory too 
 git clone https://github.com/alex-robinson/rembo1
