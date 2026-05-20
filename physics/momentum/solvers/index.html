@@ -192,7 +192,7 @@ ac-node as one of:</p>
 <p>The two assemblers share the same argument list so they are drop-in
 interchangeable from the Picard loop in <code>calc_velocity_diva</code>.</p>
 <h2 id="solver-a-residual-form-yelmo-v1">Solver A — residual form (Yelmo v1)</h2>
-<p>The residual assembler (<a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/solver_ssa_ac.f90"><code>solver_ssa_ac.f90</code></a>) builds a
+<p>The residual assembler (<a href="https://github.com/fesmc/yelmo/blob/main/src/physics/solver_ssa_ac.f90"><code>solver_ssa_ac.f90</code></a>) builds a
 non-symmetric matrix <script type="math/tex">A_\mathrm{res}</script> and right-hand side
 <script type="math/tex">\mathbf b_\mathrm{res}</script> directly from the strong form of the SSA PDE.
 Writing <script type="math/tex">N \equiv \bar\mu\,H</script> for brevity, the interior <script type="math/tex">\bar u</script> row
@@ -244,7 +244,7 @@ preconditioner.</p>
 <p>This is the formulation inherited from Yelmo v1 and is the legacy
 default.</p>
 <h2 id="solver-b-energy-form-new">Solver B — energy form (new)</h2>
-<p>The energy assembler (<a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/solver_ssa_ac_energy.f90"><code>solver_ssa_ac_energy.f90</code></a>) builds
+<p>The energy assembler (<a href="https://github.com/fesmc/yelmo/blob/main/src/physics/solver_ssa_ac_energy.f90"><code>solver_ssa_ac_energy.f90</code></a>) builds
 the Hessian of a discrete energy functional and solves
 <script type="math/tex">K\,\mathbf x = \mathbf b</script> for the velocity that minimises that energy.
 With <script type="math/tex">(\mu, \beta, H)</script> frozen during each Picard step the energy is

@@ -162,7 +162,7 @@ stresses dominate, the SSA limit). It does so by retaining the depth-integrated
 membrane stress balance of SSA while reintroducing vertical shear through a
 closure on <script type="math/tex">\frac{\partial u}{\partial z}</script> that is consistent with the Glen
 flow law.</p>
-<p>The implementation is in <a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/velocity_diva.f90"><code>src/physics/velocity_diva.f90</code></a>.</p>
+<p>The implementation is in <a href="https://github.com/fesmc/yelmo/blob/main/src/physics/velocity_diva.f90"><code>src/physics/velocity_diva.f90</code></a>.</p>
 <h2 id="continuum-equations">Continuum equations</h2>
 <h3 id="depth-integrated-stress-balance">Depth-integrated stress balance</h3>
 <p>The unknown is the depth-averaged horizontal velocity
@@ -213,7 +213,7 @@ gravitational force,</p>
 \tau_{d,y} \;=\; \rho_i\, g\, H\, \frac{\partial s}{\partial y},
 </script>
 </p>
-<p>evaluated on ac-faces by <a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/velocity_general.f90"><code>calc_driving_stress</code></a> in
+<p>evaluated on ac-faces by <a href="https://github.com/fesmc/yelmo/blob/main/src/physics/velocity_general.f90"><code>calc_driving_stress</code></a> in
 <code>velocity_general.f90</code>. A grounding-line variant
 (<code>calc_driving_stress_gl</code>) replaces <script type="math/tex">H</script> with a flotation-corrected
 thickness so that no spurious driving stress is generated at the
@@ -227,7 +227,7 @@ enters as a Neumann condition.</p>
 \mu \;=\; \tfrac{1}{2}\, A^{-1/n}\, \dot\varepsilon_e^{\,(1-n)/n},
 </script>
 </p>
-<p>(routine <a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/deformation.f90"><code>calc_viscosity_glen</code></a> in <code>deformation.f90</code>).
+<p>(routine <a href="https://github.com/fesmc/yelmo/blob/main/src/physics/deformation.f90"><code>calc_viscosity_glen</code></a> in <code>deformation.f90</code>).
 The effective strain rate <script type="math/tex">\dot\varepsilon_e</script> in DIVA uses the
 horizontal strain rates plus a contribution from the (closure-defined)
 vertical shear, regularised by <script type="math/tex">\varepsilon_0</script> to avoid singular

@@ -141,11 +141,11 @@ depth-averaged horizontal velocity <script type="math/tex">\bar{\mathbf u} = (\b
 from the <a href="../momentum/diva/">momentum balance</a> and a set of
 <strong>mass-balance inputs</strong> (surface, basal, frontal, calving). The
 implementation lives in
-<a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/mass_conservation.f90"><code>src/physics/mass_conservation.f90</code></a>,
+<a href="https://github.com/fesmc/yelmo/blob/main/src/physics/mass_conservation.f90"><code>src/physics/mass_conservation.f90</code></a>,
 with the advection step delegated to
-<a href="https://github.com/palma-ice/yelmo/blob/main/src/physics/solver_advection.f90"><code>src/physics/solver_advection.f90</code></a>
+<a href="https://github.com/fesmc/yelmo/blob/main/src/physics/solver_advection.f90"><code>src/physics/solver_advection.f90</code></a>
 and the per-timestep driver in
-<a href="https://github.com/palma-ice/yelmo/blob/main/src/yelmo_topography.f90"><code>src/yelmo_topography.f90</code></a>.</p>
+<a href="https://github.com/fesmc/yelmo/blob/main/src/yelmo_topography.f90"><code>src/yelmo_topography.f90</code></a>.</p>
 <h2 id="continuity-equation">Continuity equation</h2>
 <p>Following <a href="https://doi.org/10.5194/gmd-13-2805-2020">Robinson et al. (2020)</a>,
 Eq. (2), the ice thickness obeys the vertically integrated
