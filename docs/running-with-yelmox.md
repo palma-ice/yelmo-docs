@@ -17,12 +17,12 @@ Also note, below it is assumed that you are setting up on the `pik_hpc2024` syst
 ```bash
 
 # yelmox
-git clone git@github.com:palma-ice/yelmox.git
+git clone git@github.com:fesmc/yelmox.git
 cd yelmox
 python3 config.py config/pik_hpc2024_ifx 
 
 # yelmo
-git clone git@github.com:palma-ice/yelmo.git
+git clone git@github.com:fesmc/yelmo.git
 cd yelmo
 python3 config.py config/pik_hpc2024_ifx
 ln -s $FESMUSRC ./

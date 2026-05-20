@@ -196,5 +196,5 @@ The Picard loop, the viscosity update, the F-integral closure and the
 basal-stress and 3D velocity diagnostics are identical between the two
 solvers: only the linear-system assembly differs.
 
-[resid_src]: https://github.com/palma-ice/yelmo/blob/main/src/physics/solver_ssa_ac.f90
-[energy_src]: https://github.com/palma-ice/yelmo/blob/main/src/physics/solver_ssa_ac_energy.f90
+[resid_src]: https://github.com/fesmc/yelmo/blob/main/src/physics/solver_ssa_ac.f90
+[energy_src]: https://github.com/fesmc/yelmo/blob/main/src/physics/solver_ssa_ac_energy.f90

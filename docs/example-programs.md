@@ -26,4 +26,4 @@ Clone the repository from [https://github.com/palma-ice/yelmot](https://github.c
 This setup is suitable for glacial-cycle simulations, future simulations
 or any other typical (realistic) ice-sheet model simulation.
 
-Clone the repository from [https://github.com/palma-ice/yelmox](https://github.com/palma-ice/yelmox)
+Clone the repository from [https://github.com/fesmc/yelmox](https://github.com/fesmc/yelmox)
