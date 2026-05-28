@@ -1,5 +1,10 @@
 # Yelmo documentation website
 
+> **This documentation has moved.** The Yelmo docs now live in the `yelmo`
+> repository and are published at <https://fesmc.github.io/yelmo/>. The `main`
+> branch here now builds a single page that redirects to that location. The
+> previous full contents of this site are preserved on the `archive` branch.
+
 This site is built by the Python package `mkdocs`.
 
 To preview the site locally run `mkdocs serve`. This

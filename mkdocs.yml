@@ -1,34 +1,9 @@
 site_name: Yelmo-docs
+site_url: https://fesmc.github.io/yelmo/
 nav:
     - Home: index.md
-    - Getting started: getting-started.md
-    - Dependencies: dependencies.md
-    - Parameters: parameters.md
-    - Physics:
-        - Overview: physics/index.md
-        - Momentum balance:
-            - DIVA: physics/momentum/diva.md
-            - SSA: physics/momentum/ssa.md
-            - SIA: physics/momentum/sia.md
-            - Numerical solution: physics/momentum/solvers.md
-        - Mass conservation:
-            - Continuity equation: physics/mass_conservation/index.md
-            - Numerical solution: physics/mass_conservation/solvers.md
-    - Variables: yelmo-variables.md
-    - Input/output: yelmo-io.md
-    - Examples: example-programs.md
-    - HPC notes: hpc-notes.md
-    - Running with YelmoX: running-with-yelmox.md
-    - YelmoX flavours: yelmox_flavours.md
 #theme: mkdocs
 theme:
     name: readthedocs
-
-extra_javascript: 
-    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-
-markdown_extensions:
-    - mdx_math:
-        enable_dollar_delimiter: True
 
 
